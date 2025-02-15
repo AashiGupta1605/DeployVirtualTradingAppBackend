@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import OrgRegistration from '../../models/OrgRegisterModal.js';
+import OrgRegistration from '../../models/OrgRegister.js';
 import organizationValidationSchema from '../../helpers/joiValidation.js';
 import organizationLoginValidationSchema from '../../helpers/joiValidation.js';
 export const registerOrganization = async (req, res) => {
