@@ -1,6 +1,6 @@
 import express from "express";
-import { registerUser, loginUser, updateProfile, deleteUser } from "../controllers/authController.js";
-import authMiddleware from "../middlewares/authMiddleware.js"; // Middleware for authentication
+import { registerUser, loginUser, updateProfile, deleteUser } from "../../controllers/user/authController.js";
+import authMiddleware from "../../middlewares/authMiddleware.js"; // Corrected path for middleware
 
 const router = express.Router();
 
@@ -24,6 +24,8 @@ router.get("/user", authMiddleware, async (req, res) => {
 
 // Update User Profile
 router.put("/update", authMiddleware, updateProfile);
+
+// Delete User
 router.delete("/delete", authMiddleware, deleteUser);
 
 export default router;
