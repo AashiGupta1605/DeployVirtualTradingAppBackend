@@ -25,6 +25,7 @@ const userSchema = new mongoose.Schema({
   status: { type: Boolean, default: true },
   addedby: { type: String },
   orgtype: { type: String },
+  deleted: { type: Boolean, default: false },
   createdDate: { type: Date, default: Date.now },
   updateDate: { type: Date, default: Date.now }
 });
