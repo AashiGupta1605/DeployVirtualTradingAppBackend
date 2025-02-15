@@ -1,5 +1,5 @@
 // controllers/OrgStudentController.js
-import Student from "../models/StudentModal.js";
+import Student from "../../models/StudentModal.js";
 
 // Fetch students by organization name
 export const getStudentsByOrgName = async (req, res) => {
