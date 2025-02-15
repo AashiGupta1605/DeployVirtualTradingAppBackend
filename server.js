@@ -4,11 +4,10 @@ import dotenv from 'dotenv';
 import NiftyData from './models/NiftyData.js';
 import niftyRoute from './routes/admin/adminRoute.js';  // Ensure this file exists
 import connectDB from './config/db.js';
-import authRoutes from './routes/user/authRoutes.js';
+import authRoutes from "./routes/user/authRoutes.js";  // Updated path
+import contactRoutes from "./routes/user/contactRoutes.js"; // Updated path
 import studentRoutes from "./routes/admin/OrgStudentsRoutes.js";
-import stockRoute from "./routes/admin/stockRoute.js";
-import { fetchNifty50Data } from './scripts/scraper.js';
-import contactRoutes from "./routes/admin/contactRoutes.js";
+import stockRoute from "./routes/admin/stockRou
 import orgRegisterRoutes from "./routes/admin/orgRegisterRoutes.js";
 import cron from 'node-cron';
 import { scrapeAndStoreETFData } from './controllers/admin/stockController.js';
@@ -16,8 +15,6 @@ import organizationRoutes from "./routes/admin/orgRoutes.js";
 import userRoutes from "./routes/admin/userRoutes.js";
 import studentRoute from "./routes/organization/studentRoute.js";
 import organizationRoute from "./routes/organization/organizationRoute.js";
-
-
 
 dotenv.config();
 const app = express();
@@ -41,18 +38,10 @@ app.use('/api/nifty', niftyRoute);
 app.use('/api/data', stockRoute);
 app.use("/api/contacts", contactRoutes);
 app.use("/api/organizations", organizationRoutes);
-app.use("/api/users", userRoutes);
+
 app.use("/api/orgRegister", orgRegisterRoutes);
 app.use("/students", studentRoutes);
 // organizations routes
-
-
-
-// organizations register students route
-app.use("/api/students", studentRoute);
-
-// organizations regsitartion routes
-app.use("/api/organizations", organizationRoute);
 
 
 // API endpoint to get Nifty data from MongoDB
