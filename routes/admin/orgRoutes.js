@@ -8,7 +8,7 @@ import {
   registerOrganization,
   updateApprovalStatus,
   updateOrganizationApprovalStatus,
-} from "../controllers/orgControllers.js";
+} from "../../controllers/admin/orgControllers.js";
 
 const router = express.Router();
 

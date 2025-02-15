@@ -1,4 +1,4 @@
-import OrgRegistration from "../models/OrgRegister.js";
+import OrgRegistration from "../../models/OrgRegister.js";
 
 // Create Organization (Default Approval Status: Pending)
 export const createOrg = async (req, res) => {
