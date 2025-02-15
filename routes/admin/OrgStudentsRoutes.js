@@ -1,6 +1,6 @@
 // routes/OrgStudentsRoutes.js
 import express from "express";
-import { getStudentsByOrgName } from "../controllers/OrgStudentController.js";
+import { getStudentsByOrgName } from "../../controllers/admin/OrgStudentController.js";
 
 const router = express.Router();
 

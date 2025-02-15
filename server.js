@@ -2,23 +2,18 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import NiftyData from './models/NiftyData.js';
-import niftyRoute from './routes/adminRoute.js';  // Ensure this file exists
+import niftyRoute from './routes/admin/adminRoute.js';  // Ensure this file exists
 import connectDB from './config/db.js';
-import authRoutes from './routes/authRoutes.js';
-import studentRoutes from "./routes/OrgStudentsRoutes.js";
-import stockRoute from "./routes/stockRoute.js";
+import authRoutes from './routes/user/authRoutes.js';
+import studentRoutes from "./routes/admin/OrgStudentsRoutes.js";
+import stockRoute from "./routes/admin/stockRoute.js";
 import { fetchNifty50Data } from './scripts/scraper.js';
-import contactRoutes from "./routes/contactRoutes.js";
-import orgRegisterRoutes from "./routes/orgRegisterRoutes.js";
+import contactRoutes from "./routes/admin/contactRoutes.js";
+import orgRegisterRoutes from "./routes/admin/orgRegisterRoutes.js";
 import cron from 'node-cron';
-import { scrapeAndStoreETFData } from './controllers/stockController.js';
-import organizationRoutes from "./routes/orgRoutes.js";
- // This will fetch and store Nifty data when the server starts
- import userRoutes from "./routes/userRoutes.js";
-
-
-// sorganization students and organization register routes
-
+import { scrapeAndStoreETFData } from './controllers/admin/stockController.js';
+import organizationRoutes from "./routes/admin/orgRoutes.js";
+import userRoutes from "./routes/admin/userRoutes.js";
 import studentRoute from "./routes/organization/studentRoute.js";
 import organizationRoute from "./routes/organization/organizationRoute.js";
 

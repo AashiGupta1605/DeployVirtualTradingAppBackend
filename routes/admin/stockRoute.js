@@ -1,5 +1,5 @@
 import express from 'express';
-import {scrapeAndStoreETFData, getETFData } from '../controllers/stockController.js';
+import {scrapeAndStoreETFData, getETFData } from '../../controllers/admin/stockController.js';
 
 const router = express.Router();
 

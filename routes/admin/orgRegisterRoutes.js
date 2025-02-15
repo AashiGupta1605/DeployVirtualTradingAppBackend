@@ -6,7 +6,7 @@ import {
   updateOrg, 
   deleteOrg, 
   updateApprovalStatus 
-} from "../controllers/orgRegisterController.js";
+} from "../../controllers/admin/orgRegisterController.js";
 
 const router = express.Router();
 

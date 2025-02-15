@@ -1,5 +1,5 @@
 import express from 'express';
-import NiftyData from '../models/NiftyData.js';  // Import the NiftyData model
+import NiftyData from '../../models/NiftyData.js';  // Import the NiftyData model
 
 const router = express.Router();
 
