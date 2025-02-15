@@ -15,6 +15,15 @@ import { scrapeAndStoreETFData } from './controllers/stockController.js';
 import organizationRoutes from "./routes/orgRoutes.js";
  // This will fetch and store Nifty data when the server starts
  import userRoutes from "./routes/userRoutes.js";
+
+
+// sorganization students and organization register routes
+
+import studentRoute from "./routes/organization/studentRoute.js";
+import organizationRoute from "./routes/organization/organizationRoute.js";
+
+
+
 dotenv.config();
 const app = express();
 
@@ -41,6 +50,14 @@ app.use("/api/users", userRoutes);
 app.use("/api/orgRegister", orgRegisterRoutes);
 app.use("/students", studentRoutes);
 // organizations routes
+
+
+
+// organizations register students route
+app.use("/api/students", studentRoute);
+
+// organizations regsitartion routes
+app.use("/api/organizations", organizationRoute);
 
 
 // API endpoint to get Nifty data from MongoDB
