@@ -42,7 +42,20 @@ app.use("/api/organizations", organizationRoutes);
 
 app.use("/api/orgRegister", orgRegisterRoutes);
 app.use("/students", studentRoutes);
+
+
+// user
+app.use("/api/users", userRoutes);
+
 // organizations routes
+
+// organization route
+app.use("/api/students", studentRoute);
+
+// organizations routes
+app.use("/api/organizations", organizationRoute);
+
+
 
 
 // API endpoint to get Nifty data from MongoDB
