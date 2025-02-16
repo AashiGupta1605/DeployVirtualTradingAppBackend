@@ -1,6 +1,6 @@
 
 import axios from 'axios';
-import NiftyETFData from '../../models/Stock.js';
+import NiftyETFData from '../../models/StockModal.js';
 import dotenv from 'dotenv';
 dotenv.config();
 

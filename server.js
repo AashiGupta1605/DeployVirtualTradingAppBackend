@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import NiftyData from './models/NiftyData.js';
+import NiftyData from './models/NiftyDataModal.js';
 import niftyRoute from './routes/admin/adminRoute.js';  // Ensure this file exists
 import connectDB from './config/db.js';
 import authRoutes from "./routes/user/authRoutes.js";  // Updated path

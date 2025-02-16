@@ -1,4 +1,4 @@
-import ContactUs from "../../models/ContactUs.js";
+import ContactUs from "../../models/ContactUsModal.js";
 
 // Create a new contact entry
 export const createContact = async (req, res) => {

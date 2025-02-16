@@ -1,4 +1,4 @@
-import Organization from "../../models/OrgAdmin.js";
+import Organization from "../../models/OrgAdminModal.js";
 
 export const registerOrganization = async (req, res) => {
   try {

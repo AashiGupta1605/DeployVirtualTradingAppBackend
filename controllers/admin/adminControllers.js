@@ -1,4 +1,4 @@
-import NiftyData from '../../models/NiftyData.js';
+import NiftyData from '../../models/NiftyDataModal.js';
 
 export const saveNiftyData = async (req, res) => {
   try {
