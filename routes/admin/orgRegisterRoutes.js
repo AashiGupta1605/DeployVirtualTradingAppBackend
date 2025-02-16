@@ -1,20 +1,13 @@
 import express from "express";
-import { 
-  createOrg, 
-  getAllOrgs, 
-  getOrgById, 
-  updateOrg, 
-  deleteOrg, 
-  updateApprovalStatus 
-} from "../../controllers/admin/orgRegisterController.js";
+import { createOrg, getAllOrgs, getOrgById, updateOrg, deleteOrg, updateApprovalStatus } from "../../controllers/admin/orgRegisterController.js";
 
 const router = express.Router();
 
-router.post("/create", createOrg);        // Create Organization
-router.get("/", getAllOrgs);              // Get All Organizations
-router.get("/:id", getOrgById);           // Get Organization by ID
-router.put("/:id", updateOrg);            // Update Organization
-router.delete("/:id", deleteOrg);         // Delete Organization
-router.patch("/:id/approve", updateApprovalStatus); // Approve/Reject Organization
+router.post("/create", createOrg);
+router.get("/", getAllOrgs);
+router.get("/:id", getOrgById);
+router.put("/:id", updateOrg);
+router.delete("/:id", deleteOrg);
+router.patch("/:id/approve", updateApprovalStatus);
 
 export default router;
