@@ -1,17 +1,21 @@
 import express from "express";
-import { registerUser, loginUser, updateProfile, deleteUser } from "../../controllers/user/authController.js";
-
-import authMiddleware from "../../middlewares/authMiddleware.js"; // Corrected path for middleware
+import { 
+  registerUser, 
+  loginUser, 
+  updateProfile, 
+  deleteUser,
+  getUsers,
+  updateUser, 
+  deleteUserById
+ 
+} from "../../controllers/user/authController.js";
+import authMiddleware from "../../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-// Register User
+// User Routes
 router.post("/register", registerUser);
-
-// Login User
 router.post("/login", loginUser);
-
-// Get Logged-in User Profile
 router.get("/user", authMiddleware, async (req, res) => {
   try {
     const user = req.user; // Retrieved from authMiddleware
@@ -22,11 +26,12 @@ router.get("/user", authMiddleware, async (req, res) => {
     res.status(500).json({ message: "Error fetching user profile", error: error.message });
   }
 });
-
-// Update User Profile
 router.put("/update", authMiddleware, updateProfile);
-
-// Delete User
 router.delete("/delete", authMiddleware, deleteUser);
+
+// Admin Routes
+router.get("/admin/users", getUsers);
+router.put("/admin/users/:id", updateUser);
+router.delete("/admin/users/:id", deleteUserById);
 
 export default router;
