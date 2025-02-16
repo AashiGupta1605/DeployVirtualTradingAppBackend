@@ -1,4 +1,4 @@
-import OrgRegistration from "../../models/OrgRegister.js";
+import OrgRegistration from "../../models/OrgRegisterModal.js";
 
 export const createOrg = async (req, res) => {
   try {

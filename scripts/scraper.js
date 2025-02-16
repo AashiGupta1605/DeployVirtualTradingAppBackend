@@ -1,6 +1,6 @@
 import fs from 'fs';
 import axios from 'axios';
-import NiftyData from '../models/NiftyData.js';
+import NiftyData from '../models/NiftyDataModal.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
