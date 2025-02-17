@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import NiftyData from './models/NiftyDataModal.js';
 import niftyRoute from './routes/admin/adminRoute.js';  // Ensure this file exists
 import connectDB from './config/db.js';
-import authRoutes from "./routes/user/authRoutes.js";  // Updated path
+import userRoutes from "./routes/user/userRoutes.js";  // Updated path
 import contactRoutes from "./routes/user/contactRoutes.js"; // Updated path
 import studentRoutes from "./routes/admin/OrgStudentsRoutes.js";
 import stockRoute from "./routes/admin/stockRoute.js";
@@ -33,7 +33,7 @@ connectDB();
 
 app.use(cors());
 app.use(express.json());
-app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
 app.use('/api/nifty', niftyRoute);
 app.use('/api/data', stockRoute);
 app.use("/api/contacts", contactRoutes);

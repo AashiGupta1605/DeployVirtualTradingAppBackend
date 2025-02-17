@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import User from "../models/UserModal.js";
 
-const authMiddleware = async (req, res, next) => {
+const userMiddleware = async (req, res, next) => {
   try {
     const token = req.headers.authorization?.split(" ")[1]; // Extract token after 'Bearer'
     if (!token) return res.status(401).json({ message: "No token, authorization denied" });
@@ -15,4 +15,4 @@ const authMiddleware = async (req, res, next) => {
   }
 };
 
-export default authMiddleware;
+export default userMiddleware;
