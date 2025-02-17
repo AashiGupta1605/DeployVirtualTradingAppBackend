@@ -13,7 +13,6 @@ import cron from 'node-cron';
 import { scrapeAndStoreETFData } from './controllers/admin/stockController.js';
 import organizationRoutes from "./routes/admin/orgRoutes.js";
 import { fetchNifty50Data } from './scripts/scraper.js';
-import userRoutes from "./routes/admin/userRoutes.js";
 import studentRoute from "./routes/organization/studentRoute.js";
 import organizationRoute from "./routes/organization/organizationRoute.js";
 
@@ -44,8 +43,6 @@ app.use("/api/orgRegister", orgRegisterRoutes);
 app.use("/students", studentRoutes);
 
 
-// user
-app.use("/api/users", userRoutes);
 
 // organizations routes
 

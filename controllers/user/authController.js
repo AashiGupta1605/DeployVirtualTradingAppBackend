@@ -62,6 +62,7 @@ export const updateProfile = async (req, res) => {
   }
 };
 
+// Delete User (Soft Delete)
 export const deleteUser = async (req, res) => {
   const { id } = req.user; // Authenticated user ID
 
@@ -78,5 +79,40 @@ export const deleteUser = async (req, res) => {
     res.json({ message: "User account deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: "User deletion failed", error: error.message });
+  }
+};
+
+// Get All Users (for admin)
+export const getUsers = async (req, res) => {
+  try {
+    res.json(await User.find({ deleted: false }));
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+// Update User by ID (for admin)
+export const updateUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+    Object.keys(req.body).forEach(key => user[key] = req.body[key] ?? user[key]);
+    user.updateDate = Date.now();
+    res.json(await user.save());
+  } catch (error) {
+    res.status(500).json({ message: "Error updating user" });
+  }
+};
+
+// Delete User by ID (for admin)
+export const deleteUserById = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+    user.deleted = true;
+    await user.save();
+    res.json({ message: "User removed successfully (soft delete)" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting user" });
   }
 };
