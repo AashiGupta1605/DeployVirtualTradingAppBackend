@@ -1,20 +1,14 @@
+// server.js
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import NiftyData from './models/NiftyDataModal.js';
-import niftyRoute from './routes/admin/adminRoute.js';  // Ensure this file exists
 import connectDB from './config/db.js';
-import authRoutes from "./routes/user/authRoutes.js";  // Updated path
-import contactRoutes from "./routes/user/contactRoutes.js"; // Updated path
-import studentRoutes from "./routes/admin/OrgStudentsRoutes.js";
-import stockRoute from "./routes/admin/stockRoute.js";
-import orgRegisterRoutes from "./routes/admin/orgRegisterRoutes.js";
 import cron from 'node-cron';
-import { scrapeAndStoreETFData } from './controllers/admin/stockController.js';
-import organizationRoutes from "./routes/admin/orgRoutes.js";
+import { scrapeAndStoreETFData } from './scripts/scraper2.js';
 import { fetchNifty50Data } from './scripts/scraper.js';
-import studentRoute from "./routes/organization/studentRoute.js";
-import organizationRoute from "./routes/organization/organizationRoute.js";
+import adminRoute from "./routes/admin/adminRoute.js";
+import orgRoute from "./routes/organization/organizationRoute.js"
+ // Import the new router
 
 dotenv.config();
 const app = express();
@@ -28,32 +22,14 @@ cron.schedule('*/1 * * * *', async () => {
   }
 });
 
-
 connectDB();
 
 app.use(cors());
 app.use(express.json());
-app.use("/api/auth", authRoutes);
-app.use('/api/nifty', niftyRoute);
-app.use('/api/data', stockRoute);
-app.use("/api/contacts", contactRoutes);
-app.use("/api/organizations", organizationRoutes);
 
-app.use("/api/orgRegister", orgRegisterRoutes);
-app.use("/students", studentRoutes);
-
-
-
-// organizations routes
-
-// organization route
-app.use("/api/students", studentRoute);
-
-// organizations routes
-app.use("/api/organizations", organizationRoute);
-
-
-
+app.use("/api/admin", adminRoute);
+app.use("/api/org", orgRoute);
+ // Use the new router
 
 // API endpoint to get Nifty data from MongoDB
 app.get('/api/niftydata', async (req, res) => {
@@ -71,56 +47,6 @@ app.listen(PORT, async () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-app.get('/api/company/:symbol', async (req, res) => {
-  try {
-    const { symbol } = req.params;
 
-    // Get the latest stored data entry
-    const latestData = await NiftyData.findOne().sort({ fetchTime: -1 });
 
-    if (!latestData || !latestData.stocks) {
-      return res.status(404).json({ message: 'No stock data available' });
-    }
-
-    // Find the company inside the `stocks` array
-    const company = latestData.stocks.find(stock => stock.symbol === symbol);
-
-    if (!company) {
-      return res.status(404).json({ message: `Company with symbol ${symbol} not found` });
-    }
-
-    res.json(company);
-  } catch (error) {
-    console.error('Error fetching company data:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
-
-app.get('/api/symbol/:symbol', async (req, res) => {
-  try {
-    const { symbol } = req.params;
-
-    // Fetch all batches from the database
-    const allBatches = await NiftyData.find();
-
-    if (!allBatches || allBatches.length === 0) {
-      return res.status(404).json({ message: 'No stock data available' });
-    }
-
-    // Filter all the batches for the given symbol
-    const companyData = allBatches.map(batch => {
-      // Find the company inside the `stocks` array in each batch
-      return batch.stocks.filter(stock => stock.symbol === symbol);
-    }).flat(); // Flatten the array to get all matching companies
-
-    if (companyData.length === 0) {
-      return res.status(404).json({ message: `Company with symbol ${symbol} not found` });
-    }
-
-    res.json(companyData); // Return all company data across batches
-  } catch (error) {
-    console.error('Error fetching company data:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
 fetchNifty50Data();
