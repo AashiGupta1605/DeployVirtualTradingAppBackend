@@ -69,11 +69,11 @@ export const deleteUser = async (req, res) => {
   try {
     const user = await User.findById(id);
 
-    if (!user || user.deleted) {
+    if (!user || user.isDeleted) {
       return res.status(404).json({ message: "User not found or already deleted" });
     }
 
-    user.deleted = true; // Soft delete user
+    user.isDeleted = true; // Soft delete user
     await user.save();
 
     res.json({ message: "User account deleted successfully" });
@@ -85,7 +85,7 @@ export const deleteUser = async (req, res) => {
 // Get All Users (for admin)
 export const getUsers = async (req, res) => {
   try {
-    res.json(await User.find({ deleted: false }));
+    res.json(await User.find({ isDeleted: false }));
   } catch (error) {
     res.status(500).json({ message: "Server Error" });
   }
@@ -97,7 +97,7 @@ export const updateUser = async (req, res) => {
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json({ message: "User not found" });
     Object.keys(req.body).forEach(key => user[key] = req.body[key] ?? user[key]);
-    user.updateDate = Date.now();
+    user.updatedDate = Date.now();
     res.json(await user.save());
   } catch (error) {
     res.status(500).json({ message: "Error updating user" });
@@ -109,7 +109,7 @@ export const deleteUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json({ message: "User not found" });
-    user.deleted = true;
+    user.isDeleted = true;
     await user.save();
     res.json({ message: "User removed successfully (soft delete)" });
   } catch (error) {
