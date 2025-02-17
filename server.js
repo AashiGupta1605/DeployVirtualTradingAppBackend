@@ -13,7 +13,7 @@ import cron from 'node-cron';
 import { scrapeAndStoreETFData } from './controllers/admin/stockController.js';
 import organizationRoutes from "./routes/admin/orgRoutes.js";
 import { fetchNifty50Data } from './scripts/scraper.js';
-import studentRoute from "./routes/organization/studentRoute.js";
+// import studentRoute from "./routes/organization/studentRoute.js";
 import organizationRoute from "./routes/organization/organizationRoute.js";
 
 dotenv.config();
@@ -44,14 +44,9 @@ app.use("/students", studentRoutes);
 
 
 
-// organizations routes
 
-// organization route
-app.use("/api/students", studentRoute);
-
-// organizations routes
-app.use("/api/organizations", organizationRoute);
-
+// organization route (organization modal)
+app.use("/api/organization", organizationRoute);
 
 
 

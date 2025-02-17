@@ -8,7 +8,7 @@
 // export default router;
 
 import express from "express";
-import { registerStudent, getAllStudents, getStudentById, updateStudent, deleteStudent, getTotalUsersCount, getNewStudentsLastWeek } from "../../controllers/organization/studentController.js";
+import { registerStudent, getAllStudents, getStudentById, updateStudent, deleteStudent, getTotalUsersCount, getNewStudentsLastWeek } from "../../controllers/organization/Organizationontroller.js";
 
 const router = express.Router();
 
