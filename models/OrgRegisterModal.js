@@ -12,7 +12,7 @@ const orgRegistrationSchema = new mongoose.Schema({
   approvalStatus: { 
     type: String, 
     enum: ["approved", "rejected", "pending"],  // ✅ Restrict values
-    default: "pending" 
+    
   },
   createDate: { type: Date, default: Date.now },
   updateDate: { type: Date, default: Date.now }

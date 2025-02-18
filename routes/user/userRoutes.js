@@ -30,8 +30,8 @@ router.put("/update", userMiddleware, updateProfile);
 router.delete("/delete", userMiddleware, deleteUser);
 
 // Admin Routes
-router.get("/admin/users", getUsers);
-router.put("/admin/users/:id", updateUser);
-router.delete("/admin/users/:id", deleteUserById);
+router.get("/display-users", getUsers);
+router.put("/users/:id", updateUser);
+router.delete("/users/:id", deleteUserById);
 
 export default router;
