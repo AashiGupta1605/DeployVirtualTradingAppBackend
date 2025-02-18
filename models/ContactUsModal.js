@@ -7,6 +7,7 @@ const contactUsSchema = new mongoose.Schema({
   mobile: { type: String },
   type: { type: String },
   desc: { type: String },
+  isDeleted: { type: Boolean, default: false },
   createDate: { type: Date, default: Date.now },
   updateDate: { type: Date, default: Date.now }
 });

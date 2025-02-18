@@ -12,8 +12,8 @@ const orgRegistrationSchema = new mongoose.Schema({
   approvalStatus: { 
     type: String, 
     enum: ["approved", "rejected", "pending"],  // ✅ Restrict values
-    
   },
+  isDeleted: { type: Boolean, default: false },
   createDate: { type: Date, default: Date.now },
   updateDate: { type: Date, default: Date.now }
 });
