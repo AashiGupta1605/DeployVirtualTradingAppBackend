@@ -4,7 +4,7 @@ import express from 'express';
 import { organizationRegister, organizationLogin, organizationUserRegistration, organizationUpdateUser, organizationUserDelete, organizationUsersDisplay, organizationTotalUsers, organizationNewUsersLastWeek, organizationgetUserDisplayById 
     ,getAllOrgs,getOrgById,  updateOrg,
 deleteOrg,
-updateApprovalStatus,
+updateApprovalStatus,getStudentsByOrgName
 } from '../../controllers/organization/Organizationontroller.js';
 
 const router = express.Router();
@@ -32,4 +32,5 @@ router.get("/:id", getOrgById); // GET for retrieving a specific organization by
 router.put("/:id", updateOrg); // PUT for updating an organization
 router.delete("/:id", deleteOrg); // DELETE for deleting an organization
 router.put("/:id/approval-status", updateApprovalStatus); // PUT for updating approval status
+router.get('/users/:orgName', getStudentsByOrgName);
 export default router;
