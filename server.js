@@ -6,6 +6,8 @@ import connectDB from './config/db.js';
 import cron from 'node-cron';
 import { scrapeAndStoreETFData } from './scripts/scraper2.js';
 import { fetchNifty50Data } from './scripts/scraper.js';
+import contactRoute from "./routes/user/contactRoutes.js";
+import userRoute from "./routes/user/userRoutes.js";
 import adminRoute from "./routes/admin/adminRoute.js";
 import orgRoute from "./routes/organization/organizationRoute.js"
  // Import the new router
@@ -27,19 +29,13 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
+app.use("/api/contact", contactRoute);
+app.use("/api/user", userRoute);
 app.use("/api/admin", adminRoute);
 app.use("/api/org", orgRoute);
  // Use the new router
 
-// API endpoint to get Nifty data from MongoDB
-app.get('/api/niftydata', async (req, res) => {
-  try {
-    const data = await NiftyData.find();
-    res.json(data);
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching data' });
-  }
-});
+
 
 // Server setup
 const PORT = process.env.PORT || 5000;

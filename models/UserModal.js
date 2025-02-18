@@ -23,9 +23,10 @@ const userSchema = new mongoose.Schema({
   dob: { type: Date },
   password: { type: String, required: true },
   status: { type: Boolean, default: true },
-  addedby: { type: String },
+  // change by abhishek for org user registration and normal user so that they share the same User Model and help the Admin in Filtering Organization
+  addedby: { type: String, default:"self" },
   orgtype: { type: String },
-  deleted: { type: Boolean, default: false },
+  isDeleted: { type: Boolean, default: false },
   createdDate: { type: Date, default: Date.now },
   updateDate: { type: Date, default: Date.now }
 });
