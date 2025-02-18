@@ -8,31 +8,31 @@ import {
 } from '../../helpers/joiValidation.js';
 // User registration
 export const registerUser = async (req, res) => {
-  const { name, email, password, mobile, gender, dob, orgtype } = req.body;
+  const { name, email, password, confirmPassword, mobile, gender, dob, orgtype } = req.body;
 
-  // Joi validation
-  const { error } = registerUserSchema.validate(req.body);
+  // Exclude confirmPassword from validation
+  const { error } = registerUserSchema.validate({ name, email, password, mobile, gender, dob });
   if (error) return res.status(400).json({ message: error.details[0].message });
 
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ message: "User already exists" });
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create the new user
-    const newUser = await User.create({ 
-      name, 
-      email, 
-      password: hashedPassword, 
-      mobile, 
-      gender, 
-      dob, 
-      orgtype 
-    });
+    const newUserData = {
+      name,
+      email,
+      password: hashedPassword,
+      mobile,
+      gender,
+      dob,
+    };
 
-    // Generate token
+    // if (orgtype) newUserData.orgtype = orgtype; // Only include if provided
+
+    const newUser = await User.create(newUserData);
+
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
     res.status(201).json({ message: "User registered successfully", token, user: newUser });
@@ -40,6 +40,7 @@ export const registerUser = async (req, res) => {
     res.status(500).json({ message: "Registration failed", error: error.message });
   }
 };
+
 
 // User login
 export const loginUser = async (req, res) => {
