@@ -22,7 +22,7 @@ export const organizationUserRegistrationValidationSchema = Joi.object({
   mobile: Joi.string().pattern(/^[9876]\d{9}$/).required().messages({
     "string.pattern.base": "Mobile number must start with 9, 8, 7, or 6 and contain 10 digits"
   }),
-  gender: Joi.string().valid("male", "female", "other").required().label('Gender'),
+  gender: Joi.string().required(),
   dob: Joi.date().required().custom((value, helpers) => {
     if (new Date().getFullYear() - new Date(value).getFullYear() < 18) {
       return helpers.message("You must be at least 18 years old");
@@ -30,11 +30,8 @@ export const organizationUserRegistrationValidationSchema = Joi.object({
     return value;
   }).label('Date of Birth'),
   password: Joi.string().min(8).required().label('Password'),
-  confirmPassword: Joi.string().valid(Joi.ref('password')).required().messages({
-    'any.only': 'Confirm password must match password'
-  }).label('Confirm Password'),
-  addedby: Joi.string().required().label('Added By'),
-  status: Joi.string().valid("active", "inactive").required().label('Status')
+  addedby: Joi.string().required(),
+  status: Joi.boolean().default(true).required()
 });
 
 export default {
