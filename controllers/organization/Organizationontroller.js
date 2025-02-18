@@ -1,3 +1,4 @@
+// organization registration and login controllers ------------------- created by abhishek
 import OrgRegistration from '../../models/OrgRegisterModal.js';
 import { organizationRegistrationValidationSchema, organizationLoginValidationSchema, updateOrgValidation, updateApprovalStatusValidation, getUserByOrgNameValidation} from '../../helpers/joiValidation.js';
 import { hashPassword, comparePassword } from '../../helpers/hashHelper.js';
@@ -46,6 +47,9 @@ export const organizationRegister = async (req, res) => {
   }
 };
 
+
+// login
+
 export const organizationLogin = async (req, res) => {
   const { email, password } = req.body;
 
@@ -76,12 +80,14 @@ export const organizationLogin = async (req, res) => {
     }
 
     // Login successful
-    res.status(200).json({ success: true, message: "Login successful" });
+    res.status(200).json({ success: true, message: "Login successful", orgName: existingOrg.name });
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+
 
 //Admin
 export const getAllOrgs = async (req, res) => {
@@ -157,10 +163,21 @@ export const updateApprovalStatus = async (req, res) => {
   }
 };
 
+export const getStudentsByOrgName = async (req, res) => {
+  try {
+    // Hardcode the organization name to "MITS"
+    const students = await UserModal.find({ addedby: "MITS", isDeleted: false });
+    res.status(200).json(students);
+  } catch (error) {
+    console.error('Error fetching students by organization:', error);
+    res.status(500).json({ error: 'Failed to fetch students.' });
+  }
+};
 
 
 
 
+// organization users controllers such as crud opeartions of user under an organization==============
 
 import UserModal from '../../models/UserModal.js';
 import { organizationUserRegistrationValidationSchema } from '../../helpers/joiValidation.js';
@@ -208,11 +225,12 @@ export const organizationUserRegistration = async (req, res) => {
 
 export const organizationUsersDisplay = async (req, res) => {
   try {
-    const users = await UserModal.find({ isDeleted: false, addedby: { $ne: "self" } });
+    const orgName = req.params.orgName; // Get the organization name from the URL parameter
+    const users = await UserModal.find({ addedby: orgName, isDeleted: false }); // Filter users by addedby
     res.status(200).json(users);
   } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ success: false, msg: "Server error" });
+    console.error('Error fetching users by organization:', error);
+    res.status(500).json({ error: 'Failed to fetch users.' });
   }
 };
 
@@ -293,9 +311,13 @@ export const organizationUserDelete = async (req, res) => {
   }
 };
 
+
+// Function to get the total number of users for a specific organization
 export const organizationTotalUsers = async (req, res) => {
+  const orgName = req.params.orgName;
+
   try {
-    const count = await UserModal.countDocuments({ isDeleted: false, addedby: { $ne: "self" }  });
+    const count = await UserModal.countDocuments({ isDeleted: false, addedby: orgName });
     res.status(200).json({ success: true, count });
   } catch (error) {
     console.error(error.message);
@@ -303,13 +325,16 @@ export const organizationTotalUsers = async (req, res) => {
   }
 };
 
+// Function to get the number of new users added in the last week for a specific organization
 export const organizationNewUsersLastWeek = async (req, res) => {
+  const orgName = req.params.orgName;
+
   try {
     const oneWeekAgo = moment().subtract(7, 'days').toDate();
     const newUsersCount = await UserModal.countDocuments({
       createdAt: { $gte: oneWeekAgo },
       isDeleted: false,
-      addedby: { $ne: "self" } 
+      addedby: orgName
     });
     res.status(200).json({ success: true, count: newUsersCount });
   } catch (error) {

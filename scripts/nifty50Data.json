@@ -1,5 +1,5 @@
 {
-  "fetchTime": "2025-02-18T15:19:03.509Z",
+  "fetchTime": "2025-02-18T11:52:24.911Z",
   "stocks": [
     {
       "symbol": "NIFTY 50",
@@ -10,8 +10,8 @@
       "previousClose": 22959.5,
       "change": -14.200000000000728,
       "pChange": -0.06,
-      "totalTradedVolume": 210616641,
-      "totalTradedValue": 194312184619.7,
+      "totalTradedVolume": 210616675,
+      "totalTradedValue": 194312366272.88,
       "lastUpdateTime": "18-Feb-2025 16:00:00",
       "yearHigh": 26277.35,
       "yearLow": 21281.45,
@@ -19,7 +19,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -1.05,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "NTPC",
@@ -39,7 +39,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -7.3,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "TECHM",
@@ -50,16 +50,16 @@
       "previousClose": 1664.95,
       "change": 36.05,
       "pChange": 2.17,
-      "totalTradedVolume": 2654132,
-      "totalTradedValue": 4487340972.400001,
-      "lastUpdateTime": "18-Feb-2025 15:54:42",
+      "totalTradedVolume": 2654136,
+      "totalTradedValue": 4487347735.2,
+      "lastUpdateTime": "18-Feb-2025 15:59:17",
       "yearHigh": 1807.7,
       "yearLow": 1162.95,
       "perChange365d": 27.82,
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": 0.28,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "WIPRO",
@@ -71,15 +71,15 @@
       "change": 6.15,
       "pChange": 2.01,
       "totalTradedVolume": 10368789,
-      "totalTradedValue": 3206023993.2,
-      "lastUpdateTime": "18-Feb-2025 15:54:30",
+      "totalTradedValue": 3206029558.7999997,
+      "lastUpdateTime": "18-Feb-2025 15:59:05",
       "yearHigh": 324.6,
       "yearLow": 208.5,
       "perChange365d": -43.77,
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": 8.3,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "ONGC",
@@ -99,7 +99,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -12.35,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "APOLLOHOSP",
@@ -119,7 +119,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -7.73,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "POWERGRID",
@@ -139,7 +139,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -13.02,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "HCLTECH",
@@ -159,7 +159,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -4.42,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "KOTAKBANK",
@@ -179,7 +179,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": 10.62,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "CIPLA",
@@ -199,7 +199,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": 2.24,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "HDFCBANK",
@@ -219,7 +219,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": 4.92,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "INFY",
@@ -239,7 +239,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": 1.48,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "BAJFINANCE",
@@ -259,7 +259,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": 17.33,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "TATACONSUM",
@@ -270,16 +270,16 @@
       "previousClose": 1023.25,
       "change": 2.2,
       "pChange": 0.22,
-      "totalTradedVolume": 789808,
-      "totalTradedValue": 808818678.56,
-      "lastUpdateTime": "18-Feb-2025 15:54:41",
+      "totalTradedVolume": 789814,
+      "totalTradedValue": 808824822.9799999,
+      "lastUpdateTime": "18-Feb-2025 15:59:12",
       "yearHigh": 1256.44,
       "yearLow": 882.9,
       "perChange365d": -10.82,
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": 7.21,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "JSWSTEEL",
@@ -299,7 +299,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": 7.15,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "SHRIRAMFIN",
@@ -319,7 +319,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": 4.53,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "AXISBANK",
@@ -339,7 +339,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": 0.19,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "MARUTI",
@@ -359,7 +359,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": 5.16,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "ADANIPORTS",
@@ -379,7 +379,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -6.93,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "COALINDIA",
@@ -391,15 +391,15 @@
       "change": -0.1,
       "pChange": -0.03,
       "totalTradedVolume": 3843725,
-      "totalTradedValue": 1375724357.01,
-      "lastUpdateTime": "18-Feb-2025 15:54:33",
+      "totalTradedValue": 1375784489.25,
+      "lastUpdateTime": "18-Feb-2025 15:59:13",
       "yearHigh": 543.55,
       "yearLow": 349.25,
       "perChange365d": -24.98,
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -7.11,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "BPCL",
@@ -419,7 +419,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -7.79,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "NESTLEIND",
@@ -439,7 +439,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -0.03,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "LT",
@@ -459,7 +459,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -9.72,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "RELIANCE",
@@ -479,7 +479,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -5.95,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "SBILIFE",
@@ -499,7 +499,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -4.17,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "DRREDDY",
@@ -510,16 +510,16 @@
       "previousClose": 1198.95,
       "change": -1,
       "pChange": -0.08,
-      "totalTradedVolume": 1713792,
-      "totalTradedValue": 2047175957.76,
-      "lastUpdateTime": "18-Feb-2025 15:54:33",
+      "totalTradedVolume": 1713796,
+      "totalTradedValue": 2047180735.8799999,
+      "lastUpdateTime": "18-Feb-2025 15:59:21",
       "yearHigh": 1421.49,
       "yearLow": 1120,
       "perChange365d": -81.02,
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -8.44,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "TATASTEEL",
@@ -539,7 +539,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": 3.08,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "BAJAJFINSV",
@@ -559,7 +559,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": 12.75,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "SBIN",
@@ -579,7 +579,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -4.76,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "HINDALCO",
@@ -599,7 +599,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -1,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "BHARTIARTL",
@@ -612,14 +612,14 @@
       "pChange": -0.36,
       "totalTradedVolume": 7529598,
       "totalTradedValue": 12566221398.18,
-      "lastUpdateTime": "18-Feb-2025 15:54:54",
+      "lastUpdateTime": "18-Feb-2025 15:56:55",
       "yearHigh": 1779,
       "yearLow": 1097.65,
       "perChange365d": 49.6,
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": 2.95,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "EICHERMOT",
@@ -639,7 +639,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -5.33,
-      "timestamp": "2025-02-18T15:19:03.509Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "TITAN",
@@ -659,7 +659,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -3.7,
-      "timestamp": "2025-02-18T15:19:03.510Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "ADANIENT",
@@ -679,7 +679,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -7.34,
-      "timestamp": "2025-02-18T15:19:03.510Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "TATAMOTORS",
@@ -699,7 +699,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -11.95,
-      "timestamp": "2025-02-18T15:19:03.510Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "ICICIBANK",
@@ -719,7 +719,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": 2.1,
-      "timestamp": "2025-02-18T15:19:03.510Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "HDFCLIFE",
@@ -739,7 +739,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -2.95,
-      "timestamp": "2025-02-18T15:19:03.510Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "GRASIM",
@@ -759,7 +759,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": 3.7,
-      "timestamp": "2025-02-18T15:19:03.510Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "TCS",
@@ -779,7 +779,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -5.33,
-      "timestamp": "2025-02-18T15:19:03.510Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "ASIANPAINT",
@@ -799,7 +799,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -0.45,
-      "timestamp": "2025-02-18T15:19:03.510Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "HEROMOTOCO",
@@ -819,7 +819,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -5.41,
-      "timestamp": "2025-02-18T15:19:03.510Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "SUNPHARMA",
@@ -839,7 +839,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -4.05,
-      "timestamp": "2025-02-18T15:19:03.510Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "ITC",
@@ -859,7 +859,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -7.18,
-      "timestamp": "2025-02-18T15:19:03.510Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "BAJAJ-AUTO",
@@ -879,7 +879,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -0.52,
-      "timestamp": "2025-02-18T15:19:03.510Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "HINDUNILVR",
@@ -899,7 +899,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -1.05,
-      "timestamp": "2025-02-18T15:19:03.510Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "BRITANNIA",
@@ -910,16 +910,16 @@
       "previousClose": 4963.7,
       "change": -83.7,
       "pChange": -1.69,
-      "totalTradedVolume": 314196,
-      "totalTradedValue": 1543802046,
-      "lastUpdateTime": "18-Feb-2025 15:54:49",
+      "totalTradedVolume": 314216,
+      "totalTradedValue": 1543900316,
+      "lastUpdateTime": "18-Feb-2025 15:56:43",
       "yearHigh": 6469.9,
       "yearLow": 4641,
       "perChange365d": 1.02,
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": 2.25,
-      "timestamp": "2025-02-18T15:19:03.510Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "M&M",
@@ -939,7 +939,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -2.93,
-      "timestamp": "2025-02-18T15:19:03.510Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "ULTRACEMCO",
@@ -959,7 +959,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": 8.6,
-      "timestamp": "2025-02-18T15:19:03.510Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "BEL",
@@ -979,7 +979,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -11.93,
-      "timestamp": "2025-02-18T15:19:03.510Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "TRENT",
@@ -999,7 +999,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": -18.02,
-      "timestamp": "2025-02-18T15:19:03.510Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     },
     {
       "symbol": "INDUSINDBK",
@@ -1019,7 +1019,7 @@
       "date365dAgo": "16-Feb-2024",
       "date30dAgo": "17-Jan-2025",
       "perChange30d": 7.96,
-      "timestamp": "2025-02-18T15:19:03.510Z"
+      "timestamp": "2025-02-18T11:52:24.911Z"
     }
   ]
 }
