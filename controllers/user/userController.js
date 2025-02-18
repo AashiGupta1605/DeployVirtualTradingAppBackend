@@ -1,17 +1,33 @@
 import User from "../../models/UserModal.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { registerUserSchema, loginUserSchema, updateProfileSchema } from "../../helpers/userValidation.js"; // Import Joi schemas
 
 // User registration
 export const registerUser = async (req, res) => {
-  const { name, email, password, mobile, gender, dob } = req.body;
-  
+  const { name, email, password, mobile, gender, dob, orgtype } = req.body;
+
+  // Joi validation
+  const { error } = registerUserSchema.validate(req.body);
+  if (error) return res.status(400).json({ message: error.details[0].message });
+
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ message: "User already exists" });
 
+    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = await User.create({ name, email, password: hashedPassword, mobile, gender, dob });
+
+    // Create the new user
+    const newUser = await User.create({ 
+      name, 
+      email, 
+      password: hashedPassword, 
+      mobile, 
+      gender, 
+      dob, 
+      orgtype 
+    });
 
     // Generate token
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
@@ -25,6 +41,10 @@ export const registerUser = async (req, res) => {
 // User login
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
+
+  // Joi validation
+  const { error } = loginUserSchema.validate(req.body);
+  if (error) return res.status(400).json({ message: error.details[0].message });
 
   try {
     const user = await User.findOne({ email }).select("+password");
@@ -45,12 +65,16 @@ export const loginUser = async (req, res) => {
 // Update User Profile (without email change)
 export const updateProfile = async (req, res) => {
   const { id } = req.user; // User ID from auth middleware
-  const { name, mobile, gender, dob } = req.body;
-  
+  const { name, mobile, gender, dob, orgtype } = req.body;
+
+  // Joi validation
+  const { error } = updateProfileSchema.validate(req.body);
+  if (error) return res.status(400).json({ message: error.details[0].message });
+
   try {
     const updatedUser = await User.findByIdAndUpdate(
       id,
-      { name, mobile, gender, dob },
+      { name, mobile, gender, dob, orgtype },
       { new: true, runValidators: true }
     );
 
@@ -67,6 +91,10 @@ export const deleteUser = async (req, res) => {
   const { id } = req.user; // Authenticated user ID
 
   try {
+    // Joi validation for ID
+    const { error } = deleteUserSchema.validate({ id });
+    if (error) return res.status(400).json({ message: error.details[0].message });
+
     const user = await User.findById(id);
 
     if (!user || user.isDeleted) {
@@ -85,7 +113,7 @@ export const deleteUser = async (req, res) => {
 // Get All Users (for admin)
 export const getUsers = async (req, res) => {
   try {
-    res.json(await User.find({ isDeleted: false }));
+    res.json(await User.find({addedby:"self", isDeleted: false }));
   } catch (error) {
     res.status(500).json({ message: "Server Error" });
   }
