@@ -8,11 +8,9 @@ const orgRegistrationSchema = new mongoose.Schema({
   email: { type: String, required: true },
   mobile: { type: String },
   password:{type:String, required:true},
-  // status: { type: Boolean, default: true },
   approvalStatus: { 
     type: String, 
     enum: ["approved", "rejected", "pending"],  // ✅ Restrict values
-    
   },
   createDate: { type: Date, default: Date.now },
   updateDate: { type: Date, default: Date.now }

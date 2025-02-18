@@ -18,12 +18,15 @@ router.post('/login', organizationLogin);
 // organization users route ====================================== (ABHAY)
 
 router.post("/user/register", organizationUserRegistration);
-router.get("/user/display-all-users", organizationUsersDisplay);
+// router.get("/user/display-all-users", organizationUsersDisplay);
+router.get("/:orgName/users", organizationUsersDisplay);
+
+
 router.get("/user/:id", organizationgetUserDisplayById);
 router.put("/user/:id", organizationUpdateUser);
 router.delete("/user/:id", organizationUserDelete);
-router.get("/user/count/total", organizationTotalUsers);
-router.get("/user/count/new-week", organizationNewUsersLastWeek );
+router.get("/:orgName/users/count/total", organizationTotalUsers);
+router.get("/:orgName/users/count/new-week", organizationNewUsersLastWeek );
 
 
 //For Admin
