@@ -125,7 +125,7 @@ export const updateUser = async (req, res) => {
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json({ message: "User not found" });
     Object.keys(req.body).forEach(key => user[key] = req.body[key] ?? user[key]);
-    user.updatedDate = Date.now();
+    user.updateDate = Date.now();
     res.json(await user.save());
   } catch (error) {
     res.status(500).json({ message: "Error updating user" });

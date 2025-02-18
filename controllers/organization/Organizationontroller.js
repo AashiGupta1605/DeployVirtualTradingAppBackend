@@ -1,4 +1,3 @@
-
 import OrgRegistration from '../../models/OrgRegisterModal.js';
 import { organizationRegistrationValidationSchema, organizationLoginValidationSchema } from '../../helpers/joiValidation.js';
 import { hashPassword, comparePassword } from '../../helpers/hashHelper.js';
@@ -133,11 +132,7 @@ export const updateApprovalStatus = async (req, res) => {
   }
 };
 
-
-
-
-
-
+// import Student from "../../models/StudentModal.js";
 import UserModal from '../../models/UserModal.js';
 import { organizationUserRegistrationValidationSchema } from '../../helpers/joiValidation.js';
 
@@ -147,7 +142,7 @@ export const organizationUserRegistration = async (req, res) => {
     return res.status(400).json({ success: false, msg: error.details[0].message });
   }
 
-  const { name, email, mobile, gender, dob, password, addedby, status } = req.body;
+  const { name, email, mobile, gender, dob, password, confirmPassword, addedby, status } = req.body;
 
   try {
     // Check if the user already exists
@@ -164,13 +159,13 @@ export const organizationUserRegistration = async (req, res) => {
       gender,
       dob,
       password,
+      confirmPassword,
       addedby,
       status,
     });
 
     // Hash the password
     user.password = await hashPassword(password);
-
 
     await user.save();
 
@@ -181,10 +176,10 @@ export const organizationUserRegistration = async (req, res) => {
   }
 };
 
-
+// Get all students
 export const organizationUsersDisplay = async (req, res) => {
   try {
-    const users = await UserModal.find({ isDeleted: false, addedby: { $ne: "self" } });
+    const users = await UserModal.find({ isDeleted: false });
     res.status(200).json(users);
   } catch (error) {
     console.error(error.message);
@@ -213,7 +208,7 @@ export const organizationUpdateUser = async (req, res) => {
     return res.json({ success: false, msg: error.details[0].message });
   }
 
-  const { name, email, mobile, gender, dob, password, addedby, status } = updateData;
+  const { name, email, mobile, gender, dob, password, confirmPassword, addedby, status } = updateData;
 
   try {
     let user = await UserModal.findById(req.params.id);
@@ -233,7 +228,10 @@ export const organizationUpdateUser = async (req, res) => {
     if (password) {
       user.password = await hashPassword(password);
     }
-
+    
+    if(confirmPassword){
+      user.confirmPassword = await hashPassword(confirmPassword);
+    }
 
     user.updatedDate = Date.now();
 
@@ -245,8 +243,6 @@ export const organizationUpdateUser = async (req, res) => {
     res.status(500).json({ success: false, msg: "Server error" });
   }
 };
-
-
 
 // Soft delete a student
 export const organizationUserDelete = async (req, res) => {
@@ -271,7 +267,7 @@ export const organizationUserDelete = async (req, res) => {
 
 export const organizationTotalUsers = async (req, res) => {
   try {
-    const count = await UserModal.countDocuments({ isDeleted: false, addedby: { $ne: "self" }  });
+    const count = await UserModal.countDocuments({ isDeleted: false });
     res.status(200).json({ success: true, count });
   } catch (error) {
     console.error(error.message);
@@ -285,7 +281,6 @@ export const organizationNewUsersLastWeek = async (req, res) => {
     const newUsersCount = await UserModal.countDocuments({
       createdAt: { $gte: oneWeekAgo },
       isDeleted: false,
-      addedby: { $ne: "self" } 
     });
     res.status(200).json({ success: true, count: newUsersCount });
   } catch (error) {
