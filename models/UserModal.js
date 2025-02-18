@@ -1,3 +1,4 @@
+
 // by khusi
 // import mongoose from "mongoose";
 
@@ -20,6 +21,7 @@
 
 // export default mongoose.model("User", userSchema);
 
+
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
@@ -30,7 +32,6 @@ const userSchema = new mongoose.Schema({
   gender: { type: String },
   dob: { type: Date },
   status: { type: Boolean, default: true },
-  // change by abhishek for org user registration and normal user so that they share the same User Model and help the Admin in Filtering Organization
   addedby: { type: String, default:"self" },
   orgtype: { type: String },
   isDeleted: { type: Boolean, default: false },

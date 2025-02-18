@@ -2,7 +2,10 @@ import User from "../../models/UserModal.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { registerUserSchema, loginUserSchema, updateProfileSchema } from "../../helpers/userValidation.js"; // Import Joi schemas
-
+import {
+  updateUserValidation,
+  deleteUserValidation,
+} from '../../helpers/joiValidation.js';
 // User registration
 export const registerUser = async (req, res) => {
   const { name, email, password, confirmPassword, mobile, gender, dob, orgtype } = req.body;
@@ -123,6 +126,12 @@ export const getUsers = async (req, res) => {
 // Update User by ID (for admin)
 export const updateUser = async (req, res) => {
   try {
+    // Validate request body
+    const { error } = updateUserValidation.validate(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
+
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json({ message: "User not found" });
     Object.keys(req.body).forEach(key => user[key] = req.body[key] ?? user[key]);
@@ -136,6 +145,12 @@ export const updateUser = async (req, res) => {
 // Delete User by ID (for admin)
 export const deleteUserById = async (req, res) => {
   try {
+    // Validate request params
+    const { error } = deleteUserValidation.validate(req.params);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
+
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json({ message: "User not found" });
     user.isDeleted = true;

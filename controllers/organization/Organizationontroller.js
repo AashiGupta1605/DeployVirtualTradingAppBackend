@@ -1,8 +1,12 @@
+
+
 // organization registration and login controllers ------------------- created by abhishek
 import OrgRegistration from '../../models/OrgRegisterModal.js';
-import { organizationRegistrationValidationSchema, organizationLoginValidationSchema } from '../../helpers/joiValidation.js';
+import { organizationRegistrationValidationSchema, organizationLoginValidationSchema, updateOrgValidation, updateApprovalStatusValidation, getUserByOrgNameValidation} from '../../helpers/joiValidation.js';
 import { hashPassword, comparePassword } from '../../helpers/hashHelper.js';
 import moment from "moment";
+
+
 
 export const organizationRegister = async (req, res) => {
   const { name, address, website, contactPerson, email, mobile, approvalStatus, password } = req.body;
@@ -90,11 +94,13 @@ export const organizationLogin = async (req, res) => {
 //Admin
 export const getAllOrgs = async (req, res) => {
   try {
-    res.status(200).json(await OrgRegistration.find());
+    const orgs = await OrgRegistration.find({ isDeleted: false }); // ✅ Filter by isDeleted: false
+    res.status(200).json(orgs);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 export const getOrgById = async (req, res) => {
   try {
@@ -108,6 +114,12 @@ export const getOrgById = async (req, res) => {
 
 export const updateOrg = async (req, res) => {
   try {
+    // Validate request body
+    const { error } = updateOrgValidation.validate(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
+
     const updatedOrg = await OrgRegistration.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!updatedOrg) return res.status(404).json({ message: "Organization not found" });
     res.status(200).json({ message: "Organization updated", data: updatedOrg });
@@ -116,20 +128,35 @@ export const updateOrg = async (req, res) => {
   }
 };
 
+
 export const deleteOrg = async (req, res) => {
   try {
-    const deletedOrg = await OrgRegistration.findByIdAndDelete(req.params.id);
-    if (!deletedOrg) return res.status(404).json({ message: "Organization not found" });
-    res.status(200).json({ message: "Organization deleted successfully" });
+    const deletedOrg = await OrgRegistration.findByIdAndUpdate(
+      req.params.id,
+      { isDeleted: true },  // ✅ Instead of permanent delete, mark as deleted
+      { new: true }
+    );
+
+    if (!deletedOrg) {
+      return res.status(404).json({ message: "Organization not found" });
+    }
+
+    res.status(200).json({ message: "Organization soft deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
+
 export const updateApprovalStatus = async (req, res) => {
   try {
+    // Validate request body
+    const { error } = updateApprovalStatusValidation.validate(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
+
     const { status } = req.body;
-    if (!["approved", "rejected"].includes(status)) return res.status(400).json({ message: "Invalid approval status" });
     const updatedOrg = await OrgRegistration.findByIdAndUpdate(req.params.id, { approvalStatus: status }, { new: true });
     if (!updatedOrg) return res.status(404).json({ message: "Organization not found" });
     res.status(200).json({ message: `Organization ${status}`, data: updatedOrg });
@@ -316,4 +343,23 @@ export const organizationNewUsersLastWeek = async (req, res) => {
     console.error(error.message);
     res.status(500).json({ success: false, msg: "Server error" });
   }
+};
+
+//Admin
+export const getUserByOrgName = async (req, res) => {
+  try {
+    // Validate request params
+    const { error } = getUserByOrgNameValidation.validate(req.params);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
+
+    const orgName = req.params.orgName;
+    const user = await UserModal.find({ addedby: orgName, isDeleted: false });
+    res.status(200).json(user);
+  } catch (error) {
+    console.error('Error fetching students by organization:', error);
+    res.status(500).json({ error: 'Failed to fetch students.' });
+  }
+
 };
