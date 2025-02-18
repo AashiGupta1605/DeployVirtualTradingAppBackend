@@ -5,13 +5,11 @@ export const registerUserSchema = Joi.object({
   name: Joi.string().min(3).required(),
   email: Joi.string().email().required(),
   password: Joi.string().min(6).required(),
-   // Confirm password validation
-  mobile: Joi.string().pattern(/^[0-9]{10}$/).required(), // Mobile number pattern
+  mobile: Joi.string().pattern(/^[0-9]{10}$/).required(),
   gender: Joi.string().required(),
-  dob: Joi.date().less('now').required(), // Ensure date is in the past
-  orgtype: Joi.string().valid('company', 'individual').required() // Org type added here
+  dob: Joi.date().less("now").required(),
+  // orgtype: Joi.string().valid("company", "individual").optional(), // Now optional
 });
-
 // Validation schema for user login
 export const loginUserSchema = Joi.object({
   email: Joi.string().email().required(),
