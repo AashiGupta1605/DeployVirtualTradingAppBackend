@@ -1,7 +1,10 @@
+
+
 // organization registration and login controllers ------------------- created by abhishek
 import OrgRegistration from '../../models/OrgRegisterModal.js';
 import { organizationRegistrationValidationSchema, organizationLoginValidationSchema, updateOrgValidation, updateApprovalStatusValidation, getUserByOrgNameValidation} from '../../helpers/joiValidation.js';
 import { hashPassword, comparePassword } from '../../helpers/hashHelper.js';
+import {buildDateQuery, buildSearchQuery, buildAgeQuery} from "../../helpers/dataHandler.js";
 import moment from "moment";
 
 
@@ -223,18 +226,48 @@ export const organizationUserRegistration = async (req, res) => {
 };
 
 
+// separate logic for code all code included
+
 export const organizationUsersDisplay = async (req, res) => {
   try {
-    const orgName = req.params.orgName; // Get the organization name from the URL parameter
-    const users = await UserModal.find({ addedby: orgName, isDeleted: false }); // Filter users by addedby
-    res.status(200).json(users);
+    const orgName = req.params.orgName;
+    const { page = 1, limit = 10, search = '', startDate, endDate, minAge, maxAge } = req.query;
+
+    const searchQuery = buildSearchQuery(search);
+    const dateQuery = buildDateQuery(startDate, endDate);
+    const ageQuery = buildAgeQuery(minAge, maxAge);
+
+    const users = await UserModal.find({
+      addedby: orgName,
+      isDeleted: false,
+      ...searchQuery,
+      ...dateQuery,
+      ...ageQuery
+    })
+      .skip((page - 1) * limit)
+      .limit(Number(limit));
+
+    const totalUsers = await UserModal.countDocuments({
+      addedby: orgName,
+      isDeleted: false,
+      ...searchQuery,
+      ...dateQuery,
+      ...ageQuery
+    });
+
+    res.status(200).json({
+      users,
+      totalPages: Math.ceil(totalUsers / limit),
+      currentPage: Number(page)
+    });
   } catch (error) {
     console.error('Error fetching users by organization:', error);
     res.status(500).json({ error: 'Failed to fetch users.' });
   }
 };
 
-// Get a student by ID
+
+// Get a user by ID
 export const organizationgetUserDisplayById = async (req, res) => {
   try {
     const user = await UserModal.findById(req.params.id);
@@ -343,6 +376,87 @@ export const organizationNewUsersLastWeek = async (req, res) => {
   }
 };
 
+export const organizationMaleUsers = async (req, res) => {
+  const orgName = req.params.orgName;
+
+  try {
+    const maleUsersCount = await UserModal.countDocuments({
+      gender: "Male",
+      isDeleted: false,
+      addedby: orgName
+    });
+    res.status(200).json({ success: true, count: maleUsersCount });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ success: false, msg: "Server error" });
+  }
+};
+
+export const organizationFemaleUsers = async (req, res) => {
+  const orgName = req.params.orgName;
+
+  try {
+    const femaleUsersCount = await UserModal.countDocuments({
+      gender: "Female",
+      isDeleted: false,
+      addedby: orgName
+    });
+    res.status(200).json({ success: true, count: femaleUsersCount });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ success: false, msg: "Server error" });
+  }
+};
+
+export const organizationActiveUsers = async (req, res) => {
+  const orgName = req.params.orgName;
+
+  try {
+    const activeUsersCount = await UserModal.countDocuments({
+      status: true,
+      isDeleted: false,
+      addedby: orgName
+    });
+    res.status(200).json({ success: true, count: activeUsersCount });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ success: false, msg: "Server error" });
+  }
+};
+
+export const organizationDeactiveUsers = async (req, res) => {
+  const orgName = req.params.orgName;
+
+  try {
+    const deactiveUsersCount = await UserModal.countDocuments({
+      status: false,
+      isDeleted: false,
+      addedby: orgName
+    });
+    res.status(200).json({ success: true, count: deactiveUsersCount });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ success: false, msg: "Server error" });
+  }
+};
+
+
+export const organizationAverageUserAge = async (req, res) => {
+  const orgName = req.params.orgName;
+
+  try {
+    const users = await UserModal.find({ isDeleted: false, addedby: orgName }, 'dob');
+    const totalAge = users.reduce((sum, user) => {
+      const age = moment().diff(user.dob, 'years');
+      return sum + age;
+    }, 0);
+    const averageAge = totalAge / users.length;
+    res.status(200).json({ success: true, averageAge: averageAge.toFixed(2) });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ success: false, msg: "Server error" });
+  }
+  
 //Admin
 export const getUserByOrgName = async (req, res) => {
   try {
