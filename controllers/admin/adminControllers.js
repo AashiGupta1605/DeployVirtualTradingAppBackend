@@ -1,8 +1,14 @@
 import NiftyData from '../../models/NiftyDataModal.js';
-
+import { saveNiftyDataValidation, getCompanyBySymbolValidation,} from '../../helpers/joiValidation.js';
 // Save Nifty data
 export const saveNiftyData = async (req, res) => {
   try {
+    // Validate request body
+    const { error } = saveNiftyDataValidation.validate(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
+
     const { name, value } = req.body;
     await new NiftyData({ name, value }).save();
     res.status(201).json({ message: 'Data saved successfully' });
@@ -24,6 +30,12 @@ export const getNiftyData = async (req, res) => {
 // Get latest company data by symbol
 export const getCompanyBySymbol = async (req, res) => {
   try {
+    // Validate request params
+    const { error } = getCompanyBySymbolValidation.validate(req.params);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
+
     const { symbol } = req.params;
     const latestData = await NiftyData.findOne().sort({ fetchTime: -1 });
 
@@ -33,7 +45,7 @@ export const getCompanyBySymbol = async (req, res) => {
 
     const company = latestData.stocks.find(stock => stock.symbol === symbol);
     if (!company) {
-      return res.status(404).json(`{ message: Company with symbol ${symbol} not found }`);
+      return res.status(404).json({ message: `Company with symbol ${symbol} not found` });
     }
 
     res.status(200).json(company);

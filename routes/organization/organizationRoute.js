@@ -10,6 +10,7 @@ organizationFemaleUsers,
 organizationActiveUsers,
 organizationDeactiveUsers,
 organizationAverageUserAge
+updateApprovalStatus,getUserByOrgName
 } from '../../controllers/organization/Organizationontroller.js';
 
 const router = express.Router();
@@ -49,5 +50,5 @@ router.get("/:id", getOrgById); // GET for retrieving a specific organization by
 router.put("/:id", updateOrg); // PUT for updating an organization
 router.delete("/:id", deleteOrg); // DELETE for deleting an organization
 router.put("/:id/approval-status", updateApprovalStatus); // PUT for updating approval status
-router.get('/users/:orgName', getStudentsByOrgName);
+router.get('/users/:orgName', getUserByOrgName);
 export default router;

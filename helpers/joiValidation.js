@@ -1,5 +1,6 @@
 import Joi from "joi";
 
+//organization
 export const organizationRegistrationValidationSchema = Joi.object({
   name: Joi.string().required().label('Name'),
   address: Joi.string().required().label('Address'),
@@ -39,3 +40,60 @@ export default {
   organizationLoginValidationSchema,
   organizationUserRegistrationValidationSchema
 };
+
+
+//Admin
+export const saveNiftyDataValidation = Joi.object({
+  name: Joi.string().required().messages({
+    'string.empty': 'Name is required',
+    'any.required': 'Name is required',
+  }),
+  value: Joi.number().required().messages({
+    'number.base': 'Value must be a number',
+    'any.required': 'Value is required',
+  }),
+});
+
+export const getCompanyBySymbolValidation = Joi.object({
+  symbol: Joi.string().required().messages({
+    'string.empty': 'Symbol is required',
+    'any.required': 'Symbol is required',
+  }),
+});
+
+export const updateOrgValidation = Joi.object({
+  name: Joi.string().optional(),
+  approvalStatus: Joi.string().valid('approved', 'rejected').optional(),
+  isDeleted: Joi.boolean().optional(),
+}).min(1).messages({
+  'object.min': 'At least one field is required to update',
+});
+
+export const updateApprovalStatusValidation = Joi.object({
+  status: Joi.string().valid('approved', 'rejected').required().messages({
+    'any.only': 'Status must be either "approved" or "rejected"',
+    'any.required': 'Status is required',
+  }),
+});
+
+export const getUserByOrgNameValidation = Joi.object({
+  orgName: Joi.string().required().messages({
+    'string.empty': 'Organization name is required',
+    'any.required': 'Organization name is required',
+  }),
+});
+
+export const updateUserValidation = Joi.object({
+  name: Joi.string().optional(),
+  email: Joi.string().email().optional(),
+  isDeleted: Joi.boolean().optional(),
+}).min(1).messages({
+  'object.min': 'At least one field is required to update',
+});
+
+export const deleteUserValidation = Joi.object({
+  id: Joi.string().required().messages({
+    'string.empty': 'User ID is required',
+    'any.required': 'User ID is required',
+  }),
+});
