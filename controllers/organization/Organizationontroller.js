@@ -1,6 +1,3 @@
-
-
-// organization registration and login controllers ------------------- created by abhishek
 import OrgRegistration from '../../models/OrgRegisterModal.js';
 import { organizationRegistrationValidationSchema, organizationLoginValidationSchema, updateOrgValidation, updateApprovalStatusValidation, getUserByOrgNameValidation} from '../../helpers/joiValidation.js';
 import { hashPassword, comparePassword } from '../../helpers/hashHelper.js';
@@ -160,15 +157,11 @@ export const updateApprovalStatus = async (req, res) => {
     const { status } = req.body;
     const updatedOrg = await OrgRegistration.findByIdAndUpdate(req.params.id, { approvalStatus: status }, { new: true });
     if (!updatedOrg) return res.status(404).json({ message: "Organization not found" });
-    res.status(200).json({ message: `Organization ${status}`, data: updatedOrg });
+    res.status(200).json(`{ message: Organization ${status}, data: updatedOrg }`);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
-
-
-
-
 
 // organization users controllers such as crud opeartions of user under an organization==============
 

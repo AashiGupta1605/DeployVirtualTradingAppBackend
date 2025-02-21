@@ -9,7 +9,8 @@ organizationFemaleUsers,
 organizationActiveUsers,
 organizationDeactiveUsers,
 organizationAverageUserAge,
-updateApprovalStatus,getUserByOrgName
+updateApprovalStatus,getUserByOrgName,
+organizationAverageUserAge
 } from '../../controllers/organization/Organizationontroller.js';
 
 const router = express.Router();
