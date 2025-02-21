@@ -4,14 +4,13 @@ import express from 'express';
 import { organizationRegister, organizationLogin, organizationUserRegistration, organizationUpdateUser, organizationUserDelete, organizationUsersDisplay, organizationTotalUsers, organizationNewUsersLastWeek, organizationgetUserDisplayById 
     ,getAllOrgs,getOrgById,  updateOrg,
 deleteOrg,
-updateApprovalStatus,
 organizationMaleUsers,
 organizationFemaleUsers,
 organizationActiveUsers,
 organizationDeactiveUsers,
 organizationAverageUserAge,
 updateApprovalStatus,getUserByOrgName,
-organizationAverageUserAge,getUserByOrgName
+organizationAverageUserAge
 } from '../../controllers/organization/Organizationontroller.js';
 
 const router = express.Router();

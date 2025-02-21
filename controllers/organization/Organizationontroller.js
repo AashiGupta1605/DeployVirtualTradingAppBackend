@@ -163,20 +163,6 @@ export const updateApprovalStatus = async (req, res) => {
   }
 };
 
-// export const getStudentsByOrgName = async (req, res) => {
-//   try {
-//     // Hardcode the organization name to "MITS"
-//     const students = await UserModal.find({ addedby: "MITS", isDeleted: false });
-//     res.status(200).json(students);
-//   } catch (error) {
-//     console.error('Error fetching students by organization:', error);
-//     res.status(500).json({ error: 'Failed to fetch students.' });
-//   }
-// };
-
-
-
-
 // organization users controllers such as crud opeartions of user under an organization==============
 
 import UserModal from '../../models/UserModal.js';
@@ -225,6 +211,48 @@ export const organizationUserRegistration = async (req, res) => {
 
 // separate logic for code all code included
 
+// export const organizationUsersDisplay = async (req, res) => {
+//   try {
+//     const orgName = req.params.orgName;
+//     const { page = 1, limit = 10, search = '', startDate, endDate, minAge, maxAge } = req.query;
+
+//     const searchQuery = buildSearchQuery(search);
+//     const dateQuery = buildDateQuery(startDate, endDate);
+//     const ageQuery = buildAgeQuery(minAge, maxAge);
+
+//     const users = await UserModal.find({
+//       addedby: orgName,
+//       isDeleted: false,
+//       ...searchQuery,
+//       ...dateQuery,
+//       ...ageQuery
+//     })
+//       .skip((page - 1) * limit)
+//       .limit(Number(limit));
+
+//     const totalUsers = await UserModal.countDocuments({
+//       addedby: orgName,
+//       isDeleted: false,
+//       ...searchQuery,
+//       ...dateQuery,
+//       ...ageQuery
+//     });
+
+//     res.status(200).json({
+//       users,
+//       totalPages: Math.ceil(totalUsers / limit),
+//       currentPage: Number(page)
+//     });
+//   } catch (error) {
+//     console.error('Error fetching users by organization:', error);
+//     res.status(500).json({ error: 'Failed to fetch users.' });
+//   }
+// };
+
+
+
+// added pagination for numers and records
+
 export const organizationUsersDisplay = async (req, res) => {
   try {
     const orgName = req.params.orgName;
@@ -262,6 +290,8 @@ export const organizationUsersDisplay = async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch users.' });
   }
 };
+
+
 
 
 // Get a user by ID
