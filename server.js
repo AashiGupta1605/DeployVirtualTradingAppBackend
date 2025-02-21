@@ -36,7 +36,6 @@ app.use("/api/org", orgRoute);
  // Use the new router
 
 
-
 // Server setup
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, async () => {
