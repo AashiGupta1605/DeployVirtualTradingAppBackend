@@ -9,6 +9,8 @@ organizationMaleUsers,
 organizationFemaleUsers,
 organizationActiveUsers,
 organizationDeactiveUsers,
+organizationAverageUserAge,
+updateApprovalStatus,getUserByOrgName,
 organizationAverageUserAge,getUserByOrgName
 } from '../../controllers/organization/Organizationontroller.js';
 
