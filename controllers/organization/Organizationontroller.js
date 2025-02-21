@@ -166,16 +166,16 @@ export const updateApprovalStatus = async (req, res) => {
   }
 };
 
-export const getStudentsByOrgName = async (req, res) => {
-  try {
-    // Hardcode the organization name to "MITS"
-    const students = await UserModal.find({ addedby: "MITS", isDeleted: false });
-    res.status(200).json(students);
-  } catch (error) {
-    console.error('Error fetching students by organization:', error);
-    res.status(500).json({ error: 'Failed to fetch students.' });
-  }
-};
+// export const getStudentsByOrgName = async (req, res) => {
+//   try {
+//     // Hardcode the organization name to "MITS"
+//     const students = await UserModal.find({ addedby: "MITS", isDeleted: false });
+//     res.status(200).json(students);
+//   } catch (error) {
+//     console.error('Error fetching students by organization:', error);
+//     res.status(500).json({ error: 'Failed to fetch students.' });
+//   }
+// };
 
 
 
@@ -440,7 +440,6 @@ export const organizationDeactiveUsers = async (req, res) => {
   }
 };
 
-
 export const organizationAverageUserAge = async (req, res) => {
   const orgName = req.params.orgName;
 
@@ -456,8 +455,9 @@ export const organizationAverageUserAge = async (req, res) => {
     console.error(error.message);
     res.status(500).json({ success: false, msg: "Server error" });
   }
-  
-//Admin
+};
+
+// Admin
 export const getUserByOrgName = async (req, res) => {
   try {
     // Validate request params
