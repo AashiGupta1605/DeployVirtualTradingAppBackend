@@ -1,6 +1,3 @@
-
-
-// organization registration and login controllers ------------------- created by abhishek
 import OrgRegistration from '../../models/OrgRegisterModal.js';
 import { organizationRegistrationValidationSchema, organizationLoginValidationSchema, updateOrgValidation, updateApprovalStatusValidation, getUserByOrgNameValidation} from '../../helpers/joiValidation.js';
 import { hashPassword, comparePassword } from '../../helpers/hashHelper.js';
@@ -160,7 +157,7 @@ export const updateApprovalStatus = async (req, res) => {
     const { status } = req.body;
     const updatedOrg = await OrgRegistration.findByIdAndUpdate(req.params.id, { approvalStatus: status }, { new: true });
     if (!updatedOrg) return res.status(404).json({ message: "Organization not found" });
-    res.status(200).json({ message: `Organization ${status}`, data: updatedOrg });
+    res.status(200).json(`{ message: Organization ${status}, data: updatedOrg }`);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -440,7 +437,6 @@ export const organizationDeactiveUsers = async (req, res) => {
   }
 };
 
-
 export const organizationAverageUserAge = async (req, res) => {
   const orgName = req.params.orgName;
 
@@ -456,8 +452,9 @@ export const organizationAverageUserAge = async (req, res) => {
     console.error(error.message);
     res.status(500).json({ success: false, msg: "Server error" });
   }
-  
-//Admin
+};
+
+// Admin
 export const getUserByOrgName = async (req, res) => {
   try {
     // Validate request params

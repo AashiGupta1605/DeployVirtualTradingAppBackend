@@ -4,12 +4,12 @@ import express from 'express';
 import { organizationRegister, organizationLogin, organizationUserRegistration, organizationUpdateUser, organizationUserDelete, organizationUsersDisplay, organizationTotalUsers, organizationNewUsersLastWeek, organizationgetUserDisplayById 
     ,getAllOrgs,getOrgById,  updateOrg,
 deleteOrg,
-updateApprovalStatus,getStudentsByOrgName,
+getStudentsByOrgName,
 organizationMaleUsers,
 organizationFemaleUsers,
 organizationActiveUsers,
 organizationDeactiveUsers,
-organizationAverageUserAge
+organizationAverageUserAge,
 updateApprovalStatus,getUserByOrgName
 } from '../../controllers/organization/Organizationontroller.js';
 
