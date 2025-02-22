@@ -19,10 +19,11 @@ export const loginUserSchema = Joi.object({
 // Validation schema for updating profile (excluding email)
 export const updateProfileSchema = Joi.object({
   name: Joi.string().min(3),
+  email: Joi.string().email().required(),
   mobile: Joi.string().pattern(/^[0-9]{10}$/),
   gender: Joi.string().valid('male', 'female', 'other'),
   dob: Joi.date().less('now'),
-  orgtype: Joi.string().valid('company', 'individual') // Added to profile update schema
+  // orgtype: Joi.string().valid('company', 'individual') // Added to profile update schema
 });
 
 // Validation schema for deleting user
