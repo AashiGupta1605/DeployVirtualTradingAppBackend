@@ -9,7 +9,7 @@ import { fetchNifty50Data } from './scripts/scraper.js';
 import contactRoute from "./routes/user/contactRoutes.js";
 import userRoute from "./routes/user/userRoutes.js";
 import adminRoute from "./routes/admin/adminRoute.js";
-import orgRoute from "./routes/organization/organizationRoute.js"
+import organizationRoute from "./routes/organization/organizationRoute.js"
  // Import the new router
 
 dotenv.config();
@@ -29,10 +29,10 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/contact", contactRoute);
-app.use("/api/user", userRoute);
-app.use("/api/admin", adminRoute);
-app.use("/api/org", orgRoute);
+app.use("/v1/api/contact", contactRoute);
+app.use("/v1/api/user", userRoute);
+app.use("/v1/api/admin", adminRoute);
+app.use("/v1/api/organization", organizationRoute);
  // Use the new router
 
 
