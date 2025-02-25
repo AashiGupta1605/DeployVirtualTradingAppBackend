@@ -23,7 +23,7 @@ router.post('/login', organizationLogin);
 // organization users route ====================================== (ABHAY)
 
 router.post("/user/register", organizationUserRegistration);
-// router.get("/user/display-all-users", organizationUsersDisplay);
+router.get("/user/display-all-users", organizationUsersDisplay);
 router.get("/:orgName/users", organizationUsersDisplay);
 
 
@@ -31,16 +31,12 @@ router.get("/user/:id", organizationgetUserDisplayById);
 router.put("/user/:id", organizationUpdateUser);
 router.delete("/user/:id", organizationUserDelete);
 router.get("/:orgName/users/count/total", organizationTotalUsers);
-router.get("/:orgName/users/count/new-week", organizationNewUsersLastWeek );
+router.get("/:orgName/users/count/new-week", organizationNewUsersLastWeek);
 router.get("/:orgName/users/count/male", organizationMaleUsers);
 router.get("/:orgName/users/count/female", organizationFemaleUsers);
 router.get("/:orgName/users/count/active", organizationActiveUsers);
 router.get("/:orgName/users/count/deactive", organizationDeactiveUsers);
 router.get("/:orgName/users/count/average-age", organizationAverageUserAge);
-
-
-
-
 
 
 //For Admin
@@ -51,3 +47,4 @@ router.delete("/:id", deleteOrg); // DELETE for deleting an organization
 router.put("/:id/approval-status", updateApprovalStatus); // PUT for updating approval status
 router.get('/users/:orgName', getUserByOrgName);
 export default router;
+
