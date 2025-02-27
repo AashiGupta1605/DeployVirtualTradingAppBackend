@@ -26,7 +26,12 @@ cron.schedule('*/1 * * * *', async () => {
 
 connectDB();
 
-app.use(cors());
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
 app.use(express.json());
 
 app.use("/v1/api/contact", contactRoute);
@@ -35,6 +40,7 @@ app.use("/v1/api/admin", adminRoute);
 app.use("/v1/api/organization", organizationRoute);
  // Use the new router
 
+ 
 
 // Server setup
 const PORT = process.env.PORT || 5000;
