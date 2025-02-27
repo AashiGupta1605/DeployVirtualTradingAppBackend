@@ -658,30 +658,80 @@ export const updateOrg = async (req, res) => {
       return res.status(400).json({ message: error.details[0].message });
     }
 
-    const updatedOrg = await OrgRegistration.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!updatedOrg) return res.status(404).json({ message: ORG_NOT_FOUND });
-    res.status(200).json({ message: ORG_UPDATED_SUCCESS, data: updatedOrg });
+    // Prepare update data
+    const updateData = { ...req.body };
+    
+    // Remove system-generated and sensitive fields
+    const fieldsToRemove = ['_id', 'password', 'createDate', 'updateDate', '__v'];
+    fieldsToRemove.forEach(field => delete updateData[field]);
+
+    // Ensure only defined fields are updated
+    const filteredUpdateData = Object.fromEntries(
+      Object.entries(updateData).filter(([_, v]) => v !== undefined)
+    );
+
+    // Update organization
+    const updatedOrg = await OrgRegistration.findByIdAndUpdate(
+      req.params.id, 
+      filteredUpdateData, 
+      { 
+        new: true,  // Return the updated document
+        runValidators: true  // Run model validations
+      }
+    );
+
+    if (!updatedOrg) {
+      return res.status(404).json({ message: ORG_NOT_FOUND });
+    }
+
+    res.status(200).json({ 
+      message: ORG_UPDATED_SUCCESS, 
+      data: updatedOrg 
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Update organization error:', error);
+    res.status(500).json({ 
+      message: 'Error updating organization', 
+      error: error.message 
+    });
   }
 };
 
-
 export const deleteOrg = async (req, res) => {
   try {
+    // Validate the ID
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ message: 'Invalid organization ID' });
+    }
+
+    // Soft delete the organization
     const deletedOrg = await OrgRegistration.findByIdAndUpdate(
-      req.params.id,
-      { isDeleted: true },  // ✅ Instead of permanent delete, mark as deleted
-      { new: true }
+      id,
+      { 
+        isDeleted: true,
+        updatedDate: Date.now() 
+      },
+      { 
+        new: true,  // Return the updated document
+        runValidators: true  // Run model validations
+      }
     );
 
     if (!deletedOrg) {
       return res.status(404).json({ message: ORG_NOT_FOUND });
     }
 
-    res.status(200).json({ message: ORG_SOFT_DELETED_SUCCESS });
+    res.status(200).json({ 
+      message: ORG_SOFT_DELETED_SUCCESS,
+      data: deletedOrg 
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Delete organization error:', error);
+    res.status(500).json({ 
+      message: 'Error deleting organization', 
+      error: error.message 
+    });
   }
 };
 
