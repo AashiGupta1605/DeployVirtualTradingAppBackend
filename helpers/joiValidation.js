@@ -63,8 +63,23 @@ export const getCompanyBySymbolValidation = Joi.object({
 
 export const updateOrgValidation = Joi.object({
   name: Joi.string().optional(),
-  approvalStatus: Joi.string().valid('approved', 'rejected').optional(),
+  address: Joi.string().optional(),
+  website: Joi.string().uri().optional(),
+  contactPerson: Joi.string().optional(),
+  email: Joi.string().email().optional(),
+  mobile: Joi.string()
+    .pattern(/^[0-9]{10}$/)
+    .optional(),
+  approvalStatus: Joi.string()
+    .valid('approved', 'pending', 'rejected')
+    .optional(),
   isDeleted: Joi.boolean().optional(),
+  // Explicitly exclude system-generated and sensitive fields
+  password: Joi.forbidden(),
+  createDate: Joi.forbidden(),
+  updateDate: Joi.forbidden(),
+  _id: Joi.forbidden(),
+  __v: Joi.forbidden()
 }).min(1).messages({
   'object.min': 'At least one field is required to update',
 });
@@ -84,11 +99,23 @@ export const getUserByOrgNameValidation = Joi.object({
 });
 
 export const updateUserValidation = Joi.object({
-  name: Joi.string().optional(),
-  email: Joi.string().email().optional(),
-  isDeleted: Joi.boolean().optional(),
-}).min(1).messages({
-  'object.min': 'At least one field is required to update',
+  name: Joi.string()
+    .min(2)
+    .optional(),
+  email: Joi.string()
+    .email()
+    .optional(),
+  mobile: Joi.string()
+    .pattern(/^[0-9]{10}$/)
+    .optional(),
+  gender: Joi.string()
+    .valid('Male', 'Female', 'Other')
+    .optional(),
+  dob: Joi.date()
+    .max(new Date())
+    .optional(),
+  orgtype: Joi.string()
+    .optional()
 });
 
 export const deleteUserValidation = Joi.object({
