@@ -148,13 +148,35 @@ export const updateUser = async (req, res) => {
       return res.status(400).json({ message: error.details[0].message });
     }
 
+    // Find user by ID
     const user = await User.findById(req.params.id);
-    if (!user) return res.status(404).json({ message: "User not found" });
-    Object.keys(req.body).forEach(key => user[key] = req.body[key] ?? user[key]);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Update user fields
+    Object.keys(req.body).forEach(key => {
+      if (req.body[key] !== undefined) {
+        user[key] = req.body[key];
+      }
+    });
+
+    // Update timestamp
     user.updatedDate = Date.now();
-    res.json(await user.save());
+
+    // Save updated user
+    const updatedUser = await user.save();
+
+    res.json({
+      message: "User updated successfully",
+      user: updatedUser
+    });
   } catch (error) {
-    res.status(500).json({ message: "Error updating user" });
+    console.error('Update user error:', error);
+    res.status(500).json({ 
+      message: "Error updating user", 
+      error: error.message 
+    });
   }
 };
 
