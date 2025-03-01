@@ -70,6 +70,7 @@ export const deleteContact = async (req, res) => {
     }
     res.status(200).json({ message: "Contact deleted successfully!" });
   } catch (error) {
+    console.error('Delete error:', error); // Add this for debugging
     res.status(500).json({ error: "Failed to delete contact" });
   }
 };

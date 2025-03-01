@@ -66,10 +66,26 @@ export const loginUser = async (req, res) => {
   }
 };
 
+// Get User Profile
+export const getUserProfile = async (req, res) => {
+  try {
+    const user = req.user; // Retrieved from userMiddleware
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({ user });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching user profile", error: error.message });
+  }
+};
+
+
 // Update User Profile (without email change)
 export const updateProfile = async (req, res) => {
   const { id } = req.user; // User ID from auth middleware
-  const { name, mobile, gender, dob, orgtype } = req.body;
+  const { name, email, mobile, gender, dob} = req.body;
 
   // Joi validation
   const { error } = updateProfileSchema.validate(req.body);
@@ -78,7 +94,7 @@ export const updateProfile = async (req, res) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(
       id,
-      { name, mobile, gender, dob, orgtype },
+      { name, email, mobile, gender, dob },
       { new: true, runValidators: true }
     );
 
@@ -135,7 +151,7 @@ export const updateUser = async (req, res) => {
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json({ message: "User not found" });
     Object.keys(req.body).forEach(key => user[key] = req.body[key] ?? user[key]);
-    user.updateDate = Date.now();
+    user.updatedDate = Date.now();
     res.json(await user.save());
   } catch (error) {
     res.status(500).json({ message: "Error updating user" });
