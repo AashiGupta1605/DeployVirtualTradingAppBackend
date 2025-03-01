@@ -10,6 +10,10 @@ organizationActiveUsers,
 organizationDeactiveUsers,
 organizationAverageUserAge,
 updateApprovalStatus,getUserByOrgName,
+organizationUsersFeedbackDisplay,
+organizationUserFeedbackDelete,
+organizationUsersFeedbackDelete,
+submitOrganizationFeedback,
 } from '../../controllers/organization/Organizationontroller.js';
 
 const router = express.Router();
@@ -26,6 +30,15 @@ router.post("/user/register", organizationUserRegistration);
 router.get("/user/display-all-users", organizationUsersDisplay);
 router.get("/:orgName/users", organizationUsersDisplay);
 
+// added on 28 feb night
+// organizaition users feedback
+router.get("/:orgName/users/feedbacks", organizationUsersFeedbackDisplay);
+// router.delete("/user/feedbacks/:id", organizationUsersFeedbackDelete);
+router.delete("/user/feedbacks/:id", organizationUsersFeedbackDelete);
+
+// organization feedbacks
+router.post("/feedbacks/register", submitOrganizationFeedback);
+
 
 router.get("/user/:id", organizationgetUserDisplayById);
 router.put("/user/:id", organizationUpdateUser);
@@ -37,6 +50,8 @@ router.get("/:orgName/users/count/female", organizationFemaleUsers);
 router.get("/:orgName/users/count/active", organizationActiveUsers);
 router.get("/:orgName/users/count/deactive", organizationDeactiveUsers);
 router.get("/:orgName/users/count/average-age", organizationAverageUserAge);
+
+
 
 
 //For Admin

@@ -755,8 +755,59 @@ export const updateApprovalStatus = async (req, res) => {
 
 // organization users controllers such as crud opeartions of user under an organization==============
 
+// import UserModal from '../../models/UserModal.js';
+// import { organizationUserRegistrationValidationSchema } from '../../helpers/joiValidation.js';
+// import Feedback from '../../models/FeedbackModel.js';
+
+// export const organizationUserRegistration = async (req, res) => {
+//   const { error } = organizationUserRegistrationValidationSchema.validate(req.body);
+//   if (error) {
+//     return res.status(400).json({ success: false, msg: error.details[0].message });
+//   }
+
+//   const { name, email, mobile, gender, dob, password, addedby, status } = req.body;
+
+//   try {
+//     // Check if the user already exists
+//     let user = await UserModal.findOne({ email });
+//     if (user) {
+//       return res.status(400).json({ success: false, msg: USER_ALREADY_EXISTS });
+//     }
+
+//     // Create a new student
+//     user = new UserModal({
+//       name,
+//       email,
+//       mobile,
+//       gender,
+//       dob,
+//       password,
+//       addedby,
+//       status,
+//     });
+
+//     // Hash the password
+//     user.password = await hashPassword(password);
+
+
+//     await user.save();
+
+//     res.status(201).json({ msg: USER_REGISTRATION_SUCCESS });
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(500).json({ success: false, msg: SERVER_ERROR });
+//   }
+// };
+
+
+
+// email inocude durong registration fir users 
+
 import UserModal from '../../models/UserModal.js';
 import { organizationUserRegistrationValidationSchema } from '../../helpers/joiValidation.js';
+import { sendRegistrationEmail } from '../../helpers/emailService.js';
+import Feedback from '../../models/FeedbackModel.js';
+import crypto from 'crypto';
 
 export const organizationUserRegistration = async (req, res) => {
   const { error } = organizationUserRegistrationValidationSchema.validate(req.body);
@@ -764,16 +815,19 @@ export const organizationUserRegistration = async (req, res) => {
     return res.status(400).json({ success: false, msg: error.details[0].message });
   }
 
-  const { name, email, mobile, gender, dob, password, addedby, status } = req.body;
+  const { name, email, mobile, gender, dob, addedby, status } = req.body;
 
   try {
     // Check if the user already exists
     let user = await UserModal.findOne({ email });
     if (user) {
-      return res.status(400).json({ success: false, msg: USER_ALREADY_EXISTS });
+      return res.status(400).json({ success: false, msg: 'User already exists' });
     }
 
-    // Create a new student
+    // Generate a unique password
+    const password = `${name}${crypto.randomBytes(3).toString('hex')}`;
+
+    // Create a new user
     user = new UserModal({
       name,
       email,
@@ -788,15 +842,18 @@ export const organizationUserRegistration = async (req, res) => {
     // Hash the password
     user.password = await hashPassword(password);
 
-
     await user.save();
 
-    res.status(201).json({ msg: USER_REGISTRATION_SUCCESS });
+    // Send registration email
+    await sendRegistrationEmail(email, name, password);
+
+    res.status(201).json({ msg: 'User registered successfully. An email has been sent with login details.' });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ success: false, msg: SERVER_ERROR });
+    res.status(500).json({ success: false, msg: 'Server error' });
   }
 };
+
 
 
 // separate logic for code all code included
@@ -1136,3 +1193,193 @@ export const getUserByOrgName = async (req, res) => {
 
 
 
+
+
+
+
+
+// organization user feedbacks
+
+
+export const organizationUserFeedbackDelete = async (req, res) => {
+  try {
+    let user = await Feedback.findById(req.params.id);
+    if (!user || user.isDeleted) {
+      return res.json({ success: false, msg: USER_NOT_FOUND });
+    }
+
+    // Soft delete the user
+    user.isDeleted = true;
+    user.updatedDate = Date.now();
+
+    await user.save();
+
+    res.status(200).json({ success: true, msg: USER_SOFT_DELETED_SUCCESS });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ success: false, msg: SERVER_ERROR });
+  }
+};
+
+
+
+
+
+
+
+
+
+// feedback user organization controller
+
+export const organizationUsersFeedbackDisplay = async (req, res) => {
+  try {
+    const orgName = req.params.orgName;
+    const { page = 1, limit = 10, search = "", startDate, endDate } = req.query;
+
+    const searchQuery = buildSearchQuery(search);
+    const dateQuery = buildDateQuery(startDate, endDate);
+
+    const feedbacks = await Feedback.find({
+      addedby: orgName,
+      isDeleted: false,
+      ...searchQuery,
+      ...dateQuery,
+    })
+      .populate("userId", "name email mobile") // Populate user details
+      .skip((page - 1) * limit)
+      .limit(Number(limit));
+
+    // const totalFeedbacks = await Feedback.countDocuments({
+    //   addedby: orgName,
+    //   isDeleted: false,
+    //   ...searchQuery,
+    //   ...dateQuery,
+    // });
+
+    res.status(200).json({
+      feedbacks,
+      totalPages: Math.ceil(totalFeedbacks / limit),
+      currentPage: Number(page),
+    });
+  } catch (error) {
+    console.error("Error fetching feedbacks by organization:", error);
+    res.status(500).json({ error: "Failed to fetch feedbacks." });
+  }
+};
+
+
+
+// export const organizationUsersFeedbackDelete = async (req, res) => {
+//   try {
+//     const feedback = await Feedback.findById(req.params.id);
+//     if (!feedback || feedback.isDeleted) {
+//       return res.status(404).json({ success: false, msg: "Feedback not found" });
+//     }
+
+//     // Soft delete the feedback
+//     feedback.isDeleted = true;
+//     feedback.updatedDate = Date.now();
+
+//     await feedback.save();
+
+//     res.status(200).json({ success: true, msg: "Feedback deleted successfully." });
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(500).json({ success: false, msg: "Server error" });
+//   }
+// };
+
+// controllers/OrganizationFeedbackController.js
+// import Feedback from "../../models/FeedbackModel.js";
+
+export const organizationUsersFeedbackDelete = async (req, res) => {
+  try {
+    const feedback = await Feedback.findById(req.params.id);
+    if (!feedback || feedback.isDeleted) {
+      return res.json({ success: false, msg: "Feedback not found" });
+    }
+
+    // Soft delete the feedback
+    feedback.isDeleted = true;
+    feedback.updatedDate = Date.now();
+
+    await feedback.save();
+
+    res.status(200).json({ success: true, msg: "Feedback deleted successfully." });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ success: false, msg: "Server error" });
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+// organization feedbacks
+import { organizationFeedbackValidationSchema } from "../../helpers/joiValidation.js";
+
+export const submitOrganizationFeedback = async (req, res) => {
+  const { error } = organizationFeedbackValidationSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ success: false, msg: error.details[0].message });
+  }
+
+  const { organizationId, feedbackCategory, feedbackMessage, rating, recommend, suggestions } = req.body;
+
+  try {
+    // Create a new feedback
+    const feedback = new Feedback({
+      organizationId,
+      feedbackCategory,
+      feedbackMessage,
+      rating,
+      recommend,
+      suggestions,
+    });
+
+    // Save the feedback to the database
+    await feedback.save();
+
+    res.status(201).json({ success: true, msg: "Feedback submitted successfully." });
+  } catch (error) {
+    console.error("Error submitting feedback:", error);
+    res.status(500).json({ success: false, msg: "Server error" });
+  }
+};
+
+
+
+
+
+
+// display organization feedbacks
+
+export const getOrganizationFeedbacks = async (req, res) => {
+  try {
+    const organizationId = req.params.organizationId;
+    const { page = 1, limit = 10 } = req.query;
+
+    const feedbacks = await Feedback.find({ organizationId, isDeleted: false })
+      .skip((page - 1) * limit)
+      .limit(Number(limit));
+
+    const totalFeedbacks = await Feedback.countDocuments({ organizationId, isDeleted: false });
+
+    res.status(200).json({
+      feedbacks,
+      totalPages: Math.ceil(totalFeedbacks / limit),
+      currentPage: Number(page),
+    });
+  } catch (error) {
+    console.error("Error fetching organization feedbacks:", error);
+    res.status(500).json({ error: "Failed to fetch feedbacks." });
+  }
+};
