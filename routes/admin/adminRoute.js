@@ -5,7 +5,12 @@ import {
   getCompanyBySymbol,
   getAllCompanyDataBySymbol,
   registerOrganization,
-  registerUser
+  registerUser,
+  getAllFeedbacks,
+  getFeedbackById,
+  updateFeedbackStatus,
+  softDeleteFeedback,
+  getFeedbackStats
 } from '../../controllers/admin/adminControllers.js';
 import { getETFData } from '../../scripts/scraper2.js';
 
@@ -26,5 +31,11 @@ router.get('/etfdata', getETFData);
 // backend/routes/organizationRoutes.js
 router.post('/OrgRegister', registerOrganization);
 router.post('/UserRegister', registerUser);
+
+router.get('/feedbacks', getAllFeedbacks);
+router.get('/feedbacks/stats', getFeedbackStats);
+router.get('/feedbacks/:id', getFeedbackById);
+router.patch('/feedbacks/:id/status', updateFeedbackStatus);
+router.delete('/feedbacks/:id', softDeleteFeedback);
 
 export default router;
