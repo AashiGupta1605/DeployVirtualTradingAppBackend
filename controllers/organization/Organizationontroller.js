@@ -515,7 +515,7 @@
 import OrgRegistration from '../../models/OrgRegisterModal.js';
 import { organizationRegistrationValidationSchema, organizationLoginValidationSchema, updateOrgValidation, updateApprovalStatusValidation, getUserByOrgNameValidation} from '../../helpers/joiValidation.js';
 import { hashPassword, comparePassword } from '../../helpers/hashHelper.js';
-import {buildDateQuery, buildSearchQuery, buildAgeQuery} from "../../helpers/dataHandler.js";
+import {buildDateQuery, buildSearchQuery, buildGenderQuery} from "../../helpers/dataHandler.js";
 import moment from "moment";
 
 import {
@@ -843,21 +843,66 @@ export const organizationUserRegistration = async (req, res) => {
 
 // added pagination for numers and records
 
+// export const organizationUsersDisplay = async (req, res) => {
+//   try {
+//     const orgName = req.params.orgName;
+//     const { page = 1, limit = 10, search = '', startDate, endDate, minAge, maxAge } = req.query;
+
+//     const searchQuery = buildSearchQuery(search);
+//     const dateQuery = buildDateQuery(startDate, endDate);
+//     const ageQuery = buildAgeQuery(minAge, maxAge);
+
+//     const users = await UserModal.find({
+//       addedby: orgName,
+//       isDeleted: false,
+//       ...searchQuery,
+//       ...dateQuery,
+//       ...ageQuery
+//     })
+//       .skip((page - 1) * limit)
+//       .limit(Number(limit));
+
+//     const totalUsers = await UserModal.countDocuments({
+//       addedby: orgName,
+//       isDeleted: false,
+//       ...searchQuery,
+//       ...dateQuery,
+//       ...ageQuery
+//     });
+
+//     res.status(200).json({
+//       users,
+//       totalPages: Math.ceil(totalUsers / limit),
+//       currentPage: Number(page)
+//     });
+//   } catch (error) {
+//     console.error('Error fetching users by organization:', error);
+//     res.status(500).json({ error: SERVER_ERROR });
+//   }
+// };
+
+
+// gender include
+
+// organizationUsersController.js
+
 export const organizationUsersDisplay = async (req, res) => {
   try {
     const orgName = req.params.orgName;
-    const { page = 1, limit = 10, search = '', startDate, endDate, minAge, maxAge } = req.query;
+    const { page = 1, limit = 10, search = '', startDate, endDate, gender } = req.query;
 
     const searchQuery = buildSearchQuery(search);
     const dateQuery = buildDateQuery(startDate, endDate);
-    const ageQuery = buildAgeQuery(minAge, maxAge);
+    const genderQuery = buildGenderQuery(gender);
+
+    console.log("Gender Query:", genderQuery); // Debugging: Log the gender query
 
     const users = await UserModal.find({
       addedby: orgName,
       isDeleted: false,
       ...searchQuery,
       ...dateQuery,
-      ...ageQuery
+      ...genderQuery,
     })
       .skip((page - 1) * limit)
       .limit(Number(limit));
@@ -867,22 +912,19 @@ export const organizationUsersDisplay = async (req, res) => {
       isDeleted: false,
       ...searchQuery,
       ...dateQuery,
-      ...ageQuery
+      ...genderQuery,
     });
 
     res.status(200).json({
       users,
       totalPages: Math.ceil(totalUsers / limit),
-      currentPage: Number(page)
+      currentPage: Number(page),
     });
   } catch (error) {
     console.error('Error fetching users by organization:', error);
     res.status(500).json({ error: SERVER_ERROR });
   }
 };
-
-
-
 
 // Get a user by ID
 export const organizationgetUserDisplayById = async (req, res) => {
