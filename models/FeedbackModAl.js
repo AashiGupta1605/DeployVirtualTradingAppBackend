@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-// const mongoose = require("mongoose");
-=======
->>>>>>> d1794dc36f5bee0a41b7ad971905d7d1c0e67433
 import mongoose from "mongoose";
 
-// models/FeedbackModal.js
 const FeedbackSchema = new mongoose.Schema({
     userId: { 
         type: mongoose.Schema.Types.ObjectId, 
@@ -37,13 +32,6 @@ const FeedbackSchema = new mongoose.Schema({
     updatedDate: { type: Date, default: Date.now }
 });
 
-<<<<<<< HEAD
-// module.exports = mongoose.model("Feedback", FeedbackSchema);
-const UserFeedback = mongoose.model('Feedback',FeedbackSchema);
-export default UserFeedback;
-
-
-=======
 const Feedback = mongoose.model("Feedback", FeedbackSchema);
 export default Feedback;
->>>>>>> d1794dc36f5bee0a41b7ad971905d7d1c0e67433
+
