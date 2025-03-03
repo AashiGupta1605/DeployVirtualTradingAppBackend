@@ -1,30 +1,22 @@
+// routes/admin/adminRoutes.js
 import express from 'express';
-import {
-  saveNiftyData,
-  getNiftyData,
-  getCompanyBySymbol,
-  getAllCompanyDataBySymbol,
-  registerOrganization,
-  registerUser
-} from '../../controllers/admin/adminControllers.js';
+import niftyDataRoutes from './niftyRoutes/niftyDataRoutes.js';
+import organizationRoutes from './organizationRoutes/organizationRoutes.js';
+import userRoutes from './userRoutes/userRoutes.js';
 import { getETFData } from '../../scripts/scraper2.js';
 
 const router = express.Router();
 
 // Nifty Data Routes
-router.post('/niftydata', saveNiftyData);
-router.get('/niftydata', getNiftyData);
+router.use('/nifty', niftyDataRoutes);
 
-// Company Data Routes
-router.get('/company/:symbol', getCompanyBySymbol);
-router.get('/company/history/:symbol', getAllCompanyDataBySymbol);
-
-// ETF Route
+// ETF Data Routes
 router.get('/etfdata', getETFData);
 
+// Organization Routes
+router.use('/', organizationRoutes);
 
-// backend/routes/organizationRoutes.js
-router.post('/OrgRegister', registerOrganization);
-router.post('/UserRegister', registerUser);
+// User Routes
+router.use('/', userRoutes);
 
 export default router;
