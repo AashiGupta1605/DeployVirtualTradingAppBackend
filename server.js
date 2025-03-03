@@ -9,7 +9,9 @@ import { fetchNifty50Data } from './scripts/scraper.js';
 import contactRoute from "./routes/user/contactRoutes.js";
 import userRoute from "./routes/user/userRoutes.js";
 import adminRoute from "./routes/admin/adminRoute.js";
-import organizationRoute from "./routes/organization/organizationRoute.js"
+import organizationRoute from "./routes/organization/organizationRoute.js";
+import feedbackRoute from "./routes/user/feedbackRoutes.js";
+
  // Import the new router
 
 dotenv.config();
@@ -38,6 +40,7 @@ app.use("/v1/api/contact", contactRoute);
 app.use("/v1/api/user", userRoute);
 app.use("/v1/api/admin", adminRoute);
 app.use("/v1/api/organization", organizationRoute);
+app.use("/v1/api/feedback", feedbackRoute);
  // Use the new router
 
  

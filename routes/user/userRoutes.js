@@ -13,8 +13,8 @@ import {
   getFeedbackById, 
   updateFeedback, 
   deleteFeedback 
- 
 } from "../../controllers/user/userController.js";
+import { subscriptionPlanRoutes } from './userSubscriptionPlanRoutes/userSubscriptionPlanRoutes.js';
 import userMiddleware from "../../middlewares/userMiddleware.js";
 
 const router = express.Router();
@@ -37,5 +37,8 @@ router.delete("/feedback/:id", userMiddleware, deleteFeedback);
 router.get("/display-users", getUsers);
 router.put("/users/:id", updateUser);
 router.delete("/users/:id", deleteUserById);
+
+// Mount subscription routes
+router.use('/subscription-plans', subscriptionPlanRoutes);  // Use router.use instead of app.use
 
 export default router;
