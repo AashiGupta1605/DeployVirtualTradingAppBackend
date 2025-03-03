@@ -11,7 +11,6 @@ import userRoute from "./routes/user/index.js";
 import adminRoute from "./routes/admin/adminRoute.js";
 import organizationRoute from "./routes/organization/index.js"
 
- // Import the new router
 
 dotenv.config();
 const app = express();
@@ -39,7 +38,6 @@ app.use("/v1/api/contact", contactRoute);
 app.use("/v1/api/user", userRoute);
 app.use("/v1/api/admin", adminRoute);
 app.use("/v1/api/organization", organizationRoute);
-app.use("/v1/api/feedback", feedbackRoute);
  // Use the new router
 
  
