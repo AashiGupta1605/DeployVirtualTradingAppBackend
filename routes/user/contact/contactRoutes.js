@@ -5,7 +5,7 @@ import {
   getContactById,
   updateContact,
   deleteContact,
-} from "../../controllers/user/contactController.js"; // Corrected path for controller
+} from "../../../controllers/user/contactController.js"; // Corrected path for controller
 
 const router = express.Router();
 

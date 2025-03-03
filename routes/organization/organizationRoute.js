@@ -132,12 +132,20 @@ const router = express.Router();
 router.post('/register', organizationRegister);
 router.post('/login', organizationLogin);
 
-// Admin routes for organizations
-router.get('/display-all-org', verifyToken, getAllOrgs);
-router.get('/:id', verifyToken, getOrgById);
-router.put('/:id', verifyToken, updateOrg);
-router.delete('/:id', verifyToken, deleteOrg);
-router.put('/:id/approval-status', verifyToken, updateApprovalStatus);
-router.get('/users/:orgName', verifyToken, getUserByOrgName);
+// // Admin routes for organizations
+// router.get('/display-all-org', verifyToken, getAllOrgs);
+// router.get('/:id', verifyToken, getOrgById);
+// router.put('/:id', verifyToken, updateOrg);
+// router.delete('/:id', verifyToken, deleteOrg);
+// router.put('/:id/approval-status', verifyToken, updateApprovalStatus);
+// router.get('/users/:orgName', verifyToken, getUserByOrgName);
 
+
+router.get("/display-all-org", getAllOrgs); // GET for retrieving all organizations
+router.get("/:id", getOrgById); // GET for retrieving a specific organization by ID
+router.put("/:id", updateOrg); // PUT for updating an organization
+router.delete("/:id", deleteOrg); // DELETE for deleting an organization
+router.put("/:id/approval-status", updateApprovalStatus); // PUT for updating approval status
+router.get('/users/:orgName', getUserByOrgName);
 export default router;
+
