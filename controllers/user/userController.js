@@ -1,5 +1,4 @@
 import User from "../../models/UserModal.js";
-import Feedback from "../../models/FeedbackModAl.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { registerUserSchema, loginUserSchema, updateProfileSchema } from "../../helpers/userValidation.js"; // Import Joi schemas
@@ -130,92 +129,6 @@ export const deleteUser = async (req, res) => {
     res.status(500).json({ message: "User deletion failed", error: error.message });
   }
 };
-
-// Create Feedback
-export const createFeedback = async (req, res) => {
-  try {
-      const { userId, feedbackCategory, feedbackMessage, rating, recommend, suggestions } = req.body;
-
-      // Check if user exists
-      const userExists = await User.findById(userId);
-      if (!userExists) {
-          return res.status(404).json({ message: "User not found" });
-      }
-
-      const newFeedback = new Feedback({
-          userId,
-          feedbackCategory,
-          feedbackMessage,
-          rating,
-          recommend,
-          suggestions
-      });
-
-      await newFeedback.save();
-      res.status(201).json({ message: "Feedback submitted successfully", feedback: newFeedback });
-  } catch (error) {
-      res.status(500).json({ message: "Internal Server Error", error: error.message });
-  }
-};
-
-// Get All Feedbacks
-export const getAllFeedbacks = async (req, res) => {
-  try {
-      const feedbacks = await Feedback.find({ isDeleted: false }).populate("userId", "name email");
-      res.status(200).json(feedbacks);
-  } catch (error) {
-      res.status(500).json({ message: "Internal Server Error", error: error.message });
-  }
-};
-
-// Get Feedback by ID
-export const getFeedbackById = async (req, res) => {
-  
-    try {
-      const { id } = req.params;
-
-    const feedback = await Feedback.find({ userId: id }).populate("userId", "name email mobile"); // Populate user details
-
-    if (!feedback.length) {
-      return res.status(404).json({ message: "No feedback found" });
-    }
-
-    res.status(200).json(feedback);
-  } catch (error) {
-    console.error("Error fetching feedback:", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-  };
-  
-
-// Update Feedback
-export const updateFeedback = async (req, res) => {
-  try {
-      const { id } = req.params;
-      const updatedFeedback = await Feedback.findByIdAndUpdate(id, req.body, { new: true });
-      if (!updatedFeedback) {
-          return res.status(404).json({ message: "Feedback not found" });
-      }
-      res.status(200).json({ message: "Feedback updated successfully", feedback: updatedFeedback });
-  } catch (error) {
-      res.status(500).json({ message: "Internal Server Error", error: error.message });
-  }
-};
-
-// Soft Delete Feedback
-export const deleteFeedback = async (req, res) => {
-  try {
-      const { id } = req.params;
-      const feedback = await Feedback.findByIdAndUpdate(id, { isDeleted: true }, { new: true });
-      if (!feedback) {
-          return res.status(404).json({ message: "Feedback not found" });
-      }
-      res.status(200).json({ message: "Feedback deleted successfully" });
-  } catch (error) {
-      res.status(500).json({ message: "Internal Server Error", error: error.message });
-  }
-};
-
 
 
 // Get All Users (for admin)
