@@ -12,10 +12,19 @@ export const organizationRegistrationValidationSchema = Joi.object({
   password: Joi.string().min(8).required().label('Password')
 });
 
+// export const organizationLoginValidationSchema = Joi.object({
+//   email: Joi.string().email().required().label('Email'),
+//   password: Joi.string().required().label('Password')
+// });
+
+// add login with mobile 
+
 export const organizationLoginValidationSchema = Joi.object({
-  email: Joi.string().email().required().label('Email'),
+  email: Joi.string().email().label('Email'),
+  mobile: Joi.string().label('Mobile'),
   password: Joi.string().required().label('Password')
-});
+}).or('email', 'mobile'); // Require either email or mobile, but not both
+
 
 export const organizationUserRegistrationValidationSchema = Joi.object({
   name: Joi.string().required().label('Name'),
@@ -30,7 +39,7 @@ export const organizationUserRegistrationValidationSchema = Joi.object({
     }
     return value;
   }).label('Date of Birth'),
-  password: Joi.string().min(8).required().label('Password'),
+  // password: Joi.string().min(8).required().label('Password'),
   addedby: Joi.string().required(),
   status: Joi.boolean().default(true).required()
 });
@@ -123,4 +132,31 @@ export const deleteUserValidation = Joi.object({
     'string.empty': 'User ID is required',
     'any.required': 'User ID is required',
   }),
+});
+
+
+
+
+
+
+
+// organization feedbacks models
+
+
+export const organizationFeedbackValidationSchema = Joi.object({
+  organizationId: Joi.string().required(),
+  feedbackCategory: Joi.string()
+    .valid(
+      "Website UI/UX",
+      "Trading Features",
+      "Data Accuracy",
+      "Performance & Speed",
+      "Customer Support",
+      "Other"
+    )
+    .required(),
+  feedbackMessage: Joi.string().required(),
+  rating: Joi.number().min(1).max(5).required(),
+  recommend: Joi.boolean().required(),
+  suggestions: Joi.string().allow("").optional(),
 });
