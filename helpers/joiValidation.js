@@ -12,10 +12,19 @@ export const organizationRegistrationValidationSchema = Joi.object({
   password: Joi.string().min(8).required().label('Password')
 });
 
+// export const organizationLoginValidationSchema = Joi.object({
+//   email: Joi.string().email().required().label('Email'),
+//   password: Joi.string().required().label('Password')
+// });
+
+// add login with mobile 
+
 export const organizationLoginValidationSchema = Joi.object({
-  email: Joi.string().email().required().label('Email'),
+  email: Joi.string().email().label('Email'),
+  mobile: Joi.string().label('Mobile'),
   password: Joi.string().required().label('Password')
-});
+}).or('email', 'mobile'); // Require either email or mobile, but not both
+
 
 export const organizationUserRegistrationValidationSchema = Joi.object({
   name: Joi.string().required().label('Name'),
