@@ -7,12 +7,8 @@ import {
   getUsers,
   updateUser, 
   deleteUserById,
-  getUserProfile, 
-  createFeedback, 
-  getAllFeedbacks, 
-  getFeedbackById, 
-  updateFeedback, 
-  deleteFeedback 
+  getUserProfile 
+
 } from "../../controllers/user/userController.js";
 import { subscriptionPlanRoutes } from './userSubscriptionPlanRoutes/userSubscriptionPlanRoutes.js';
 import userMiddleware from "../../middlewares/userMiddleware.js";
@@ -26,12 +22,8 @@ router.get("/profile", userMiddleware, getUserProfile);
 router.put("/update", userMiddleware, updateProfile);
 router.delete("/delete", userMiddleware, deleteUser);
 
-//feedback routes 
-router.post("/feedback", userMiddleware, createFeedback);
-router.get("/feedbacks", userMiddleware, getAllFeedbacks);
-router.get("/feedback/:id", userMiddleware, getFeedbackById);
-router.put("/feedback/:id", userMiddleware, updateFeedback);
-router.delete("/feedback/:id", userMiddleware, deleteFeedback);
+
+
 
 // Admin Routes
 router.get("/display-users", getUsers);
