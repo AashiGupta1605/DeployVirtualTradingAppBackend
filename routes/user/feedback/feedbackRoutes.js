@@ -4,8 +4,8 @@ import { displayOrganizationFeedback, organizationUsersFeedbackDelete, organizat
     updateFeedbackStatus,
     softDeleteFeedback,
     getFeedbackStats,  
-    getAllFeedbackAdmin} from "../../controllers/user/feedbackController.js";
-import userMiddleware from "../../middlewares/userMiddleware.js";
+    getAllFeedbackAdmin} from "../../../controllers/user/feedbackController.js";
+import userMiddleware from "../../../middlewares/userMiddleware.js";
 const router = express.Router();
 
 
@@ -14,26 +14,17 @@ router.get("/:orgName/users/feedbacks", organizationUsersFeedbackDisplay);
 router.delete("/delete/feedbacks/:id", organizationUsersFeedbackDelete);
 router.put("/update/feedbacks/:id", updateUsersFeedbackStatus);
 
-
-// user feedabcks routes
-
-//feedback routes 
-router.post("/feedback", userMiddleware, createFeedback);
-router.get("/feedbacks", userMiddleware, getAllFeedbacks);
-router.get("/feedback/:id", userMiddleware, getFeedbackById);
-router.put("/feedback/:id", userMiddleware, updateFeedback);
-router.delete("/feedback/:id", userMiddleware, deleteFeedback);
-
-
+//user feedback routes 
+router.post("/", userMiddleware, createFeedback);
+router.get("/", userMiddleware, getAllFeedbacks);
+router.get("/:id", userMiddleware, getFeedbackById);
+router.put("/:id", userMiddleware, updateFeedback);
+router.delete("/:id", userMiddleware, deleteFeedback);
 
 // organization feedbacks
 
 router.post("/feedback/register", registerOrganizationFeedback);
 router.get("/:orgName/feedback", displayOrganizationFeedback);
-
-
-
-
 
 // admin routes
 

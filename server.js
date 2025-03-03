@@ -6,11 +6,11 @@ import connectDB from './config/db.js';
 import cron from 'node-cron';
 import { scrapeAndStoreETFData } from './scripts/scraper2.js';
 import { fetchNifty50Data } from './scripts/scraper.js';
-import contactRoute from "./routes/user/contactRoutes.js";
+// import contactRoute from "./routes/user/contactRoutes.js";
 import userRoute from "./routes/user/index.js";
 import adminRoute from "./routes/admin/adminRoute.js";
 import organizationRoute from "./routes/organization/index.js"
- // Import the new router
+
 
 dotenv.config();
 const app = express();
@@ -34,7 +34,7 @@ app.use(cors({
 
 app.use(express.json());
 
-app.use("/v1/api/contact", contactRoute);
+// app.use("/v1/api/contact", contactRoute);
 app.use("/v1/api/user", userRoute);
 app.use("/v1/api/admin", adminRoute);
 app.use("/v1/api/organization", organizationRoute);

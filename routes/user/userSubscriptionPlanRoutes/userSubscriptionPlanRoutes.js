@@ -1,5 +1,4 @@
 // routes/user/userSubscriptionPlanRoutes/userSubscriptionPlanRoutes.js
-
 import express from 'express';
 import {
   createSubscriptionPlan,
@@ -12,7 +11,6 @@ import {
 
 const router = express.Router();
 
-// Move the user-specific route to the top to prevent conflicts
 router.get('/user/:userId', getUserSubscriptionPlans);
 
 router.route('/')
@@ -25,4 +23,4 @@ router.route('/:id')
 
 router.patch('/:id/cancel', cancelSubscriptionPlan);
 
-export { router as subscriptionPlanRoutes };
+export default router;  // Changed to default export
