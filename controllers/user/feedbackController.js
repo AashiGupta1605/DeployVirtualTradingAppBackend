@@ -274,83 +274,28 @@ export const createFeedback = async (req, res) => {
 
   // admin feedabck controllers
 
-  export const getAllFeedbackAdmin = async (req, res) => {
-    try {
-      const {
-        category,
-        rating,
-        startDate,
-        endDate,
-        recommend,
-        search
-      } = req.query;
-  
-      let query = { isDeleted: false };
-  
-      // Apply filters if provided
-      if (category && category !== 'all') {
-        query.feedbackCategory = category;
-      }
-  
-      if (rating && rating !== 'all') {
-        query.rating = parseInt(rating);
-      }
-  
-      if (recommend === 'true' || recommend === 'false') {
-        query.recommend = recommend === 'true';
-      }
-  
-      if (startDate && endDate) {
-        query.createdDate = {
-          $gte: new Date(startDate),
-          $lte: new Date(endDate)
-        };
-      }
-  
-      if (search) {
-        // Get user IDs matching the search criteria
-        const users = await User.find({
-          $or: [
-            { name: { $regex: search, $options: 'i' } },
-            { email: { $regex: search, $options: 'i' } }
-          ]
-        });
-        
-        const userIds = users.map(user => user._id);
-        
-        query.$or = [
-          { userId: { $in: userIds } },
-          { feedbackMessage: { $regex: search, $options: 'i' } }
-        ];
-      }
-  
-      const feedbacks = await Feedback.find(query)
-        .populate('userId', 'name email mobile') // Populate user details
-        .sort({ createdDate: -1 });
-  
-      // Calculate statistics
-      const stats = {
-        total: feedbacks.length,
-        positive: feedbacks.filter(f => f.rating >= 4).length,
-        negative: feedbacks.filter(f => f.rating <= 2).length,
-        recommended: feedbacks.filter(f => f.recommend).length
-      };
-  
-      res.status(200).json({
-        success: true,
-        data: feedbacks,
-        stats
-      });
-  
-    } catch (error) {
-      console.error('Error fetching feedbacks:', error);
-      res.status(500).json({
-        success: false,
-        message: 'Failed to fetch feedbacks',
-        error: error.message
-      });
-    }
-  };
+// In feedbackController.js
+
+export const getAllFeedbackAdmin = async (req, res) => {
+  try {
+    const feedbacks = await Feedback.find()
+      .populate('userId', 'name email mobile')
+      .sort({ createdDate: -1 });
+
+    console.log('Fetched feedbacks:', feedbacks); // Debug log
+
+    res.status(200).json({
+      success: true,
+      data: feedbacks
+    });
+  } catch (error) {
+    console.error('Error in getAllFeedbackAdmin:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to fetch feedbacks'
+    });
+  }
+};
   
   // Get feedback by ID
   export const getFeedbackByIdAdmin = async (req, res) => {
