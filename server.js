@@ -8,8 +8,9 @@ import { scrapeAndStoreETFData } from './scripts/scraper2.js';
 import { fetchNifty50Data } from './scripts/scraper.js';
 import userRoute from "./routes/user/index.js";
 import adminRoute from "./routes/admin/adminRoute.js";
-import organizationRoute from "./routes/organization/index.js"
-
+import organizationRoute from "./routes/organization/organizationRoute.js"
+import guestUserRoute from "./routes/guestUser/guestUserRoute.js"
+ // Import the new router
 
 dotenv.config();
 const app = express();
@@ -36,6 +37,7 @@ app.use(express.json());
 app.use("/v1/api/user", userRoute);
 app.use("/v1/api/admin", adminRoute);
 app.use("/v1/api/organization", organizationRoute);
+app.use("/v1/api/guestUser",guestUserRoute)
  // Use the new router
 
  
