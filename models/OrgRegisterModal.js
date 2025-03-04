@@ -12,6 +12,7 @@ const orgRegistrationSchema = new mongoose.Schema({
     type: String, 
     enum: ["approved", "rejected", "pending"],  // ✅ Restrict values
   },
+  photo:{type:String, default:"https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png"},
   isDeleted: { type: Boolean, default: false },
   createDate: { type: Date, default: Date.now },
   updateDate: { type: Date, default: Date.now }

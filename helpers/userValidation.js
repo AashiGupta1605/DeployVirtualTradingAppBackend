@@ -1,15 +1,32 @@
 import Joi from 'joi'; 
 
-// Validation schema for user registration
 export const registerUserSchema = Joi.object({
   name: Joi.string().min(3).required(),
   email: Joi.string().email().required(),
   password: Joi.string().min(6).required(),
   mobile: Joi.string().pattern(/^[0-9]{10}$/).required(),
   gender: Joi.string().required(),
-  dob: Joi.date().less("now").required(),
-  // orgtype: Joi.string().valid("company", "individual").optional(), // Now optional
+  dob: Joi.date()
+    .required()
+    .custom((value, helpers) => {
+      const birthDate = new Date(value);
+      const today = new Date();
+      const age = today.getFullYear() - birthDate.getFullYear();
+
+      // Adjust age if birthdate hasn't occurred yet this year
+      const hasBirthdayOccurred =
+        today.getMonth() > birthDate.getMonth() ||
+        (today.getMonth() === birthDate.getMonth() && today.getDate() >= birthDate.getDate());
+
+      if (age < 18 || (age === 18 && !hasBirthdayOccurred)) {
+        return helpers.message("You must be at least 18 years old");
+      }
+
+      return value;
+    })
+    .label("Date of Birth"),
 });
+
 // Validation schema for user login
 export const loginUserSchema = Joi.object({
   email: Joi.string().email().required(),

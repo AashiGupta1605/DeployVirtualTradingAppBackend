@@ -124,6 +124,8 @@ import {
   deleteOrg,
   updateApprovalStatus,
   getUserByOrgName,
+  getOrganizationById,
+  updateOrganization,
 } from '../../controllers/organization/organizationController.js';
 import { verifyToken } from '../../helpers/jwtHandler.js';
 const router = express.Router();
@@ -131,6 +133,8 @@ const router = express.Router();
 // Organization routes
 router.post('/register', organizationRegister);
 router.post('/login', organizationLogin);
+router.get('/:orgId', getOrganizationById);
+router.put('/update/:orgId', verifyToken, updateOrganization);
 
 // // Admin routes for organizations
 // router.get('/display-all-org', verifyToken, getAllOrgs);
