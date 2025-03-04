@@ -1,5 +1,6 @@
 // controllers/admin/organizationControllers.js
 import Organization from '../../models/OrgRegisterModal.js';
+import transporter from '../../config/emailColfig.js'; 
 
 // Organization Controllers
 export const registerOrganization = async (req, res) => {

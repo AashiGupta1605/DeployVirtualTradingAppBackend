@@ -1,5 +1,6 @@
 // controllers/admin/userControllers.js
 import User from '../../models/UserModal.js';
+import transporter from '../../config/emailColfig.js'; 
 
 // User Controllers
 

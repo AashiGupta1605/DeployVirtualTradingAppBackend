@@ -1,16 +1,20 @@
 // routes/admin/adminRoutes.js
 import express from 'express';
 import niftyDataRoutes from './niftyRoutes/niftyDataRoutes.js';
+// import etfRoutes from '../../routes/admin/niftyRoutes/niftyDataRoutes.js';
 import organizationRoutes from './organizationRoutes/organizationRoutes.js';
 import userRoutes from './userRoutes/userRoutes.js';
 import { getETFData } from '../../scripts/scraper2.js';
+import etfRoutes from '../admin/etfRoutes/etfDataRoutes.js';
+
 
 const router = express.Router();
 
 // Nifty Data Routes
 router.use('/nifty', niftyDataRoutes);
+router.use('/etf', etfRoutes);
 
-// ETF Data Routes
+// ETF Data for table Routes
 router.get('/etfdata', getETFData);
 
 // Organization Routes
