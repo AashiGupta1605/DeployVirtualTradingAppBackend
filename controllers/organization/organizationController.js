@@ -174,6 +174,43 @@ export const organizationLogin = async (req, res) => {
   }
 };
 
+
+
+export const getOrganizationById = async (req, res) => {
+  const { orgId } = req.params;
+
+  try {
+    const org = await OrgRegistration.findById(orgId);
+    if (!org) {
+      return res.status(404).json({ message: 'Organization not found' });
+    }
+    res.status(200).json(org);
+  } catch (error) {
+    console.error("Error fetching organization:", error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+export const updateOrganization = async (req, res) => {
+  const { orgId } = req.params;
+  const updateData = req.body;
+
+  try {
+    const updatedOrg = await OrgRegistration.findByIdAndUpdate(orgId, updateData, { new: true });
+    if (!updatedOrg) {
+      return res.status(404).json({ message: 'Organization not found' });
+    }
+    res.status(200).json(updatedOrg);
+  } catch (error) {
+    console.error("Error updating organization:", error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+
+
 //Admin
 export const getAllOrgs = async (req, res) => {
   try {
@@ -323,6 +360,31 @@ export const getUserByOrgName = async (req, res) => {
 };
 
 
+//Guest User: Searching on fetching Organizations
+export const searchOrganizations = async (req, res) => {
+  try {
+    const { search } = req.params; // Get the search parameter from the request
+
+    let query = { isDeleted: false };
+
+    if (search && search.trim() !== "") {
+      query.$or = [
+        { name: { $regex: search, $options: "i" } }, // Case-insensitive search by name
+        { address: { $regex: search, $options: "i" } }, // Case-insensitive search by address
+      ];
+      // // If search is a valid date, add createdAt filter
+      // const date = new Date(search);
+      // if (!isNaN(date)) {
+      //   query.$or.push({ createdAt: { $gte: date } });
+      // }
+    }
+    const orgs = await OrgRegistration.find(query);
+    res.status(200).json(orgs);
+  } 
+  catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 
 
