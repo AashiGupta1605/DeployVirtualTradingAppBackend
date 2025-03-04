@@ -323,6 +323,31 @@ export const getUserByOrgName = async (req, res) => {
 };
 
 
+//Guest User: Searching on fetching Organizations
+export const searchOrganizations = async (req, res) => {
+  try {
+    const { search } = req.params; // Get the search parameter from the request
+
+    let query = { isDeleted: false };
+
+    if (search && search.trim() !== "") {
+      query.$or = [
+        { name: { $regex: search, $options: "i" } }, // Case-insensitive search by name
+        { address: { $regex: search, $options: "i" } }, // Case-insensitive search by address
+      ];
+      // // If search is a valid date, add createdAt filter
+      // const date = new Date(search);
+      // if (!isNaN(date)) {
+      //   query.$or.push({ createdAt: { $gte: date } });
+      // }
+    }
+    const orgs = await OrgRegistration.find(query);
+    res.status(200).json(orgs);
+  } 
+  catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 
 
