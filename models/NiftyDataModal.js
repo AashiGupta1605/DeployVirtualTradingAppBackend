@@ -5,8 +5,8 @@ const stockSchema = new mongoose.Schema({
   symbol: {
     type: String,
     required: [true, 'Symbol is required'],
-    trim: true,
-    index: true
+    trim: true
+    // Removed index: true to prevent duplicate indexing
   },
   open: {
     type: Number,
@@ -83,101 +83,114 @@ const stockSchema = new mongoose.Schema({
   },
   timestamp: {
     type: Date,
-    default: Date.now,
-    index: true // Add index for timestamp
+    default: Date.now
+    // Removed index: true as it's covered by compound index
   }
 }, {
-  timestamps: true,
-  _id: false // Prevent MongoDB from creating _id for each stock
+  _id: false, // Prevent MongoDB from creating _id for each stock
+  timestamps: false // Remove timestamps from subdocuments
 });
 
 const niftyDataSchema = new mongoose.Schema({
   fetchTime: {
     type: Date,
     required: true,
-    default: Date.now,
-    index: true
+    default: Date.now
+    // Removed index: true as it's covered by compound index
   },
   stocks: [stockSchema]
 }, {
   timestamps: true,
-  // Add options for better performance
   toJSON: { virtuals: true },
   toObject: { virtuals: true }
 });
 
-// Remove duplicate indexes and optimize them
-niftyDataSchema.index({ fetchTime: -1 }, { background: true });
-niftyDataSchema.index({ 'stocks.symbol': 1 }, { background: true });
+// Single compound index that covers most query patterns
 niftyDataSchema.index(
-  { fetchTime: -1, 'stocks.symbol': 1 },
+  { 
+    fetchTime: -1, 
+    'stocks.symbol': 1 
+  },
   { 
     background: true,
-    name: 'fetch_symbol_compound_idx' // Named index for better monitoring
+    name: 'fetch_symbol_compound_idx'
   }
 );
 
-// Optimize static methods for common queries
+// Static methods with error handling
 niftyDataSchema.statics = {
   async findLatestBySymbol(symbol) {
-    return this.aggregate([
-      { $sort: { fetchTime: -1 } },
-      { $limit: 1 },
-      { $unwind: '$stocks' },
-      { $match: { 'stocks.symbol': symbol } },
-      {
-        $project: {
-          _id: 0,
-          fetchTime: 1,
-          stock: '$stocks'
+    try {
+      return await this.aggregate([
+        { $sort: { fetchTime: -1 } },
+        { $limit: 1 },
+        { $unwind: '$stocks' },
+        { $match: { 'stocks.symbol': symbol } },
+        {
+          $project: {
+            _id: 0,
+            fetchTime: 1,
+            stock: '$stocks'
+          }
         }
-      }
-    ]).exec();
+      ]);
+    } catch (error) {
+      console.error('Error in findLatestBySymbol:', error);
+      throw error;
+    }
   },
 
   async findHistoricalDataBySymbol(symbol, limit = 30) {
-    return this.aggregate([
-      { $sort: { fetchTime: -1 } },
-      { $limit: limit },
-      { $unwind: '$stocks' },
-      { $match: { 'stocks.symbol': symbol } },
-      {
-        $project: {
-          _id: 0,
-          fetchTime: 1,
-          stock: '$stocks'
-        }
-      },
-      { $sort: { fetchTime: -1 } }
-    ]).exec();
+    try {
+      return await this.aggregate([
+        { $sort: { fetchTime: -1 } },
+        { $limit: limit },
+        { $unwind: '$stocks' },
+        { $match: { 'stocks.symbol': symbol } },
+        {
+          $project: {
+            _id: 0,
+            fetchTime: 1,
+            stock: '$stocks'
+          }
+        },
+        { $sort: { fetchTime: -1 } }
+      ]);
+    } catch (error) {
+      console.error('Error in findHistoricalDataBySymbol:', error);
+      throw error;
+    }
   }
 };
 
-// Add middleware for validation and data cleaning
-niftyDataSchema.pre('save', function(next) {
-  if (!this.stocks || !Array.isArray(this.stocks) || this.stocks.length === 0) {
-    return next(new Error('Stocks array cannot be empty'));
-  }
-
-  // Ensure unique symbols in the stocks array
-  const symbols = new Set();
-  const duplicates = [];
-  
-  this.stocks.forEach(stock => {
-    if (symbols.has(stock.symbol)) {
-      duplicates.push(stock.symbol);
+// Validation middleware
+niftyDataSchema.pre('save', async function(next) {
+  try {
+    if (!this.stocks?.length) {
+      throw new Error('Stocks array cannot be empty');
     }
-    symbols.add(stock.symbol);
-  });
 
-  if (duplicates.length > 0) {
-    return next(new Error(`Duplicate symbols found: ${duplicates.join(', ')}`));
+    const symbols = new Set();
+    const duplicates = [];
+    
+    this.stocks.forEach(stock => {
+      if (symbols.has(stock.symbol)) {
+        duplicates.push(stock.symbol);
+      }
+      symbols.add(stock.symbol);
+    });
+
+    if (duplicates.length) {
+      throw new Error(`Duplicate symbols found: ${duplicates.join(', ')}`);
+    }
+
+    next();
+  } catch (error) {
+    next(error);
   }
-
-  next();
 });
 
-// Add error handling middleware
+// Error handling middleware
 niftyDataSchema.post('save', function(error, doc, next) {
   if (error.name === 'MongoServerError' && error.code === 11000) {
     next(new Error('Duplicate key error'));
@@ -188,7 +201,27 @@ niftyDataSchema.post('save', function(error, doc, next) {
 
 const NiftyData = mongoose.model('NiftyData', niftyDataSchema);
 
-// Create indexes in background
-NiftyData.createIndexes().catch(console.error);
+// Initialize indexes without automatic creation
+const initializeIndexes = async () => {
+  try {
+    // Check if indexes exist before creating
+    const existingIndexes = await NiftyData.collection.getIndexes();
+    if (!existingIndexes.fetch_symbol_compound_idx) {
+      await NiftyData.collection.createIndex(
+        { fetchTime: -1, 'stocks.symbol': 1 },
+        { 
+          background: true,
+          name: 'fetch_symbol_compound_idx'
+        }
+      );
+      console.log('NiftyData indexes created successfully');
+    }
+  } catch (error) {
+    console.error('Error initializing indexes:', error);
+  }
+};
+
+// Initialize indexes when the model is first loaded
+initializeIndexes();
 
 export default NiftyData;
