@@ -107,29 +107,37 @@ export const updateProfile = async (req, res) => {
 };
 
 // Delete User (Soft Delete)
-export const deleteUser = async (req, res) => {
+export const deleteUser = async (req, res) => { 
   const { id } = req.user; // Authenticated user ID
+
+  console.log("Authenticated User ID:", id); // Debugging
 
   try {
     // Joi validation for ID
-    const { error } = deleteUserSchema.validate({ id });
-    if (error) return res.status(400).json({ message: error.details[0].message });
+    const { error } = deleteUserValidation.validate({ id });
+    if (error) {
+      console.error("Validation Error:", error.details[0].message);
+      return res.status(400).json({ message: error.details[0].message });
+    }
 
     const user = await User.findById(id);
+    console.log("User Found:", user); // Debugging
 
     if (!user || user.isDeleted) {
+      console.error("User not found or already deleted");
       return res.status(404).json({ message: "User not found or already deleted" });
     }
 
     user.isDeleted = true; // Soft delete user
     await user.save();
 
+    console.log("User deletion successful");
     res.json({ message: "User account deleted successfully" });
   } catch (error) {
+    console.error("Error in deleteUser:", error.message);
     res.status(500).json({ message: "User deletion failed", error: error.message });
   }
 };
-
 
 // Get All Users (for admin)
 export const getUsers = async (req, res) => {
