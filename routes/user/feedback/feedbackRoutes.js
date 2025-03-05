@@ -4,7 +4,10 @@ import { displayOrganizationFeedback, organizationUsersFeedbackDelete, organizat
     updateFeedbackStatus,
     softDeleteFeedback,
     getFeedbackStats,  
-    getAllFeedbackAdmin} from "../../../controllers/user/feedbackController.js";
+    getAllFeedbackAdmin,
+    updateOrganizationFeedback,
+    deleteOrganizationFeedback,
+    updateOrganizationUsersFeedback} from "../../../controllers/user/feedbackController.js";
 import userMiddleware from "../../../middlewares/userMiddleware.js";
 const router = express.Router();
 
@@ -17,13 +20,20 @@ router.patch('/admin/:id/status', updateFeedbackStatus);
 router.delete('/admin/:id', softDeleteFeedback);
 
 // organization user feedbacks
+// router.get("/:orgName/users/feedbacks", organizationUsersFeedbackDisplay);
+// router.delete("/delete/:id", organizationUsersFeedbackDelete);
+// router.put("/update/feedbacks/:id", updateUsersFeedbackStatus);
+
 router.get("/:orgName/users/feedbacks", organizationUsersFeedbackDisplay);
 router.delete("/delete/:id", organizationUsersFeedbackDelete);
-router.put("/update/feedbacks/:id", updateUsersFeedbackStatus);
+router.put("/update/feedbacks/:id", updateOrganizationUsersFeedback);
+router.put("/update/status/:id", updateUsersFeedbackStatus);
 
 // organization feedbacks
 router.post("/register", registerOrganizationFeedback);
 router.get("/:orgName/feedback", displayOrganizationFeedback);
+router.put("/update/:feedbackId", updateOrganizationFeedback); // Update feedback route
+router.delete("/delete/:feedbackId", deleteOrganizationFeedback); 
 
 //user feedback routes 
 router.post("/", userMiddleware, createFeedback);
