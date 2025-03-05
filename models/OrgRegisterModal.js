@@ -40,16 +40,14 @@ const orgRegistrationSchema = new mongoose.Schema({
     enum: ['approved', 'rejected', 'pending'],
     default: 'pending'
   },
-  photo: { 
-    type: String, 
-    default: 'https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png' 
-  },
-  isDeleted: { 
-    type: Boolean, 
-    default: false 
-  }
+
+  photo:{type:String, default:"https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png"},
+  isDeleted: { type: Boolean, default: false },
+  createDate: { type: Date, default: Date.now },
+  updateDate: { type: Date, default: Date.now }
 }, {
   timestamps: true // This will add createdAt and updatedAt fields
+
 });
 
 // Add indexes for better query performance
