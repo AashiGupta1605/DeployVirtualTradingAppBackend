@@ -229,6 +229,13 @@ export const updateOrganizationByName = async (req, res) => {
     // Log the updated organization for debugging
     console.log("Updated Organization:", updatedOrg);
 
+    res.status(200).json(updatedOrg);
+  } catch (error) {
+    console.error("Error updating organization:", error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+    
 
 export const getOrganizationById = async (req, res) => {
   const { orgId } = req.params;
