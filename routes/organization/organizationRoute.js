@@ -11,22 +11,20 @@ import {
   updateOrg,
   deleteOrg,
   updateApprovalStatus,
-  getUserByOrgName,
-  getOrganizationById,
-  updateOrganization,
+  getOrganizationByName,
+  updateOrganizationByName,
   searchOrganizations
 } from '../../controllers/organization/organizationController.js';
-import { verifyToken } from '../../helpers/jwtHandler.js';
 
 const router = express.Router();
 
-// Public routes
+// organization routes
 router.post('/register', organizationRegister);
 router.post('/login', organizationLogin);
+router.get('/by-name', getOrganizationByName);
+router.put('/update-by-name', updateOrganizationByName);
 
-// Organization profile routes
-router.get('/profile/:orgId', getOrganizationById);
-router.put('/profile/:orgId', verifyToken, updateOrganization);
+
 
 // Admin List and search organizations
 router.get('/list', getAllOrgs);
@@ -38,7 +36,8 @@ router.put('/update/:orgId', updateOrg);
 router.delete('/organization/:id', deleteOrg);
 router.put('/status/:id', updateApprovalStatus); 
 
+
 // User related routes
-router.get('/users/:orgName', verifyToken, getUserByOrgName);
+// router.get('/users/:orgName', verifyToken, getUserByOrgName);
 
 export default router;
