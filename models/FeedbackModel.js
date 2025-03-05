@@ -112,6 +112,11 @@ const FeedbackSchema = new mongoose.Schema({
     default: "approved",
   },
     addedby: { type: String }, // Organization name
+    feedbackType: {
+      type: String,
+      enum: ["organization", "user"],
+      required: true,
+    },
     
   isDeleted: { type: Boolean, default: false },
   createdDate: { type: Date, default: Date.now },

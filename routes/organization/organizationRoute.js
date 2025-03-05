@@ -124,8 +124,8 @@ import {
   deleteOrg,
   updateApprovalStatus,
   getUserByOrgName,
-  getOrganizationById,
-  updateOrganization,
+  getOrganizationByName,
+  updateOrganizationByName,
 } from '../../controllers/organization/organizationController.js';
 import { verifyToken } from '../../helpers/jwtHandler.js';
 const router = express.Router();
@@ -133,8 +133,8 @@ const router = express.Router();
 // Organization routes
 router.post('/register', organizationRegister);
 router.post('/login', organizationLogin);
-router.get('/:orgId', getOrganizationById);
-router.put('/update/:orgId', verifyToken, updateOrganization);
+router.get('/by-name', getOrganizationByName);
+router.put('/update-by-name', updateOrganizationByName);
 
 // // Admin routes for organizations
 // router.get('/display-all-org', verifyToken, getAllOrgs);
@@ -143,7 +143,6 @@ router.put('/update/:orgId', verifyToken, updateOrganization);
 // router.delete('/:id', verifyToken, deleteOrg);
 // router.put('/:id/approval-status', verifyToken, updateApprovalStatus);
 // router.get('/users/:orgName', verifyToken, getUserByOrgName);
-
 
 router.get("/display-all-org", getAllOrgs); // GET for retrieving all organizations
 router.get("/:id", getOrgById); // GET for retrieving a specific organization by ID

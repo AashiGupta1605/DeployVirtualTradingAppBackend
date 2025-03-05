@@ -176,39 +176,64 @@ export const organizationLogin = async (req, res) => {
 
 
 
-export const getOrganizationById = async (req, res) => {
-  const { orgId } = req.params;
+export const getOrganizationByName = async (req, res) => {
+  const { orgName } = req.query; // Use req.query for GET request
+  // OR
+  // const { orgName } = req.body; // Use req.body for POST request
+
+  if (!orgName) {
+    return res.status(400).json({ success: false, message: 'Organization name is required' });
+  }
 
   try {
-    const org = await OrgRegistration.findById(orgId);
+    // Fetch the organization by name
+    const org = await OrgRegistration.findOne({ name: orgName }).select('-password'); // Exclude the password field
     if (!org) {
-      return res.status(404).json({ message: 'Organization not found' });
+      return res.status(404).json({ success: false, message: 'Organization not found' });
     }
-    res.status(200).json(org);
+
+    console.log("Organization Data:", org); // Log the organization data
+    res.status(200).json({ success: true, data: org });
   } catch (error) {
     console.error("Error fetching organization:", error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 };
 
 
-export const updateOrganization = async (req, res) => {
-  const { orgId } = req.params;
-  const updateData = req.body;
+// Update organization by name
+export const updateOrganizationByName = async (req, res) => {
+  const { orgName } = req.query; // Use req.query to get orgName
+  const updateData = req.body; // Data to update
+
+  if (!orgName) {
+    return res.status(400).json({ message: 'Organization name is required' });
+  }
 
   try {
-    const updatedOrg = await OrgRegistration.findByIdAndUpdate(orgId, updateData, { new: true });
+    // Log the update data for debugging
+    console.log("Update Data:", updateData);
+
+    // Find the organization by name and update it
+    const updatedOrg = await OrgRegistration.findOneAndUpdate(
+      { name: orgName }, // Query by name
+      { $set: updateData }, // Use $set to update only the specified fields
+      { new: true, runValidators: true } // Return the updated document and run validators
+    );
+
     if (!updatedOrg) {
       return res.status(404).json({ message: 'Organization not found' });
     }
+
+    // Log the updated organization for debugging
+    console.log("Updated Organization:", updatedOrg);
+
     res.status(200).json(updatedOrg);
   } catch (error) {
     console.error("Error updating organization:", error);
     res.status(500).json({ message: 'Server error' });
   }
 };
-
-
 
 
 //Admin
