@@ -51,6 +51,282 @@ export const getNiftyData = async (req, res) => {
   }
 };
 
+// export const getCompanyBySymbol = async (req, res) => {
+//   try {
+//     const { symbol } = req.params;
+
+//     const latestData = await NiftyData.aggregate([
+//       // Get the latest document first
+//       { $sort: { fetchTime: -1 } },
+//       { $limit: 1 },
+//       // Unwind the stocks array
+//       { $unwind: '$stocks' },
+//       // Match the specific symbol
+//       { $match: { 'stocks.symbol': symbol } },
+//       // Project only needed fields
+//       {
+//         $project: {
+//           _id: 0,
+//           fetchTime: 1,
+//           symbol: '$stocks.symbol',
+//           open: '$stocks.open',
+//           dayHigh: '$stocks.dayHigh',
+//           dayLow: '$stocks.dayLow',
+//           lastPrice: '$stocks.lastPrice',
+//           previousClose: '$stocks.previousClose',
+//           change: '$stocks.change',
+//           pChange: '$stocks.pChange',
+//           totalTradedVolume: '$stocks.totalTradedVolume',
+//           totalTradedValue: '$stocks.totalTradedValue',
+//           lastUpdateTime: '$stocks.lastUpdateTime',
+//           yearHigh: '$stocks.yearHigh',
+//           yearLow: '$stocks.yearLow',
+//           perChange365d: '$stocks.perChange365d',
+//           perChange30d: '$stocks.perChange30d'
+//         }
+//       }
+//     ]).exec();
+
+//     if (!latestData.length) {
+//       return res.status(404).json({
+//         message: `No data found for symbol ${symbol}`
+//       });
+//     }
+
+//     res.status(200).json(latestData[0]);
+
+//   } catch (error) {
+//     console.error('Error fetching company data:', error);
+//     res.status(500).json({ message: 'Internal server error' });
+//   }
+// };
+
+
+// // export const getChartDataBySymbol = async (req, res) => {
+// //   try {
+// //     const { symbol } = req.params;
+// //     const { timeRange } = req.query;
+    
+// //     console.log('Fetching chart data for:', { symbol, timeRange });
+    
+// //     const currentDate = new Date();
+// //     let startDate;
+// //     let numberOfRecords;
+    
+// //     switch (timeRange) {
+// //       case '1D':
+// //         startDate = new Date(currentDate);
+// //         startDate.setHours(0, 0, 0, 0);
+// //         numberOfRecords = 1;
+// //         break;
+// //       case '1W':
+// //         startDate = new Date(currentDate);
+// //         startDate.setDate(currentDate.getDate() - 7);
+// //         numberOfRecords = 7;
+// //         break;
+// //       case '1M':
+// //         startDate = new Date(currentDate);
+// //         startDate.setMonth(currentDate.getMonth() - 1);
+// //         numberOfRecords = 30;
+// //         break;
+// //       case '3M':
+// //         startDate = new Date(currentDate);
+// //         startDate.setMonth(currentDate.getMonth() - 3);
+// //         numberOfRecords = 90;
+// //         break;
+// //       case '6M':
+// //         startDate = new Date(currentDate);
+// //         startDate.setMonth(currentDate.getMonth() - 6);
+// //         numberOfRecords = 180;
+// //         break;
+// //       case '1Y':
+// //         startDate = new Date(currentDate);
+// //         startDate.setFullYear(currentDate.getFullYear() - 1);
+// //         numberOfRecords = 365;
+// //         break;
+// //       case '2Y':
+// //         startDate = new Date(currentDate);
+// //         startDate.setFullYear(currentDate.getFullYear() - 2);
+// //         numberOfRecords = 730;
+// //         break;
+// //       case '3Y':
+// //         startDate = new Date(currentDate);
+// //         startDate.setFullYear(currentDate.getFullYear() - 3);
+// //         numberOfRecords = 1095;
+// //         break;
+// //       case '5Y':
+// //         startDate = new Date(currentDate);
+// //         startDate.setFullYear(currentDate.getFullYear() - 5);
+// //         numberOfRecords = 1825;
+// //         break;
+// //       default:
+// //         startDate = new Date(currentDate);
+// //         startDate.setHours(0, 0, 0, 0);
+// //         numberOfRecords = 1;
+// //     }
+
+// //     // Aggregation pipeline for daily OHLC data
+// //     const aggregationPipeline = [
+// //       {
+// //         $match: {
+// //           fetchTime: {
+// //             $gte: startDate,
+// //             $lte: currentDate
+// //           }
+// //         }
+// //       },
+// //       { $unwind: '$stocks' },
+// //       { $match: { 'stocks.symbol': symbol } },
+// //       {
+// //         $group: {
+// //           _id: {
+// //             date: { 
+// //               $dateToString: { 
+// //                 format: "%Y-%m-%d", 
+// //                 date: "$fetchTime",
+// //                 timezone: "Asia/Kolkata"
+// //               } 
+// //             }
+// //           },
+// //           open: { $first: '$stocks.open' },
+// //           high: { $max: '$stocks.dayHigh' },
+// //           low: { $min: '$stocks.dayLow' },
+// //           close: { $last: '$stocks.lastPrice' },
+// //           volume: { $sum: '$stocks.totalTradedVolume' },
+// //           value: { $sum: '$stocks.totalTradedValue' }
+// //         }
+// //       },
+// //       { $sort: { '_id.date': -1 } },
+// //       { $limit: numberOfRecords },
+// //       { $sort: { '_id.date': 1 } },
+// //       {
+// //         $project: {
+// //           _id: 0,
+// //           date: '$_id.date',
+// //           open: 1,
+// //           high: 1,
+// //           low: 1,
+// //           close: 1,
+// //           volume: 1,
+// //           value: 1
+// //         }
+// //       }
+// //     ];
+
+
+// //     const chartData = await NiftyData.aggregate(aggregationPipeline).exec();
+    
+// //     console.log('Chart data before sending:', chartData);
+
+// //     if (!chartData.length) {
+// //       console.log('No data found');
+// //       return res.status(404).json({
+// //         message: `No chart data found for symbol ${symbol} in the specified time range`
+// //       });
+// //     }
+
+// //     // Format the data before sending
+// //     const formattedData = chartData.map(item => ({
+// //       date: item.date,
+// //       open: Number(item.open),
+// //       high: Number(item.high),
+// //       low: Number(item.low),
+// //       close: Number(item.close),
+// //       volume: Number(item.volume || 0)
+// //     }));
+
+// //     console.log('Sending formatted data:', formattedData);
+// //     res.status(200).json(formattedData);
+
+// //   } catch (error) {
+// //     console.error('Error in getChartDataBySymbol:', error);
+// //     res.status(500).json({ message: 'Internal server error' });
+// //   }
+// // };
+
+// // For Table Data - All records with full details
+// export const getHistoricalDataBySymbol = async (req, res) => {
+//   try {
+//     const { symbol } = req.params;
+//     const { timeRange } = req.query;
+    
+//     const currentDate = new Date();
+//     let startDate;
+    
+//     switch (timeRange) {
+//       case '1D':
+//         startDate = new Date(currentDate);
+//         startDate.setHours(0, 0, 0, 0);
+//         break;
+//       case '1W':
+//         startDate = new Date(currentDate);
+//         startDate.setDate(currentDate.getDate() - 7);
+//         break;
+//       case '1M':
+//         startDate = new Date(currentDate);
+//         startDate.setDate(currentDate.getDate() - 30);
+//         break;
+//       case '3M':
+//         startDate = new Date(currentDate);
+//         startDate.setDate(currentDate.getDate() - 90);
+//         break;
+//       default:
+//         startDate = new Date(currentDate);
+//         startDate.setHours(0, 0, 0, 0);
+//     }
+
+//     // Aggregation pipeline for full historical data
+//     const aggregationPipeline = [
+//       {
+//         $match: {
+//           fetchTime: {
+//             $gte: startDate,
+//             $lte: currentDate
+//           }
+//         }
+//       },
+//       { $unwind: '$stocks' },
+//       { $match: { 'stocks.symbol': symbol } },
+//       { $sort: { fetchTime: -1 } },
+//       {
+//         $project: {
+//           _id: 0,
+//           lastUpdateTime: '$stocks.lastUpdateTime',
+//           open: '$stocks.open',
+//           dayHigh: '$stocks.dayHigh',
+//           dayLow: '$stocks.dayLow',
+//           lastPrice: '$stocks.lastPrice',
+//           previousClose: '$stocks.previousClose',
+//           change: '$stocks.change',
+//           pChange: '$stocks.pChange',
+//           totalTradedVolume: '$stocks.totalTradedVolume',
+//           totalTradedValue: '$stocks.totalTradedValue'
+//         }
+//       }
+//     ];
+
+//     const historicalData = await NiftyData.aggregate(aggregationPipeline).exec();
+
+//     if (!historicalData.length) {
+//       return res.status(404).json({
+//         message: `No historical data found for symbol ${symbol} in the specified time range`
+//       });
+//     }
+
+//     res.status(200).json(historicalData);
+
+//   } catch (error) {
+//     console.error('Error fetching historical data:', error);
+//     res.status(500).json({ message: 'Internal server error' });
+//   }
+// };
+
+
+
+// controllers/admin/niftyDataControllers.js
+// import NiftyData from '../../models/NiftyDataModal.js';
+// import { saveNiftyDataValidation, getCompanyBySymbolValidation } from '../../helpers/joiValidation.js';
+
 export const getCompanyBySymbol = async (req, res) => {
   try {
     const { symbol } = req.params;
@@ -107,6 +383,8 @@ export const getChartDataBySymbol = async (req, res) => {
     const { symbol } = req.params;
     const { timeRange } = req.query;
     
+    console.log('Fetching chart data for:', { symbol, timeRange });
+    
     const currentDate = new Date();
     let startDate;
     let numberOfRecords;
@@ -131,6 +409,31 @@ export const getChartDataBySymbol = async (req, res) => {
         startDate = new Date(currentDate);
         startDate.setMonth(currentDate.getMonth() - 3);
         numberOfRecords = 90;
+        break;
+      case '6M':
+        startDate = new Date(currentDate);
+        startDate.setMonth(currentDate.getMonth() - 6);
+        numberOfRecords = 180;
+        break;
+      case '1Y':
+        startDate = new Date(currentDate);
+        startDate.setFullYear(currentDate.getFullYear() - 1);
+        numberOfRecords = 365;
+        break;
+      case '2Y':
+        startDate = new Date(currentDate);
+        startDate.setFullYear(currentDate.getFullYear() - 2);
+        numberOfRecords = 730;
+        break;
+      case '3Y':
+        startDate = new Date(currentDate);
+        startDate.setFullYear(currentDate.getFullYear() - 3);
+        numberOfRecords = 1095;
+        break;
+      case '5Y':
+        startDate = new Date(currentDate);
+        startDate.setFullYear(currentDate.getFullYear() - 5);
+        numberOfRecords = 1825;
         break;
       default:
         startDate = new Date(currentDate);
@@ -162,14 +465,16 @@ export const getChartDataBySymbol = async (req, res) => {
             }
           },
           open: { $first: '$stocks.open' },
-          high: { $first: '$stocks.dayHigh' },
-          low: { $first: '$stocks.dayLow' },
-          close: { $first: '$stocks.lastPrice' }
+          high: { $max: '$stocks.dayHigh' },
+          low: { $min: '$stocks.dayLow' },
+          close: { $last: '$stocks.lastPrice' },
+          volume: { $sum: '$stocks.totalTradedVolume' },
+          value: { $sum: '$stocks.totalTradedValue' }
         }
       },
-      { $sort: { '_id.date': -1 } }, // Sort by date descending
-      { $limit: numberOfRecords }, // Limit to required number of records
-      { $sort: { '_id.date': 1 } }, // Sort back to ascending for chart display
+      { $sort: { '_id.date': -1 } },
+      { $limit: numberOfRecords },
+      { $sort: { '_id.date': 1 } },
       {
         $project: {
           _id: 0,
@@ -177,29 +482,44 @@ export const getChartDataBySymbol = async (req, res) => {
           open: 1,
           high: 1,
           low: 1,
-          close: 1
+          close: 1,
+          volume: 1,
+          value: 1
         }
       }
     ];
 
+
     const chartData = await NiftyData.aggregate(aggregationPipeline).exec();
+    
+    console.log('Chart data before sending:', chartData);
 
     if (!chartData.length) {
+      console.log('No data found');
       return res.status(404).json({
         message: `No chart data found for symbol ${symbol} in the specified time range`
       });
     }
 
-    console.log(`Returning ${chartData.length} records for chart data`);
-    res.status(200).json(chartData);
+    // Format the data before sending
+    const formattedData = chartData.map(item => ({
+      date: item.date,
+      open: Number(item.open),
+      high: Number(item.high),
+      low: Number(item.low),
+      close: Number(item.close),
+      volume: Number(item.volume || 0)
+    }));
+
+    console.log('Sending formatted data:', formattedData);
+    res.status(200).json(formattedData);
 
   } catch (error) {
-    console.error('Error fetching chart data:', error);
+    console.error('Error in getChartDataBySymbol:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 };
 
-// For Table Data - All records with full details
 export const getHistoricalDataBySymbol = async (req, res) => {
   try {
     const { symbol } = req.params;
@@ -274,4 +594,4 @@ export const getHistoricalDataBySymbol = async (req, res) => {
     console.error('Error fetching historical data:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
-};
+}; 

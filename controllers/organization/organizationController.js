@@ -212,126 +212,200 @@ export const updateOrganization = async (req, res) => {
 
 
 //Admin
+
+
+// Get all organizations
+// controllers/organization/organizationController.js
+import mongoose from 'mongoose';
+
+
+// Get all organizations
 export const getAllOrgs = async (req, res) => {
   try {
-    const orgs = await OrgRegistration.find({ isDeleted: false }); // ✅ Filter by isDeleted: false
-    res.status(200).json(orgs);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+    const organizations = await OrgRegistration.find({ isDeleted: false })
+      .select('-password')
+      .lean();
 
-
-export const getOrgById = async (req, res) => {
-  try {
-    const org = await OrgRegistration.findById(req.params.id);
-    if (!org) return res.status(404).json({ message: ORG_NOT_FOUND });
-    res.status(200).json(org);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-export const updateOrg = async (req, res) => {
-  try {
-    // Validate request body
-    const { error } = updateOrgValidation.validate(req.body);
-    if (error) {
-      return res.status(400).json({ message: error.details[0].message });
-    }
-
-    // Prepare update data
-    const updateData = { ...req.body };
-    
-    // Remove system-generated and sensitive fields
-    const fieldsToRemove = ['_id', 'password', 'createDate', 'updateDate', '__v'];
-    fieldsToRemove.forEach(field => delete updateData[field]);
-
-    // Ensure only defined fields are updated
-    const filteredUpdateData = Object.fromEntries(
-      Object.entries(updateData).filter(([_, v]) => v !== undefined)
-    );
-
-    // Update organization
-    const updatedOrg = await OrgRegistration.findByIdAndUpdate(
-      req.params.id, 
-      filteredUpdateData, 
-      { 
-        new: true,  // Return the updated document
-        runValidators: true  // Run model validations
-      }
-    );
-
-    if (!updatedOrg) {
-      return res.status(404).json({ message: ORG_NOT_FOUND });
-    }
-
-    res.status(200).json({ 
-      message: ORG_UPDATED_SUCCESS, 
-      data: updatedOrg 
+    return res.status(200).json({
+      success: true,
+      data: organizations,
+      count: organizations.length,
+      message: 'Organizations fetched successfully'
     });
   } catch (error) {
-    console.error('Update organization error:', error);
-    res.status(500).json({ 
-      message: 'Error updating organization', 
+    console.error('Error fetching organizations:', error);
+    return res.status(500).json({ 
+      success: false,
+      message: 'Failed to fetch organizations',
       error: error.message 
     });
   }
 };
 
-export const deleteOrg = async (req, res) => {
+// Get organization by ID
+export const getOrgById = async (req, res) => {
   try {
-    // Validate the ID
-    const { id } = req.params;
-    if (!id) {
-      return res.status(400).json({ message: 'Invalid organization ID' });
+    const { orgId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(orgId)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid organization ID format'
+      });
     }
 
-    // Soft delete the organization
+    const organization = await OrgRegistration.findOne({
+      _id: orgId,
+      isDeleted: false
+    }).select('-password');
+
+    if (!organization) {
+      return res.status(404).json({
+        success: false,
+        message: 'Organization not found'
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: organization,
+      message: 'Organization fetched successfully'
+    });
+  } catch (error) {
+    console.error('Error fetching organization:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to fetch organization',
+      error: error.message
+    });
+  }
+};
+
+// Update organization
+export const updateOrg = async (req, res) => {
+  try {
+    const { orgId } = req.params;
+    const updateData = { ...req.body };
+
+    if (!mongoose.Types.ObjectId.isValid(orgId)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid organization ID format'
+      });
+    }
+
+    // Remove sensitive fields
+    delete updateData.password;
+    delete updateData._id;
+
+    const organization = await OrgRegistration.findOneAndUpdate(
+      { _id: orgId, isDeleted: false },
+      updateData,
+      { new: true, runValidators: true }
+    ).select('-password');
+
+    if (!organization) {
+      return res.status(404).json({
+        success: false,
+        message: 'Organization not found'
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: organization,
+      message: 'Organization updated successfully'
+    });
+  } catch (error) {
+    console.error('Error updating organization:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to update organization',
+      error: error.message
+    });
+  }
+};
+
+// controllers/organization/organizationController.js
+// controllers/organization/organizationController.js
+export const deleteOrg = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Organization ID is required'
+      });
+    }
+
     const deletedOrg = await OrgRegistration.findByIdAndUpdate(
       id,
-      { 
-        isDeleted: true,
-        updatedDate: Date.now() 
-      },
-      { 
-        new: true,  // Return the updated document
-        runValidators: true  // Run model validations
-      }
+      { isDeleted: true },
+      { new: true }
     );
 
     if (!deletedOrg) {
-      return res.status(404).json({ message: ORG_NOT_FOUND });
+      return res.status(404).json({
+        success: false,
+        message: 'Organization not found'
+      });
     }
 
-    res.status(200).json({ 
-      message: ORG_SOFT_DELETED_SUCCESS,
-      data: deletedOrg 
+    return res.status(200).json({
+      success: true,
+      message: 'Organization deleted successfully',
+      id: id
     });
   } catch (error) {
     console.error('Delete organization error:', error);
-    res.status(500).json({ 
-      message: 'Error deleting organization', 
-      error: error.message 
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to delete organization',
+      error: error.message
     });
   }
 };
 
-
+// controllers/organization/organizationController.js
 export const updateApprovalStatus = async (req, res) => {
   try {
-    // Validate request body
-    const { error } = updateApprovalStatusValidation.validate(req.body);
-    if (error) {
-      return res.status(400).json({ message: error.details[0].message });
+    const { id } = req.params;
+    const { status } = req.body;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Organization ID is required'
+      });
     }
 
-    const { status } = req.body;
-    const updatedOrg = await OrgRegistration.findByIdAndUpdate(req.params.id, { approvalStatus: status }, { new: true });
-    if (!updatedOrg) return res.status(404).json({ message: ORG_NOT_FOUND });
-    res.status(200).json(`{ message: Organization ${status}, data: updatedOrg }`);
+    const updatedOrg = await OrgRegistration.findByIdAndUpdate(
+      id,
+      { approvalStatus: status },
+      { new: true }
+    );
+
+    if (!updatedOrg) {
+      return res.status(404).json({
+        success: false,
+        message: 'Organization not found'
+      });
+    }
+
+    // Return properly formatted response
+    return res.status(200).json({
+      success: true,
+      data: updatedOrg,
+      message: `Organization status updated to ${status}`,
+      id: id,
+      status: status
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    return res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to update organization status'
+    });
   }
 };
 
