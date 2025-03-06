@@ -11,9 +11,9 @@ import {
   updateOrg,
   deleteOrg,
   updateApprovalStatus,
-  getOrganizationByName,
-  updateOrganizationByName,
-  searchOrganizations
+  searchOrganizations,
+  getOrganizationById,
+  updateOrganizationById
 } from '../../controllers/organization/organizationController.js';
 
 const router = express.Router();
@@ -21,9 +21,11 @@ const router = express.Router();
 // organization routes
 router.post('/register', organizationRegister);
 router.post('/login', organizationLogin);
-router.get('/by-name', getOrganizationByName);
-router.put('/update-by-name', updateOrganizationByName);
+// router.get('/by-name', getOrganizationByName);
+// router.put('/update-by-name', updateOrganizationByName);
 
+router.get("/by-id", getOrganizationById); // GET organization by ID
+router.put("/update-by-id", updateOrganizationById);
 
 
 // Admin List and search organizations

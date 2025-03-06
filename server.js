@@ -8,6 +8,7 @@ import { scrapeAndStoreETFData } from './scripts/scraper2.js';
 import { fetchNifty50Data } from './scripts/scraper.js';
 import userRoute from "./routes/user/index.js";
 import adminRoute from "./routes/admin/adminRoute.js";
+import bodyParser from "body-parser";
 
 import organizationRoute from "./routes/organization/index.js"
   // server.js
@@ -37,6 +38,10 @@ app.use(cors({
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
+
+// by abhishek for cloduinary image upload error
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
 app.use(express.json());
 
