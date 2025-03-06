@@ -2,6 +2,7 @@
 import { buildDateQuery, buildSearchQuery } from "../../helpers/dataHandler.js";
 import Feedback from "../../models/FeedbackModel.js";
 
+//--------------------Guest User side-----------------------
 export const getUserFeedback = async (req, res) => { 
     try {
         const {category, sortBy, order} = req.params
@@ -43,6 +44,12 @@ export const getAllFeedback = async(req,res)=>{
         res.status(500).json({ success: false, message: "Failed to get feedback data from database.", error });
     }
 };
+
+export const getOrganizationsFeedback = async(req,res)=>{
+  
+}
+
+//------------------------Guest User side-----------------------------------------
 
 // // organization user feedbacks - crud operations
 
@@ -476,11 +483,12 @@ export const createFeedback = async (req, res) => {
 
 export const getAllFeedbackAdmin = async (req, res) => {
   try {
-    const feedbacks = await Feedback.find()
-      .populate('userId', 'name email mobile')
+    const feedbacks = await Feedback.find({ isDeleted: { $ne: true } }) // Exclude deleted feedback
+      .populate('userId', 'name email mobile') // Populate user details
+      .populate('organizationId', 'name email') // Populate organization details
       .sort({ createdDate: -1 });
 
-    console.log('Fetched feedbacks:', feedbacks); // Debug log
+    console.log('Fetched feedbacks:', feedbacks);
 
     res.status(200).json({
       success: true,
@@ -494,6 +502,7 @@ export const getAllFeedbackAdmin = async (req, res) => {
     });
   }
 };
+
   
   // Get feedback by ID
   export const getFeedbackByIdAdmin = async (req, res) => {
