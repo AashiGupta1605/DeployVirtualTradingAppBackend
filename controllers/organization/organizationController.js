@@ -201,14 +201,43 @@ export const getOrganizationByName = async (req, res) => {
   }
 };
 
-
+//Commented by -- Aashi, give error --------------start--------------------------------
 // Update organization by name
+// export const updateOrganizationByName = async (req, res) => {
+//   const { orgName } = req.query; // Use req.query to get orgName
+//   const updateData = req.body; // Data to update
+
+//   if (!orgName) {
+//     return res.status(400).json({ message: 'Organization name is required' });
+//   }
+
+//   try {
+//     // Log the update data for debugging
+//     console.log("Update Data:", updateData);
+
+//     // Find the organization by name and update it
+//     const updatedOrg = await OrgRegistration.findOneAndUpdate(
+//       { name: orgName }, // Query by name
+//       { $set: updateData }, // Use $set to update only the specified fields
+//       { new: true, runValidators: true } // Return the updated document and run validators
+//     );
+
+//     if (!updatedOrg) {
+//       return res.status(404).json({ message: 'Organization not found' });
+//     }
+
+//     // Log the updated organization for debugging
+//     console.log("Updated Organization:", updatedOrg);
+//-----------------------end---------------------------------------------------------
+
+
+//on the place of above, correct code (Aashi) is ---------------start-------------------------
 export const updateOrganizationByName = async (req, res) => {
   const { orgName } = req.query; // Use req.query to get orgName
   const updateData = req.body; // Data to update
 
   if (!orgName) {
-    return res.status(400).json({ message: 'Organization name is required' });
+    return res.status(400).json({ message: "Organization name is required" });
   }
 
   try {
@@ -223,19 +252,20 @@ export const updateOrganizationByName = async (req, res) => {
     );
 
     if (!updatedOrg) {
-      return res.status(404).json({ message: 'Organization not found' });
+      return res.status(404).json({ message: "Organization not found" });
     }
 
     // Log the updated organization for debugging
     console.log("Updated Organization:", updatedOrg);
 
-    res.status(200).json(updatedOrg);
+    return res.status(200).json({ message: "Organization updated successfully", updatedOrg });
   } catch (error) {
     console.error("Error updating organization:", error);
-    res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: "Internal server error", error: error.message });
   }
 };
-    
+//---------------------------------end---------------------------------------------------------
+
 
 export const getOrganizationById = async (req, res) => {
   const { orgId } = req.params;
@@ -278,7 +308,9 @@ export const updateOrganization = async (req, res) => {
 
 // Get all organizations
 // controllers/organization/organizationController.js
-import mongoose from 'mongoose';
+
+
+// import mongoose from 'mongoose';
 
 
 // Get all organizations
@@ -521,11 +553,3 @@ export const searchOrganizations = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
-
-
-
-
-
-
-
