@@ -2,6 +2,7 @@
 import { buildDateQuery, buildSearchQuery } from "../../helpers/dataHandler.js";
 import Feedback from "../../models/FeedbackModel.js";
 
+//--------------------Guest User side-----------------------
 export const getUserFeedback = async (req, res) => { 
     try {
         const {category, sortBy, order} = req.params
@@ -43,6 +44,12 @@ export const getAllFeedback = async(req,res)=>{
         res.status(500).json({ success: false, message: "Failed to get feedback data from database.", error });
     }
 };
+
+export const getOrganizationsFeedback = async(req,res)=>{
+  
+}
+
+//------------------------Guest User side-----------------------------------------
 
 // // organization user feedbacks - crud operations
 
