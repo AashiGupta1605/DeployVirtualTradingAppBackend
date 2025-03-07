@@ -20,7 +20,7 @@ import userRoutes from './user/userRoutes.js';
 import feedbackRoutes from './feedback/feedbackRoutes.js';
 import contactRoutes from './contact/contactRoutes.js';
 import subscriptionRoutes from './userSubscriptionPlanRoutes/userSubscriptionPlanRoutes.js';
-
+import userTradingRoute from "./userTradingRoute/userTradingRoute.js";
 const router = express.Router();
 
 // Auth Routes
@@ -37,5 +37,10 @@ router.use('/contact', contactRoutes);
 
 // Subscription Routes
 router.use('/subscription', subscriptionRoutes);
+
+
+
+// trading route
+router.use(userTradingRoute);
 
 export default router;

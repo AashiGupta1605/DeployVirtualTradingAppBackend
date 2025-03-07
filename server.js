@@ -23,6 +23,7 @@ dotenv.config();
 const app = express();
 
 cron.schedule('*/1 * * * *', async () => {
+  // console.log('Cron job running at:', new Date().toISOString());
   try {
     await scrapeAndStoreETFData();
     console.log('ETF data scraped and saved successfully');

@@ -167,7 +167,8 @@ export const organizationLogin = async (req, res) => {
       message: 'Login successful',
       token,
       orgName: existingOrg.name,
-      orgId:existingOrg._id
+      orgId:existingOrg._id,
+      org:existingOrg
     });
   } catch (error) {
     console.error("Error during login:", error);

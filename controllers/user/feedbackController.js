@@ -243,42 +243,9 @@ export const registerOrganizationFeedback = async (req, res) => {
   }
 };
 
-// // Display organization feedback
-// export const displayOrganizationFeedback = async (req, res) => {
-//   const orgName = req.params.orgName;
-//   const { page = 1, limit = 10, search = "", startDate, endDate } = req.query;
 
-//   try {
-//     const searchQuery = buildSearchQuery(search);
-//     const dateQuery = buildDateQuery(startDate, endDate);
 
-//     const feedbacks = await Feedback.find({
-//       addedby: orgName,
-//       isDeleted: false,
-//       ...dateQuery,
-//       ...searchQuery,
-//     })
-//       .skip((page - 1) * limit)
-//       .limit(Number(limit))
-//       .sort({ createdDate: -1 });
 
-//     const totalFeedbacks = await Feedback.countDocuments({
-//       addedby: orgName,
-//       isDeleted: false,
-//       ...dateQuery,
-//       ...searchQuery,
-//     });
-
-//     res.status(200).json({
-//       feedbacks,
-//       totalPages: Math.ceil(totalFeedbacks / limit),
-//       currentPage: Number(page),
-//     });
-//   } catch (error) {
-//     console.error("Error fetching organization feedback:", error);
-//     res.status(500).json({ success: false, message: "Failed to fetch feedback" });
-//   }
-// };
 
 // Display organization feedback
 export const displayOrganizationFeedback = async (req, res) => {
@@ -295,6 +262,10 @@ export const displayOrganizationFeedback = async (req, res) => {
       isDeleted: false,
       ...dateQuery,
       ...searchQuery,
+    })
+    .populate({
+      path: "organizationId",
+      select: "name email mobile",
     })
       .skip((page - 1) * limit)
       .limit(Number(limit))
