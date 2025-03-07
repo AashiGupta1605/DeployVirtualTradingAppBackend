@@ -1,15 +1,29 @@
-import mongoose from "mongoose";
-import dotenv from "dotenv";
+// config/db.js
+
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log("MongoDB connected successfully");
+    console.log('📊 Connecting to MongoDB...');
+    
+    if (!process.env.MONGODB_URI) {
+      throw new Error('MongoDB connection string is not defined in environment variables');
+    }
+
+    const connection = await mongoose.connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      autoIndex: false // Disable automatic index creation
+    });
+
+    console.log('✅ MongoDB Connected:', connection.connection.host);
+    return connection;
   } catch (error) {
-    console.error("MongoDB connection failed", error);
-    process.exit(1);
+    console.error('❌ MongoDB connection error:', error);
+    throw error;
   }
 };
 

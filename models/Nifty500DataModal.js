@@ -1,4 +1,4 @@
-// models/NiftyDataModal.js
+// models/Nifty500DataModal.js
 
 import mongoose from 'mongoose';
 import { initializeCollectionIndexes } from '../utils/indexManager.js';
@@ -147,7 +147,7 @@ const stockSchema = new mongoose.Schema({
   timestamps: false
 });
 
-const niftyDataSchema = new mongoose.Schema({
+const nifty500DataSchema = new mongoose.Schema({
   fetchTime: {
     type: Date,
     required: true,
@@ -156,11 +156,11 @@ const niftyDataSchema = new mongoose.Schema({
   stocks: [stockSchema]
 }, {
   timestamps: true,
-  collection: 'niftydatas'
+  collection: 'nifty500data'
 });
 
 // Static Methods
-niftyDataSchema.statics = {
+nifty500DataSchema.statics = {
   async findLatestBySymbol(symbol) {
     try {
       return await this.aggregate([
@@ -202,11 +202,20 @@ niftyDataSchema.statics = {
       console.error('Error in findHistoricalDataBySymbol:', error);
       throw error;
     }
+  },
+
+  async findLatestData() {
+    try {
+      return await this.findOne().sort({ fetchTime: -1 });
+    } catch (error) {
+      console.error('Error in findLatestData:', error);
+      throw error;
+    }
   }
 };
 
 // Pre-save middleware
-niftyDataSchema.pre('save', function(next) {
+nifty500DataSchema.pre('save', function(next) {
   if (!this.stocks?.length) {
     next(new Error('Stocks array cannot be empty'));
     return;
@@ -226,7 +235,7 @@ niftyDataSchema.pre('save', function(next) {
 });
 
 // Post-save middleware
-niftyDataSchema.post('save', function(error, doc, next) {
+nifty500DataSchema.post('save', function(error, doc, next) {
   if (error.name === 'MongoServerError' && error.code === 11000) {
     next(new Error('Duplicate key error'));
   } else {
@@ -234,7 +243,7 @@ niftyDataSchema.post('save', function(error, doc, next) {
   }
 });
 
-const NiftyData = mongoose.model('NiftyData', niftyDataSchema);
+const Nifty500Data = mongoose.model('Nifty500Data', nifty500DataSchema);
 
 // Initialize indexes
 const initializeIndexes = async () => {
@@ -243,20 +252,19 @@ const initializeIndexes = async () => {
       fields: { fetchTime: -1, 'stocks.symbol': 1 },
       options: {
         background: true,
-        name: 'idx_nifty50_fetch_symbol'
+        name: 'idx_nifty500_fetch_symbol'
       }
     };
 
     await initializeCollectionIndexes(
-      NiftyData.collection,
-      'idx_nifty50_fetch_symbol',
+      Nifty500Data.collection,
+      'idx_nifty500_fetch_symbol',
       indexSpec
     );
   } catch (error) {
-    console.error('❌ Error initializing NiftyData indexes:', error);
+    console.error('❌ Error initializing Nifty500Data indexes:', error);
   }
 };
-
 // Initialize indexes when the model is first loaded
 if (mongoose.connection.readyState === 1) {
   initializeIndexes().catch(console.error);
@@ -266,4 +274,4 @@ if (mongoose.connection.readyState === 1) {
   });
 }
 
-export default NiftyData;
+export default Nifty500Data;
