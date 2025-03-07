@@ -9,7 +9,8 @@ export const organizationRegistrationValidationSchema = Joi.object({
   email: Joi.string().email().required().label('Email'),
   mobile: Joi.string().pattern(/^[9876]\d{9}$/).required().label('Mobile'),
   approvalStatus: Joi.string().valid("approved", "rejected", "pending").default("pending").label('Approval Status'),
-  password: Joi.string().min(8).required().label('Password')
+  password: Joi.string().min(8).required().label('Password'),
+  photo: Joi.string().required().label("photo")
 });
 
 // export const organizationLoginValidationSchema = Joi.object({
