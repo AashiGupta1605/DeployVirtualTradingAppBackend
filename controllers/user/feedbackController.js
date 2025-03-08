@@ -222,7 +222,9 @@ export const updateUsersFeedbackStatus = async (req, res) => {
 
 // organization feedbacks  - crud opeartions
 
-// Register organization feedback
+// Register organization feedback 
+// organization register by added by orgame 
+
 export const registerOrganizationFeedback = async (req, res) => {
   const { orgName, feedbackCategory, feedbackMessage, rating, recommend, suggestions } = req.body;
 
@@ -251,10 +253,39 @@ export const registerOrganizationFeedback = async (req, res) => {
 };
 
 
+// org register by organizationId
+
+// export const registerOrganizationFeedback = async (req, res) => {
+//   const { organizationId, feedbackCategory, feedbackMessage, rating, recommend, suggestions } = req.body;
+
+//   try {
+//     const newFeedback = new Feedback({
+//       organizationId,
+//       feedbackCategory,
+//       feedbackMessage,
+//       rating,
+//       recommend,
+//       suggestions,
+//       feedbackType: "organization",
+//     });
+
+//     await newFeedback.save();
+
+//     res.status(201).json({
+//       success: true,
+//       message: "Feedback submitted successfully",
+//       feedback: newFeedback,
+//     });
+//   } catch (error) {
+//     console.error("Error submitting feedback:", error);
+//     res.status(500).json({ success: false, message: "Failed to submit feedback" });
+//   }
+// };
 
 
 
 // Display organization feedback
+// display org feedabck by orgname 
 export const displayOrganizationFeedback = async (req, res) => {
   const orgName = req.params.orgName;
   const { page = 1, limit = 10, search = "", startDate, endDate } = req.query;
@@ -296,6 +327,50 @@ export const displayOrganizationFeedback = async (req, res) => {
     res.status(500).json({ success: false, message: "Failed to fetch feedback" });
   }
 };
+
+
+
+// displaty org feedabncks using id 
+// export const displayOrganizationFeedback = async (req, res) => {
+//   const organizationId = req.params.organizationId;
+//   const { page = 1, limit = 10, search = "", startDate, endDate } = req.query;
+
+//   try {
+//     const searchQuery = buildSearchQuery(search);
+//     const dateQuery = buildDateQuery(startDate, endDate);
+
+//     const feedbacks = await Feedback.find({
+//       organizationId,
+//       feedbackType: "organization",
+//       isDeleted: false,
+//       ...dateQuery,
+//       ...searchQuery,
+//     })
+//       .populate({
+//         path: "organizationId"
+//       })
+//       .skip((page - 1) * limit)
+//       .limit(Number(limit))
+//       .sort({ createdDate: -1 });
+
+//     const totalFeedbacks = await Feedback.countDocuments({
+//       organizationId,
+//       feedbackType: "organization",
+//       isDeleted: false,
+//       ...dateQuery,
+//       ...searchQuery,
+//     });
+
+//     res.status(200).json({
+//       feedbacks,
+//       totalPages: Math.ceil(totalFeedbacks / limit),
+//       currentPage: Number(page),
+//     });
+//   } catch (error) {
+//     console.error("Error fetching organization feedback:", error);
+//     res.status(500).json({ success: false, message: "Failed to fetch feedback" });
+//   }
+// };
 
 export const updateOrganizationFeedback = async (req, res) => {
 const { feedbackId } = req.params;

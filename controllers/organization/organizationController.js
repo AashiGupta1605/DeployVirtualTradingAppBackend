@@ -37,7 +37,7 @@ import {
 
 
 export const organizationRegister = async (req, res) => {
-  const { name, address, website, contactPerson, email, mobile, approvalStatus, password } = req.body;
+  const { name, address, website, contactPerson, email, mobile, approvalStatus, password, accreditation } = req.body;
 
   // Validate the request body
   const { error } = organizationRegistrationValidationSchema.validate(req.body);
@@ -63,6 +63,7 @@ export const organizationRegister = async (req, res) => {
       contactPerson,
       email,
       mobile,
+      accreditation,
       approvalStatus,
       password: hashedPassword
     });

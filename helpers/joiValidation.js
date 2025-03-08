@@ -10,13 +10,10 @@ export const organizationRegistrationValidationSchema = Joi.object({
   mobile: Joi.string().pattern(/^[9876]\d{9}$/).required().label('Mobile'),
   approvalStatus: Joi.string().valid("approved", "rejected", "pending").default("pending").label('Approval Status'),
   password: Joi.string().min(8).required().label('Password'),
+  accreditation:Joi.string().required().label("Accreditation"),
   photo:Joi.string().required().label("photo") // ad this line here and your registration will start working..
 });
 
-// export const organizationLoginValidationSchema = Joi.object({
-//   email: Joi.string().email().required().label('Email'),
-//   password: Joi.string().required().label('Password')
-// });
 
 // add login with mobile 
 
@@ -42,7 +39,7 @@ export const organizationUserRegistrationValidationSchema = Joi.object({
   }).label('Date of Birth'),
   // password: Joi.string().min(8).required().label('Password'),
   addedby: Joi.string().required(),
-  status: Joi.boolean().default(true).required()
+  status: Joi.boolean().default(true).required(),
 });
 
 export default {
