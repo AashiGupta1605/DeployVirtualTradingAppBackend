@@ -2,10 +2,11 @@
 import { buildDateQuery, buildSearchQuery } from "../../helpers/dataHandler.js";
 import Feedback from "../../models/FeedbackModel.js";
 
-//--------------------Guest User side-----------------------
-export const getUserFeedback = async (req, res) => { 
+//-------------------------------------------Guest User side--------------------------------------------------
+
+export const getAllUsersFeedbacks = async (req, res) => { 
     try {
-        const {category, sortBy, order} = req.params
+        const {organization, category, sortBy, order} = req.params
 
         // Convert 'increasing' or 'decreasing' to 1 or -1 for MongoDB sorting
         const sortOrder = order === "increasing" ? 1 : -1;
@@ -17,14 +18,29 @@ export const getUserFeedback = async (req, res) => {
         // const filter = category && category !== "undefined" ? { feedbackCategory: category } : {};
         // const feedbackData = await filteredData.find(filter).sort({[sortBy]:sortOrder})
 
-        const filter = { isDeleted: false };
+        const filter = { isDeleted: false, status:"approved", feedbackType:"user"};
 
         if (category && category.trim() !== "" && category !== "undefined") {
-            filter.feedbackCategory = category;
+            filter.feedbackCategory = { $regex: new RegExp(category, "i") };
         }
 
         // Fetch filtered & sorted feedback data
-        const feedbackData = await Feedback.find(filter).sort({ [sortBy]: sortOrder });
+        // const feedbackData = await Feedback.find(filter).sort({ [sortBy]: sortOrder });
+
+        // Fetch feedbacks and populate organization details
+        let feedbackData = await Feedback.find(filter)
+            .populate({
+                path: "organizationId",  // Populates `organizationId`
+                select: "name", // Only fetches organization name
+            })
+            .sort({ [sortBy]: sortOrder });
+
+        // If organization name is provided, filter feedbackData manually
+        if (organization && organization.trim() !== "" && organization !== "undefined") {
+            feedbackData = feedbackData.filter(
+                (feedback) => feedback.organizationId?.name === organization
+            );
+        }
 
         res.status(200).json({ success: true, feedbackData });
     } 
@@ -34,7 +50,7 @@ export const getUserFeedback = async (req, res) => {
     }
 };
 
-export const getAllFeedback = async(req,res)=>{
+export const getAllCompleteFeedbacks = async(req,res)=>{
     try{
         const feedbackData = await Feedback.find({ isDeleted: false })
         res.status(200).json({ success: true, feedbackData });
@@ -45,11 +61,37 @@ export const getAllFeedback = async(req,res)=>{
     }
 };
 
-export const getOrganizationsFeedback = async(req,res)=>{
-  
+export const getAllOrganizationsFeedbacks = async(req,res)=>{
+  try {
+    const {organization, category, sortBy, order} = req.params
+
+    const sortOrder = order === "increasing" ? 1 : -1;
+    const filter = { isDeleted: false, status:"approved", feedbackType:"organization"};
+
+    if (category && category.trim() !== "" && category !== "undefined") {
+        filter.feedbackCategory = { $regex: new RegExp(category, "i") };
+    }
+    let feedbackData = await Feedback.find(filter)
+        .populate({
+            path: "organizationId",  
+            select: "name", 
+        })
+        .sort({ [sortBy]: sortOrder });
+
+    if (organization && organization.trim() !== "" && organization !== "undefined") {
+        feedbackData = feedbackData.filter(
+            (feedback) => feedback.organizationId?.name === organization
+        );
+    }
+    res.status(200).json({ success: true, feedbackData });
+} 
+catch (error) {
+    console.error('Error in geting user feedbacks data: ', error);
+    res.status(500).json({ success: false, message: "Failed to get feedback data from database.", error });
+}
 }
 
-//------------------------Guest User side-----------------------------------------
+//-----------------------------------------Guest User side-----------------------------------------------------
 
 // // organization user feedbacks - crud operations
 
