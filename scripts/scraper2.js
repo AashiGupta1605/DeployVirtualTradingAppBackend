@@ -89,31 +89,15 @@ export const getETFData = async (req, res) => {
 
 
 
-// udpated for history code
 
 // import axios from 'axios';
 // import NiftyETFData from '../models/StockModal.js';
 // import dotenv from 'dotenv';
 // dotenv.config();
 
-// // Helper function to compare two arrays of stock data
-// const isDataChanged = (newStocks, oldStocks) => {
-//   if (newStocks.length !== oldStocks.length) return true;
-
-//   for (let i = 0; i < newStocks.length; i++) {
-//     const newStock = newStocks[i];
-//     const oldStock = oldStocks[i];
-
-//     if (JSON.stringify(newStock) !== JSON.stringify(oldStock)) {
-//       return true;
-//     }
-//   }
-
-//   return false;
-// };
-
 // export const scrapeAndStoreETFData = async () => {
 //   try {
+//     // Fetch initial response to get cookies
 //     let initialResponse = await axios.get(process.env.ETF_HOME_PAGE, {
 //       headers: {
 //         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
@@ -124,6 +108,7 @@ export const getETFData = async (req, res) => {
 
 //     let cookies = initialResponse.headers['set-cookie'];
 
+//     // Fetch ETF data using the cookies
 //     const response = await axios.get(process.env.ETF_STOCK_DETAIL_API, {
 //       headers: {
 //         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
@@ -135,13 +120,15 @@ export const getETFData = async (req, res) => {
 
 //     const etfData = response.data.data;
 
+//     // Helper functions to safely parse float and integer values
 //     const safeParseFloat = (value, defaultValue = 0) =>
 //       value === '-' || value === '' || value === undefined ? defaultValue : parseFloat(value);
 
 //     const safeParseInt = (value, defaultValue = 0) =>
 //       value === '-' || value === '' || value === undefined ? defaultValue : parseInt(value);
 
-//     const newStocks = etfData.map((data) => ({
+//     // Map the scraped data to the desired format
+//     const stocks = etfData.map((data) => ({
 //       symbol: data?.symbol || 'N/A',
 //       open: safeParseFloat(data?.open),
 //       dayHigh: safeParseFloat(data?.high),
@@ -162,27 +149,30 @@ export const getETFData = async (req, res) => {
 //       timestamp: new Date().toISOString(),
 //     }));
 
-//     // Fetch the latest data from the database
+//     // Fetch the latest record from the database
 //     const latestData = await NiftyETFData.findOne().sort({ fetchTime: -1 });
 
-//     // Check if the data has changed
-//     if (!latestData || isDataChanged(newStocks, latestData.stocks)) {
-//       // Create a new document if the data has changed
-//       await NiftyETFData.create({
-//         fetchTime: new Date(),
-//         stocks: newStocks,
-//       });
-
-//       console.log('ETF data updated and saved successfully');
-//     } else {
+//     // Compare the new data with the latest data in the database
+//     if (latestData && JSON.stringify(latestData.stocks) === JSON.stringify(stocks)) {
 //       console.log('ETF data has not changed. Skipping save.');
+//       return;
 //     }
+
+//     // If the data is different, create a new record
+//     await NiftyETFData.create({
+//       fetchTime: new Date(),
+//       stocks,
+//     });
+
+//     console.log('New ETF data saved successfully');
 //   } catch (error) {
 //     console.error('Error scraping ETF data:', error.message);
 //   }
 // };
 
-// // Get latest stock data
+
+
+
 // export const getETFData = async (req, res) => {
 //   try {
 //     const latestData = await NiftyETFData.findOne().sort({ fetchTime: -1 });

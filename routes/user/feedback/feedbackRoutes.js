@@ -20,10 +20,6 @@ router.patch('/admin/:id/status', updateFeedbackStatus);
 router.delete('/admin/:id', softDeleteFeedback);
 
 // organization user feedbacks
-// router.get("/:orgName/users/feedbacks", organizationUsersFeedbackDisplay);
-// router.delete("/delete/:id", organizationUsersFeedbackDelete);
-// router.put("/update/feedbacks/:id", updateUsersFeedbackStatus);
-
 router.get("/:orgName/users/feedbacks", organizationUsersFeedbackDisplay);
 router.delete("/delete/:id", organizationUsersFeedbackDelete);
 router.put("/update/feedbacks/:id", updateOrganizationUsersFeedback);
@@ -31,7 +27,9 @@ router.put("/update/status/:id", updateUsersFeedbackStatus);
 
 // organization feedbacks
 router.post("/register", registerOrganizationFeedback);
-router.get("/:orgName/feedback", displayOrganizationFeedback);
+router.get("/:orgName/feedback", displayOrganizationFeedback); //orgname
+// router.get("/:organizationId/feedback", displayOrganizationFeedback); //orgid
+
 router.put("/update/:feedbackId", updateOrganizationFeedback); // Update feedback route
 router.delete("/delete/:feedbackId", deleteOrganizationFeedback); 
 
