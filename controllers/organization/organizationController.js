@@ -706,12 +706,12 @@ export const getUserByOrgName = async (req, res) => {
 };
 
 
-//Guest User: Searching on fetching Organizations
+//Guest User: Searching and fetching Approved Non Deleted Organizations (for GuestUsers)
 export const searchOrganizations = async (req, res) => {
   try {
     const { search } = req.params; // Get the search parameter from the request
 
-    let query = { isDeleted: false };
+    let query = { isDeleted: false , approvalStatus: 'approved' };
 
     if (search && search.trim() !== "") {
       query.$or = [
@@ -725,12 +725,14 @@ export const searchOrganizations = async (req, res) => {
       // }
     }
     const orgs = await OrgRegistration.find(query);
-    res.status(200).json(orgs);
+    res.status(200).json({ success: true, data: orgs });
   } 
   catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ success: false, message: "Internal Server Error", error: error.message });
   }
 };
+
+
 
 
 
