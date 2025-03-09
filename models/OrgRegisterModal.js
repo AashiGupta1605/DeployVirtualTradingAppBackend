@@ -29,7 +29,8 @@ const orgRegistrationSchema = new mongoose.Schema({
   },
   mobile: { 
     type: String,
-    trim: true
+    trim: true,
+    unique:true
   },
   password: { 
     type: String, 
