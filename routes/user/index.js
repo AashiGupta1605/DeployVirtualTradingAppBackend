@@ -39,8 +39,8 @@ router.use('/contact', contactRoutes);
 router.use('/subscription', subscriptionRoutes);
 
 
-
+router.use('/', userTradingRoute);
 // trading route
-router.use(userTradingRoute);
+
 
 export default router;
