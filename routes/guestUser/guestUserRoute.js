@@ -11,7 +11,7 @@ router.get('/userFeedbacks/:sortBy/:order', getAllUsersFeedbacks);
 router.get('/organizationFeedbacks/:organization/:category/:sortBy/:order',getAllOrganizationsFeedbacks)
 router.get('/organizationFeedbacks/:sortBy/:order',getAllOrganizationsFeedbacks)
 
-router.get('/searchOrganization/:search',searchOrganizations);
+router.get('/getAllOrganizations/:search',searchOrganizations);
 router.get('/getAllOrganizations',searchOrganizations);
 
 router.get('/getAllUsers',getApprovedUsers)
