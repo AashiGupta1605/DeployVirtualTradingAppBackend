@@ -366,6 +366,58 @@ export const getOrganizationById = async (req, res) => {
 
 // Update Organization by ID
 // Update Organization by ID
+// export const updateOrganizationById = async (req, res) => {
+//   const { orgId } = req.query; // Use orgId instead of orgName
+//   const updateData = req.body; // Data to update
+
+//   if (!orgId) {
+//     return res.status(400).json({ success: false, message: 'Organization ID is required' });
+//   }
+
+//   try {
+//     // Log the update data for debugging
+//     console.log("Update Data:", updateData);
+
+//     // If the update includes a password, hash it before saving
+//     if (updateData.password) {
+//       const salt = await bcrypt.genSalt(10);
+//       updateData.password = await bcrypt.hash(updateData.password, salt);
+//     }
+
+//     // Handle photo upload to Cloudinary
+//     if (updateData.photo && updateData.photo.startsWith('data:image')) {
+//       const result = await cloudinary.uploader.upload(updateData.photo, {
+//         folder: 'organization_photos',
+//       });
+//       updateData.photo = result.secure_url;
+//     }
+
+//     // Find the organization by ID and update it
+//     const updatedOrg = await OrgRegistration.findByIdAndUpdate(
+//       orgId, // Query by ID
+//       { $set: updateData }, // Use $set to update only the specified fields
+//       { new: true, runValidators: true } // Return the updated document and run validators
+//     ).select('-password'); // Exclude the password field from the response
+
+//     if (!updatedOrg) {
+//       return res.status(404).json({ success: false, message: 'Organization not found' });
+//     }
+
+//     // Log the updated organization for debugging
+//     console.log("Updated Organization:", updatedOrg);
+
+//     res.status(200).json({ success: true, data: updatedOrg });
+//   } catch (error) {
+//     console.error("Error updating organization:", error);
+//     res.status(500).json({ success: false, message: 'Server error' });
+//   }
+// };
+
+
+
+
+// new photo remove
+
 export const updateOrganizationById = async (req, res) => {
   const { orgId } = req.query; // Use orgId instead of orgName
   const updateData = req.body; // Data to update
@@ -386,10 +438,28 @@ export const updateOrganizationById = async (req, res) => {
 
     // Handle photo upload to Cloudinary
     if (updateData.photo && updateData.photo.startsWith('data:image')) {
+      // Delete the old photo from Cloudinary if it exists
+      const org = await OrgRegistration.findById(orgId);
+      if (org.photo && org.photo !== "https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png") {
+        const publicId = org.photo.split('/').pop().split('.')[0];
+        await cloudinary.uploader.destroy(`organization_photos/${publicId}`);
+      }
+
+      // Upload the new photo to Cloudinary
       const result = await cloudinary.uploader.upload(updateData.photo, {
         folder: 'organization_photos',
       });
       updateData.photo = result.secure_url;
+    }
+
+    // Handle photo removal
+    if (updateData.photo === "https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png") {
+      const org = await OrgRegistration.findById(orgId);
+      if (org.photo && org.photo !== "https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png") {
+        const publicId = org.photo.split('/').pop().split('.')[0];
+        await cloudinary.uploader.destroy(`organization_photos/${publicId}`);
+      }
+      updateData.photo = "https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png";
     }
 
     // Find the organization by ID and update it
