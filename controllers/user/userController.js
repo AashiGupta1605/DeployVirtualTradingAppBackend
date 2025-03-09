@@ -207,3 +207,13 @@ export const deleteUserById = async (req, res) => {
     res.status(500).json({ message: "Error deleting user" });
   }
 };
+
+//Get Approved and Non-Deleted Users Data (for GuestUser)
+export const getApprovedUsers = async (req, res) => {
+  try {
+    const approvedUsers = await User.find({ status: true, isDeleted: false });
+    res.status(200).json({ success: true, data: approvedUsers });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
