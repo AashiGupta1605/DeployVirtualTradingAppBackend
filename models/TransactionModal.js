@@ -1,3 +1,19 @@
+// // models/Transaction.js
+// // import mongoose from "mongoose";
+
+// // const transactionSchema = new mongoose.Schema({
+// //   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+// //   stock: { type: String, required: true }, 
+//   // type: { type: String, enum: ["buy", "sell"], required: true },
+// //   quantity: { type: Number, required: true },
+// //   price: { type: Number, required: true },
+// //   total: { type: Number, required: true },
+// //   date: { type: Date, default: Date.now }
+// // });
+
+// // export default mongoose.model("Transaction", transactionSchema);
+
+
 // import mongoose from "mongoose";
 
 // const transactionSchema = new mongoose.Schema({
@@ -16,127 +32,85 @@
 //     required: true,
 //     default: 0
 //   },
-//   numberOfShares: {
+//   numberOfShares: { //quantity
 //     type: Number,
 //     required: true,
 //     default: 0
 //   },
-//   nifty50Id: {
+//   companyId: {
 //     type: mongoose.Schema.Types.ObjectId,
-//     ref: "NiftyData",
-//     required: true,
+//     ref: "Company",
+//     required: true
 //   },
-//   Nifty500DataId: {
-//     type: mongoose.Schema.Types.ObjectId,
-//     ref: "Nifty500Data",
-//     required: true,
+//   companySymbol: {
+//     type: String,
+//     required: true
 //   },
-//   NiftyETFDataId: {
-//     type: mongoose.Schema.Types.ObjectId,
-//     ref: "NiftyETFData",
-//     required: true,
-//   },
+//   // company type
 //   type: { type: String, enum: ["buy", "sell"], required: true },
 //   price: { type: Number, required: true },
-//   quantity: { type: Number, required: true },
-//   total: { type: Number, required: true },
-//   date: { type: Date, default: Date.now }
 // }, {
 //   timestamps: true
 // });
 
+// // Middleware to update availableBalance based on the SubscriptionPlan's virtualAmount
 // transactionSchema.pre('save', async function (next) {
 //   const subscriptionPlan = await mongoose.model('SubscriptionPlan').findById(this.subscriptionPlanId);
 //   if (subscriptionPlan) {
-//     this.availableBalance = subscriptionPlan.vertualAmount;
+//     this.availableBalance = subscriptionPlan.virtualAmount;
 //   }
 //   next();
 // });
 
-// export default mongoose.model("Transaction", transactionSchema);
+// export default mongoose.model("Transaction", transactionSchema);\
 
-
+// models/Transaction.js
 import mongoose from "mongoose";
 
 const transactionSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true,
+    required: true
   },
   subscriptionPlanId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "SubscriptionPlan",
-    required: true,
+    required: true
   },
-  stock: {
+  companySymbol: {
     type: String,
-    required: true,
+    required: true
   },
-  type: {
-    type: String,
-    enum: ["buy", "sell"],
-    required: true,
+  type: { 
+    type: String, 
+    enum: ["buy", "sell"], 
+    required: true 
   },
-  quantity: {
+  numberOfShares: {
     type: Number,
-    required: true,
-    min: 0,
+    required: true
   },
-  price: {
-    type: Number,
-    required: true,
-    min: 0,
-  },
-  availableBalance:{
-    type:String,
-    require:true
+  price: { 
+    type: Number, 
+    required: true 
   },
   total: {
     type: Number,
-    required: true,
-    min: 0,
+    required: true
   },
-  date: {
-    type: Date,
-    default: Date.now,
+  orderType: {
+    type: String,
+    enum: ["market", "limit", "stop_loss", "stop_buy"],
+    default: "market"
   },
+  status: {
+    type: String,
+    enum: ["pending", "completed", "failed"],
+    default: "completed"
+  }
 }, {
-  timestamps: true,
+  timestamps: true
 });
 
-// Pre-save middleware to validate transaction data
-transactionSchema.pre("save", async function (next) {
-  const subscriptionPlan = await mongoose.model("SubscriptionPlan").findById(this.subscriptionPlanId);
-
-  if (this.type === "buy" && this.total > subscriptionPlan.vertualAmount) {
-    next(new Error("Insufficient balance to place buy order"));
-    return;
-  }
-
-  if (this.type === "sell" && this.quantity > subscriptionPlan.holdings) {
-    next(new Error("Insufficient holdings to place sell order"));
-    return;
-  }
-
-  next();
-});
-
-// Post-save middleware to update user's subscription plan balance
-transactionSchema.post("save", async function (doc) {
-  const subscriptionPlan = await mongoose.model("SubscriptionPlan").findById(doc.subscriptionPlanId);
-
-  if (doc.type === "buy") {
-    subscriptionPlan.vertualAmount -= doc.total; // Deduct from balance
-    subscriptionPlan.holdings += doc.quantity; // Add to holdings
-  } else if (doc.type === "sell") {
-    subscriptionPlan.vertualAmount += doc.total; // Add to balance
-    subscriptionPlan.holdings -= doc.quantity; // Deduct from holdings
-  }
-
-  await subscriptionPlan.save();
-});
-
-const Transaction = mongoose.model("Transaction", transactionSchema);
-
-export default Transaction;
+export default mongoose.model("Transaction", transactionSchema);
