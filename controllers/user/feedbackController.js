@@ -268,9 +268,16 @@ export const updateUsersFeedbackStatus = async (req, res) => {
 // organization register by added by orgame 
 
 export const registerOrganizationFeedback = async (req, res) => {
-  const { orgName, feedbackCategory, feedbackMessage, rating, recommend, suggestions } = req.body;
+  const { orgName, feedbackCategory, organizationId, feedbackMessage, rating, recommend, suggestions } = req.body;
 
   try {
+
+        // Validate that organizationId is provided
+        if (!organizationId) {
+          return res.status(400).json({ success: false, message: "Organization ID is required" });
+        }
+
+        
     const newFeedback = new Feedback({
       feedbackCategory,
       feedbackMessage,
@@ -278,7 +285,8 @@ export const registerOrganizationFeedback = async (req, res) => {
       recommend,
       suggestions,
       addedby: orgName, // Set the organization name
-      feedbackType:"organization"
+      feedbackType:"organization",
+      organizationId
     });
 
     await newFeedback.save();
