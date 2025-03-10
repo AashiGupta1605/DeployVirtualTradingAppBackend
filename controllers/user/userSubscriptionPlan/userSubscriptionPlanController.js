@@ -230,3 +230,38 @@ export const getAllSubscriptionPlans = async (req, res) => {
     });
   }
 };
+
+// controllers/user/userSubscriptionPlan/userSubscriptionPlanController.js
+
+// ... existing functions
+
+export const updateSubscriptionPlanBalance = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { vertualAmount } = req.body;
+
+    const updatedSubscription = await SubscriptionPlan.findByIdAndUpdate(
+      id,
+      { vertualAmount },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedSubscription) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'Subscription plan not found'
+      });
+    }
+
+    res.status(200).json({
+      status: 'success',
+      data: updatedSubscription
+    });
+  } catch (error) {
+    console.error('Update subscription balance error:', error);
+    res.status(500).json({
+      status: 'error',
+      message: error.message || 'Internal server error'
+    });
+  }
+};
