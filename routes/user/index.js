@@ -38,7 +38,6 @@ router.use('/contact', contactRoutes);
 // Subscription Routes
 router.use('/subscription', subscriptionRoutes);
 
-
 // trading route
 router.use("/transactions", userTradingRoute);
 
