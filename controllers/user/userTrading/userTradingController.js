@@ -1,68 +1,183 @@
 // controllers/user/userTrading/userTradingController.js
-import Transaction from "../../../models/TransactionModal.js";
-import User from "../../../models/UserModal.js"; // Fix this import
 
-export const buyStock = async (req, res) => {
-  const { userId, stock, quantity, price, total } = req.body;
+import Transaction from '../../../models/TransactionModal.js';
+import Holding from '../../../models/Holding.js';
+import SubscriptionPlan from '../../../models/SubscriptionPlanModal.js';
 
+export const tradeStock = async (req, res) => {
   try {
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+    const { 
+      userId, 
+      subscriptionPlanId, 
+      companySymbol, 
+      numberOfShares, 
+      price,
+      orderType = 'market',
+      type, // 'buy' or 'sell'
+      total
+    } = req.body;
+
+    let transaction;
+    let holding;
+
+    // Validate required fields
+    if (!userId || !subscriptionPlanId || !companySymbol || !numberOfShares || !price || !type) {
+      return res.status(400).json({
+        success: false,
+        message: 'Missing required fields'
+      });
     }
 
-    const transaction = new Transaction({
-      userId,
-      companySymbol: stock, // Match the model field name
-      type: "buy",
-      numberOfShares: quantity, // Match the model field name
-      price,
-      createdAt: new Date()
+    // Check subscription
+    const subscription = await SubscriptionPlan.findById(subscriptionPlanId);
+    if (!subscription || subscription.status !== 'Active') {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid or inactive subscription'
+      });
+    }
+
+    // Find existing holding
+    holding = await Holding.findOne({ 
+      userId, 
+      subscriptionPlanId, 
+      companySymbol 
     });
 
-    await transaction.save();
-    res.status(201).json({ message: "Buy order placed successfully", transaction });
+    // Create transaction data
+    const transactionData = {
+      userId,
+      subscriptionPlanId,
+      companySymbol,
+      type,
+      numberOfShares,
+      price,
+      total,
+      orderType,
+      status: 'completed'
+    };
+
+    if (type === 'buy') {
+      // Check balance for buy
+      if (total > subscription.vertualAmount) {
+        return res.status(400).json({
+          success: false,
+          message: 'Insufficient balance'
+        });
+      }
+
+      // Create transaction
+      transaction = await Transaction.create(transactionData);
+
+      // Update or create holding
+      if (holding) {
+        // Update existing holding
+        const totalShares = holding.quantity + numberOfShares;
+        const totalValue = (holding.quantity * holding.averageBuyPrice) + total;
+        holding.quantity = totalShares;
+        holding.averageBuyPrice = totalValue / totalShares;
+        holding.lastUpdated = new Date();
+        await holding.save();
+      } else {
+        // Create new holding
+        holding = await Holding.create({
+          userId,
+          subscriptionPlanId,
+          companySymbol,
+          quantity: numberOfShares,
+          averageBuyPrice: price
+        });
+      }
+
+      // Update subscription balance (subtract for buy)
+      subscription.vertualAmount -= total;
+
+    } else if (type === 'sell') {
+      // Check if user has enough shares to sell
+      if (!holding || holding.quantity < numberOfShares) {
+        return res.status(400).json({
+          success: false,
+          message: 'Insufficient shares to sell'
+        });
+      }
+
+      // Create transaction
+      transaction = await Transaction.create(transactionData);
+
+      // Update holding
+      holding.quantity -= numberOfShares;
+      if (holding.quantity === 0) {
+        await Holding.findByIdAndDelete(holding._id);
+        holding = null;
+      } else {
+        await holding.save();
+      }
+
+      // Update subscription balance (add for sell)
+      subscription.vertualAmount += total;
+    }
+
+    // Save subscription changes
+    await subscription.save();
+
+    // Fetch updated holdings for response
+    const updatedHoldings = await Holding.find({ 
+      userId, 
+      subscriptionPlanId 
+    });
+
+    res.status(200).json({
+      success: true,
+      transaction,
+      holdings: updatedHoldings,
+      holding,
+      balance: subscription.vertualAmount
+    });
+
   } catch (error) {
-    console.error('Buy order error:', error);
-    res.status(500).json({ message: "Failed to place buy order", error: error.message });
+    console.error('Trade stock error:', error);
+    res.status(error.status || 500).json({
+      success: false,
+      message: error.message || 'Internal server error'
+    });
   }
 };
 
-export const sellStock = async (req, res) => {
-  const { userId, stock, quantity, price, total } = req.body;
-
+export const getHoldings = async (req, res) => {
   try {
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    const transaction = new Transaction({
-      userId,
-      companySymbol: stock, // Match the model field name
-      type: "sell",
-      numberOfShares: quantity, // Match the model field name
-      price,
-      createdAt: new Date()
-    });
-
-    await transaction.save();
-    res.status(201).json({ message: "Sell order placed successfully", transaction });
+    const { userId, subscriptionPlanId } = req.params;
+    const holdings = await Holding.find({ userId, subscriptionPlanId });
+    res.status(200).json(holdings);
   } catch (error) {
-    console.error('Sell order error:', error);
-    res.status(500).json({ message: "Failed to place sell order", error: error.message });
+    res.status(400).json({
+      success: false,
+      message: error.message
+    });
   }
 };
 
 export const getTransactionHistory = async (req, res) => {
   try {
-    const transactions = await Transaction.find({ 
-      userId: req.params.userId 
-    }).sort({ createdAt: -1 });
+    const { userId } = req.params;
+    
+    // Fetch transactions with populated subscription plan details
+    const transactions = await Transaction.find({ userId })
+      .sort({ createdAt: -1 })
+      .lean();
 
-    res.status(200).json(transactions);
+    // Fetch current holdings
+    const holdings = await Holding.find({ userId }).lean();
+
+    res.status(200).json({
+      transactions,
+      holdings
+    });
   } catch (error) {
     console.error('Get history error:', error);
-    res.status(500).json({ message: "Failed to fetch transaction history", error: error.message });
+    res.status(500).json({ 
+      success: false,
+      message: "Failed to fetch transaction history", 
+      error: error.message 
+    });
   }
 };
