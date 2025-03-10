@@ -1,12 +1,15 @@
+// routes/user/userTradingRoute/userTradingRoute.js
 import express from 'express';
 import {
-  buyStock, sellStock, getTransactionHistory
+  tradeStock, 
+  getTransactionHistory,
+  getHoldings
 } from '../../../controllers/user/userTrading/userTradingController.js';
 
 const router = express.Router();
 
-router.post('/buy', buyStock);
-router.post('/sell', sellStock);
-router.get('/history/:userId', getTransactionHistory);
+router.post('/trading/trade', tradeStock);
+router.get('/trading/history/:userId', getTransactionHistory);
+router.get('/trading/holdings/:userId/:subscriptionPlanId', getHoldings);
 
 export default router;
