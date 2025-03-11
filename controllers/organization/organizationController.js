@@ -548,7 +548,7 @@ export const searchOrganizations = async (req, res) => {
 
     let query = { isDeleted: false , approvalStatus: 'approved' };
 
-    if (search && search.trim() !== "") {
+    if (search && search.trim() !== "" && search!=="all") {
       query.$or = [
         { name: { $regex: search, $options: "i" } }, // Case-insensitive search by name
         { address: { $regex: search, $options: "i" } }, // Case-insensitive search by address
