@@ -37,7 +37,7 @@ const FeedbackSchema = new mongoose.Schema({
     feedbackType: {
       type: String,
       enum: ["organization", "user"],
-      required: true,
+      // required: true,
     },
     
   isDeleted: { type: Boolean, default: false },
