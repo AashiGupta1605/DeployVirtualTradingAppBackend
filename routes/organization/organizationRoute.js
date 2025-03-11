@@ -15,6 +15,7 @@ import {
   getOrganizationById,
   updateOrganizationById
 } from '../../controllers/organization/organizationController.js';
+import authMiddleware from '../../middlewares/organizationMiddleware.js';
 
 const router = express.Router();
 
@@ -24,8 +25,8 @@ router.post('/login', organizationLogin);
 // router.get('/by-name', getOrganizationByName);
 // router.put('/update-by-name', updateOrganizationByName);
 
-router.get("/by-id", getOrganizationById); // GET organization by ID
-router.put("/update-by-id", updateOrganizationById);
+router.get("/by-id", authMiddleware, getOrganizationById); // GET organization by ID
+router.put("/update-by-id", authMiddleware, updateOrganizationById);
 
 
 // Admin List and search organizations
