@@ -13,16 +13,17 @@ import {
   organizationDeactiveUsers,
   organizationAverageUserAge,
 } from '../../controllers/organization/organizationUsersController.js';
+import authMiddleware from '../../middlewares/organizationMiddleware.js';
 
 const router = express.Router();
 
 // Organization user routes
-router.post('/user/register', organizationUserRegistration);
-router.get('/user/display-all-users', organizationUsersDisplay);
-router.get('/:orgName/users', organizationUsersDisplay);
-router.get('/user/:id', organizationgetUserDisplayById);
-router.put('/user/:id', organizationUpdateUser);
-router.delete('/user/:id', organizationUserDelete);
+router.post('/user/register', authMiddleware, organizationUserRegistration);
+router.get('/user/display-all-users', authMiddleware, organizationUsersDisplay);
+router.get('/:orgName/users', authMiddleware, organizationUsersDisplay);
+router.get('/user/:id', authMiddleware, organizationgetUserDisplayById);
+router.put('/user/:id', authMiddleware, organizationUpdateUser);
+router.delete('/user/:id', authMiddleware, organizationUserDelete);
 
 // orgainzation user statistics
 router.get('/:orgName/users/count/total', organizationTotalUsers);
