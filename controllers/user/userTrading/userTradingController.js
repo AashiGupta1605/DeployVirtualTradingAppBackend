@@ -1,34 +1,44 @@
-// controllers/user/userTrading/userTradingController.js
-
 import Transaction from '../../../models/TransactionModal.js';
 import Holding from '../../../models/Holding.js';
 import SubscriptionPlan from '../../../models/SubscriptionPlanModal.js';
+import mongoose from 'mongoose';
 
 export const tradeStock = async (req, res) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
   try {
     const { 
       userId, 
       subscriptionPlanId, 
-      companySymbol, 
+      symbol: companySymbol, 
       numberOfShares, 
       price,
       orderType = 'market',
       type, // 'buy' or 'sell'
-      total
+      total,
+      currentMarketPrice
     } = req.body;
 
-    let transaction;
-    let holding;
+    // Comprehensive validation
+    const validationErrors = [];
+    if (!userId) validationErrors.push('User ID is required');
+    if (!subscriptionPlanId) validationErrors.push('Subscription Plan ID is required');
+    if (!companySymbol) validationErrors.push('Company Symbol is required');
+    if (numberOfShares <= 0) validationErrors.push('Number of shares must be positive');
+    if (price <= 0) validationErrors.push('Price must be positive');
+    if (!['buy', 'sell'].includes(type)) validationErrors.push('Invalid trade type');
+    if (!['market', 'limit', 'stop_loss', 'stop_buy'].includes(orderType)) validationErrors.push('Invalid order type');
 
-    // Validate required fields
-    if (!userId || !subscriptionPlanId || !companySymbol || !numberOfShares || !price || !type) {
+    if (validationErrors.length > 0) {
       return res.status(400).json({
         success: false,
-        message: 'Missing required fields'
+        message: 'Validation Error',
+        errors: validationErrors
       });
     }
 
-    // Check subscription
+    // Find subscription
     const subscription = await SubscriptionPlan.findById(subscriptionPlanId);
     if (!subscription || subscription.status !== 'Active') {
       return res.status(400).json({
@@ -37,28 +47,9 @@ export const tradeStock = async (req, res) => {
       });
     }
 
-    // Find existing holding
-    holding = await Holding.findOne({ 
-      userId, 
-      subscriptionPlanId, 
-      companySymbol 
-    });
-
-    // Create transaction data
-    const transactionData = {
-      userId,
-      subscriptionPlanId,
-      companySymbol,
-      type,
-      numberOfShares,
-      price,
-      total,
-      orderType,
-      status: 'completed'
-    };
-
+    // Transaction logic
     if (type === 'buy') {
-      // Check balance for buy
+      // Check balance
       if (total > subscription.vertualAmount) {
         return res.status(400).json({
           success: false,
@@ -66,34 +57,67 @@ export const tradeStock = async (req, res) => {
         });
       }
 
-      // Create transaction
-      transaction = await Transaction.create(transactionData);
+      // Update subscription balance
+      subscription.vertualAmount -= total;
+      await subscription.save({ session });
 
-      // Update or create holding
+      // Find or create holding
+      let holding = await Holding.findOne({ 
+        userId, 
+        subscriptionPlanId, 
+        companySymbol 
+      });
+
       if (holding) {
         // Update existing holding
         const totalShares = holding.quantity + numberOfShares;
         const totalValue = (holding.quantity * holding.averageBuyPrice) + total;
         holding.quantity = totalShares;
         holding.averageBuyPrice = totalValue / totalShares;
-        holding.lastUpdated = new Date();
-        await holding.save();
+        await holding.save({ session });
       } else {
         // Create new holding
-        holding = await Holding.create({
+        holding = await Holding.create([{
           userId,
           subscriptionPlanId,
           companySymbol,
           quantity: numberOfShares,
           averageBuyPrice: price
-        });
+        }], { session });
       }
 
-      // Update subscription balance (subtract for buy)
-      subscription.vertualAmount -= total;
+      // Create transaction
+      const transaction = await Transaction.create([{
+        userId,
+        subscriptionPlanId,
+        companySymbol,
+        type: 'buy',
+        numberOfShares,
+        price,
+        total,
+        orderType,
+        status: 'completed'
+      }], { session });
 
-    } else if (type === 'sell') {
-      // Check if user has enough shares to sell
+      await session.commitTransaction();
+      session.endSession();
+
+      return res.status(200).json({
+        success: true,
+        transaction: transaction[0],
+        holdings: await Holding.find({ userId, subscriptionPlanId }),
+        balance: subscription.vertualAmount
+      });
+    }
+
+    // Sell logic
+    if (type === 'sell') {
+      const holding = await Holding.findOne({ 
+        userId, 
+        subscriptionPlanId, 
+        companySymbol 
+      });
+
       if (!holding || holding.quantity < numberOfShares) {
         return res.status(400).json({
           success: false,
@@ -101,44 +125,51 @@ export const tradeStock = async (req, res) => {
         });
       }
 
-      // Create transaction
-      transaction = await Transaction.create(transactionData);
+      // Update subscription balance
+      subscription.vertualAmount += total;
+      await subscription.save({ session });
 
       // Update holding
       holding.quantity -= numberOfShares;
       if (holding.quantity === 0) {
-        await Holding.findByIdAndDelete(holding._id);
-        holding = null;
+        await Holding.findByIdAndDelete(holding._id, { session });
       } else {
-        await holding.save();
+        await holding.save({ session });
       }
 
-      // Update subscription balance (add for sell)
-      subscription.vertualAmount += total;
+      // Create transaction
+      const transaction = await Transaction.create([{
+        userId,
+        subscriptionPlanId,
+        companySymbol,
+        type: 'sell',
+        numberOfShares,
+        price,
+        total,
+        orderType,
+        status: 'completed'
+      }], { session });
+
+      await session.commitTransaction();
+      session.endSession();
+
+      return res.status(200).json({
+        success: true,
+        transaction: transaction[0],
+        holdings: await Holding.find({ userId, subscriptionPlanId }),
+        balance: subscription.vertualAmount
+      });
     }
 
-    // Save subscription changes
-    await subscription.save();
-
-    // Fetch updated holdings for response
-    const updatedHoldings = await Holding.find({ 
-      userId, 
-      subscriptionPlanId 
-    });
-
-    res.status(200).json({
-      success: true,
-      transaction,
-      holdings: updatedHoldings,
-      holding,
-      balance: subscription.vertualAmount
-    });
-
   } catch (error) {
-    console.error('Trade stock error:', error);
-    res.status(error.status || 500).json({
+    await session.abortTransaction();
+    session.endSession();
+
+    console.error('Trade Stock Error:', error);
+    return res.status(500).json({
       success: false,
-      message: error.message || 'Internal server error'
+      message: 'Internal server error',
+      error: error.message
     });
   }
 };
