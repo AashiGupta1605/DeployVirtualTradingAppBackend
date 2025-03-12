@@ -6,7 +6,6 @@ import mongoose from 'mongoose';
 export const tradeStock = async (req, res) => {
   const session = await mongoose.startSession();
   session.startTransaction();
-
   try {
     const { 
       userId, 
