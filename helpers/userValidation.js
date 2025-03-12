@@ -27,11 +27,19 @@ export const registerUserSchema = Joi.object({
     .label("Date of Birth"),
 });
 
+// // Validation schema for user login
+// export const loginUserSchema = Joi.object({
+//   email: Joi.string().email().required(),
+//   password: Joi.string().min(6).required(),
+// });
+
 // Validation schema for user login
 export const loginUserSchema = Joi.object({
-  email: Joi.string().email().required(),
-  password: Joi.string().min(6).required(),
-});
+  email: Joi.string().email().label('Email'),
+  mobile: Joi.string().pattern(/^[0-9]{10}$/).label('Mobile'), // Assumes a 10-digit mobile number format
+  password: Joi.string().min(6).required().label('Password'),
+}).or('email', 'mobile'); // Require at least one: email or mobile
+
 
 // Validation schema for updating profile (excluding email)
 export const updateProfileSchema = Joi.object({

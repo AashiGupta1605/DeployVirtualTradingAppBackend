@@ -10,8 +10,8 @@ export const organizationRegistrationValidationSchema = Joi.object({
   mobile: Joi.string().pattern(/^[9876]\d{9}$/).required().label('Mobile'),
   approvalStatus: Joi.string().valid("approved", "rejected", "pending").default("pending").label('Approval Status'),
   password: Joi.string().min(8).required().label('Password'),
-  accreditation:Joi.string().required().label("Accreditation"),
-  photo:Joi.string().required().label("photo") // ad this line here and your registration will start working..
+  accreditation:Joi.string().label("Accreditation"),
+  photo:Joi.string().label("photo") // ad this line here and your registration will start working..
 });
 
 
