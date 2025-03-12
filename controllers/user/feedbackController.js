@@ -6,7 +6,7 @@ import Feedback from "../../models/FeedbackModel.js";
 
 export const getAllUsersFeedbacks = async (req, res) => { 
     try {
-        const {organization, category, sortBy, order} = req.params
+        const {organization, category, recommend, search, sortBy, order} = req.params
 
         // Convert 'increasing' or 'decreasing' to 1 or -1 for MongoDB sorting
         const sortOrder = order === "increasing" ? 1 : -1;
@@ -20,23 +20,36 @@ export const getAllUsersFeedbacks = async (req, res) => {
 
         const filter = { isDeleted: false, status:"approved", feedbackType:"user"};
 
-        if (category && category.trim() !== "" && category !== "undefined") {
+        if (category && category.trim() !== "" && category !== "all") {
             filter.feedbackCategory = { $regex: new RegExp(category, "i") };
         }
 
+        if(recommend && recommend.trim()!=="" && recommend !== "all"){
+          filter.recommend = recommend
+        }
+        if (search && search.trim() !== "" && search !== "all") {
+          filter.$or = [
+              { feedbackMessage: { $regex: new RegExp(search, "i") } },
+              { suggestions: { $regex: new RegExp(search, "i") } }
+          ];
+        }
         // Fetch filtered & sorted feedback data
         // const feedbackData = await Feedback.find(filter).sort({ [sortBy]: sortOrder });
 
         // Fetch feedbacks and populate organization details
         let feedbackData = await Feedback.find(filter)
             .populate({
-                path: "organizationId",  // Populates `organizationId`
-                select: "name", // Only fetches organization name
+                path: "userId",  // Populates `userId`
+                select: "name", // Only fetches user name
             })
+            .populate({
+              path: "organizationId",  
+              select: "name",  // Only fetches organization name
+          })
             .sort({ [sortBy]: sortOrder });
 
         // If organization name is provided, filter feedbackData manually
-        if (organization && organization.trim() !== "" && organization !== "undefined") {
+        if (organization && organization.trim() !== "" && organization !== "all" && organization!=="All") {
             feedbackData = feedbackData.filter(
                 (feedback) => feedback.organizationId?.name === organization
             );
@@ -63,13 +76,22 @@ export const getAllCompleteFeedbacks = async(req,res)=>{
 
 export const getAllOrganizationsFeedbacks = async(req,res)=>{
   try {
-    const {organization, category, sortBy, order} = req.params
+    const {organization, category, recommend, search, sortBy, order} = req.params
 
     const sortOrder = order === "increasing" ? 1 : -1;
     const filter = { isDeleted: false, status:"approved", feedbackType:"organization"};
 
-    if (category && category.trim() !== "" && category !== "undefined") {
+    if (category && category.trim() !== "" && category !== "all") {
         filter.feedbackCategory = { $regex: new RegExp(category, "i") };
+    }
+    if(recommend && recommend.trim()!=="" && recommend !== "all" ){
+      filter.recommend = recommend
+    }
+    if (search && search.trim() !== "" && search !== "all") {
+      filter.$or = [
+          { feedbackMessage: { $regex: new RegExp(search, "i") } },
+          { suggestions: { $regex: new RegExp(search, "i") } }
+      ];
     }
     let feedbackData = await Feedback.find(filter)
         .populate({
@@ -78,7 +100,7 @@ export const getAllOrganizationsFeedbacks = async(req,res)=>{
         })
         .sort({ [sortBy]: sortOrder });
 
-    if (organization && organization.trim() !== "" && organization !== "undefined") {
+    if (organization && organization.trim() !== "" && organization !== "all" && organization!=="All" ) {
         feedbackData = feedbackData.filter(
             (feedback) => feedback.organizationId?.name === organization
         );

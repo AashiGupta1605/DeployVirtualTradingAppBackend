@@ -5,10 +5,10 @@ import { getApprovedUsers } from '../../controllers/user/userController.js';
 
 const router = express.Router();
 
-router.get('/userFeedbacks/:organization/:category/:sortBy/:order', getAllUsersFeedbacks);
+router.get('/userFeedbacks/:organization/:category/:recommend/:search/:sortBy/:order', getAllUsersFeedbacks);
 router.get('/userFeedbacks/:sortBy/:order', getAllUsersFeedbacks);
 
-router.get('/organizationFeedbacks/:organization/:category/:sortBy/:order',getAllOrganizationsFeedbacks)
+router.get('/organizationFeedbacks/:organization/:category/:recommend/:search/:sortBy/:order',getAllOrganizationsFeedbacks)
 router.get('/organizationFeedbacks/:sortBy/:order',getAllOrganizationsFeedbacks)
 
 router.get('/getAllOrganizations/:search',searchOrganizations);
