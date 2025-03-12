@@ -36,7 +36,7 @@ const orgRegistrationSchema = new mongoose.Schema({
     type: String, 
     required: true 
   },
-  accreditation:{type:String, required:true},
+  accreditation:{type:String},
   approvalStatus: { 
     type: String, 
     enum: ['approved', 'rejected', 'pending'],
