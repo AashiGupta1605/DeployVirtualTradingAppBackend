@@ -113,39 +113,30 @@ export const fetchNifty500Data = async () => {
 
     console.log(`✅ Successfully processed ${formattedData.stocks.length} stocks`);
 
-    const oldData = readDataFromJson();
-    let changesDetected = false;
-    let changedStocks = [];
-
-    if (!oldData?.stocks) {
-      console.log('📊 Initial data fetch - saving all data');
-      changesDetected = true;
-    } else {
-      console.log('🔍 Checking for changes in stock data...');
-      formattedData.stocks.forEach(newStock => {
-        const oldStock = oldData.stocks.find(s => s.symbol === newStock.symbol);
-        const differences = oldStock ? isDataDifferent(oldStock, newStock) : {};
-        
-        if (Object.keys(differences).length > 0) {
-          changesDetected = true;
-          changedStocks.push({ symbol: newStock.symbol, differences });
-          logChanges(newStock.symbol, differences);
-        }
-      });
+    // Always save data, regardless of changes
+    console.log('💾 Saving data to JSON and Database...');
+    saveDataToJson(formattedData);
+    
+    // Attempt to save to database
+    const savedResult = await saveNifty500Data(formattedData);
+    
+    if (!savedResult) {
+      console.error('❌ Failed to save data to database');
+      return null;
     }
 
-    if (changesDetected) {
-      console.log('💾 Saving updated data...');
-      saveDataToJson(formattedData);
-      await saveNifty500DataToDB(formattedData);
-      console.log(`✅ Successfully updated ${changedStocks.length} stocks`);
-    } else {
-      console.log('ℹ️ No changes detected in stock data');
-    }
-
+    console.log('✅ Data saved successfully');
     return formattedData;
   } catch (error) {
-    console.error('\n❌ Error in Nifty 500 data fetch:', error.message);
+    console.error('\n❌ Error in Nifty 500 data fetch:', error);
+    
+    // Log more detailed error information
+    if (error.response) {
+      console.error('Response data:', error.response.data);
+      console.error('Response status:', error.response.status);
+      console.error('Response headers:', error.response.headers);
+    }
+    
     throw error;
   }
 };

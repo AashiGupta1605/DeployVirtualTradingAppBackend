@@ -216,19 +216,31 @@ nifty500DataSchema.statics = {
 
 // Pre-save middleware
 nifty500DataSchema.pre('save', function(next) {
-  if (!this.stocks?.length) {
-    next(new Error('Stocks array cannot be empty'));
-    return;
+  // Ensure stocks array is not empty
+  if (!this.stocks || this.stocks.length === 0) {
+    const error = new Error('Stocks array cannot be empty');
+    console.error(error);
+    return next(error);
   }
 
-  // Check for duplicate symbols
-  const symbols = new Set();
-  for (const stock of this.stocks) {
-    if (symbols.has(stock.symbol)) {
-      next(new Error(`Duplicate symbol found: ${stock.symbol}`));
-      return;
-    }
-    symbols.add(stock.symbol);
+  // Validate each stock entry
+  const validationErrors = this.stocks.reduce((errors, stock, index) => {
+    // Check required fields
+    const requiredFields = ['symbol', 'open', 'dayHigh', 'dayLow', 'lastPrice', 'previousClose'];
+    
+    requiredFields.forEach(field => {
+      if (!stock[field] && stock[field] !== 0) {
+        errors.push(`Stock at index ${index} is missing ${field}`);
+      }
+    });
+
+    return errors;
+  }, []);
+
+  if (validationErrors.length > 0) {
+    const error = new Error(validationErrors.join('; '));
+    console.error(error);
+    return next(error);
   }
 
   next();
