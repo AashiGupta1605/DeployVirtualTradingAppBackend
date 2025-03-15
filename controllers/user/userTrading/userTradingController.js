@@ -176,10 +176,28 @@ export const tradeStock = async (req, res) => {
 export const getHoldings = async (req, res) => {
   try {
     const { userId, subscriptionPlanId } = req.params;
-    const holdings = await Holding.find({ userId, subscriptionPlanId });
-    res.status(200).json(holdings);
+    
+    // Validate inputs
+    if (!userId || !subscriptionPlanId) {
+      return res.status(400).json({
+        success: false,
+        message: 'User ID and Subscription Plan ID are required'
+      });
+    }
+
+    const holdings = await Holding.find({ 
+      userId, 
+      subscriptionPlanId 
+    });
+
+    // If no holdings found, return an empty array instead of 404
+    res.status(200).json({
+      success: true,
+      holdings: holdings || []
+    });
   } catch (error) {
-    res.status(400).json({
+    console.error('Get Holdings Error:', error);
+    res.status(500).json({
       success: false,
       message: error.message
     });
