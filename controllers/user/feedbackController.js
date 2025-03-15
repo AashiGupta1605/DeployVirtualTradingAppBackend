@@ -76,9 +76,10 @@ export const getAllCompleteFeedbacks = async(req,res)=>{
 
 export const getAllOrganizationsFeedbacks = async(req,res)=>{
   try {
-    const {organization, category, recommend, search, sortBy, order} = req.params
+    const {category, recommend, search, sortBy, order} = req.params
 
     const sortOrder = order === "increasing" ? 1 : -1;
+
     const filter = { isDeleted: false, status:"approved", feedbackType:"organization"};
 
     if (category && category.trim() !== "" && category !== "all") {
@@ -87,30 +88,28 @@ export const getAllOrganizationsFeedbacks = async(req,res)=>{
     if(recommend && recommend.trim()!=="" && recommend !== "all" ){
       filter.recommend = recommend
     }
-    if (search && search.trim() !== "" && search !== "all") {
-      filter.$or = [
-          { feedbackMessage: { $regex: new RegExp(search, "i") } },
-          { suggestions: { $regex: new RegExp(search, "i") } }
-      ];
-    }
-    let feedbackData = await Feedback.find(filter)
-        .populate({
-            path: "organizationId",  
-            select: "name", 
-        })
-        .sort({ [sortBy]: sortOrder });
 
-    if (organization && organization.trim() !== "" && organization !== "all" && organization!=="All" ) {
-        feedbackData = feedbackData.filter(
-            (feedback) => feedback.organizationId?.name === organization
-        );
+    let feedbackData = await Feedback.find(filter)
+    .populate({
+        path: "organizationId",  
+        select: "name", 
+    })
+    .sort({ [sortBy]: sortOrder });
+
+    if (search && search.trim() !== "" && search !== "all") {
+      feedbackData = feedbackData.filter(
+        (feedback) =>
+          feedback.organizationId?.name?.toLowerCase().includes(search.toLowerCase()) ||
+          feedback.feedbackMessage.toLowerCase().includes(search.toLowerCase()) ||
+          feedback.suggestions.toLowerCase().includes(search.toLowerCase())
+      );
     }
     res.status(200).json({ success: true, feedbackData });
-} 
-catch (error) {
+  } 
+  catch (error) {
     console.error('Error in geting user feedbacks data: ', error);
     res.status(500).json({ success: false, message: "Failed to get feedback data from database.", error });
-}
+  }
 }
 
 //-----------------------------------------Guest User side-----------------------------------------------------

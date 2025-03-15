@@ -8,7 +8,7 @@ const router = express.Router();
 router.get('/userFeedbacks/:organization/:category/:recommend/:search/:sortBy/:order', getAllUsersFeedbacks);
 router.get('/userFeedbacks/:sortBy/:order', getAllUsersFeedbacks);
 
-router.get('/organizationFeedbacks/:organization/:category/:recommend/:search/:sortBy/:order',getAllOrganizationsFeedbacks)
+router.get('/organizationFeedbacks/:category/:recommend/:search/:sortBy/:order',getAllOrganizationsFeedbacks)
 router.get('/organizationFeedbacks/:sortBy/:order',getAllOrganizationsFeedbacks)
 
 router.get('/getAllOrganizations/:search',searchOrganizations);
