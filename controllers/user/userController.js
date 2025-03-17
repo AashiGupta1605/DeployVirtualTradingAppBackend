@@ -65,7 +65,7 @@ export const registerUser = async (req, res) => {
 //     res.status(500).json({ message: "Login failed", error: error.message });
 //   }
 // };
-export const loginUser = async (req, res) => {
+export const loginUser = async (req, res) => { 
   const { email, mobile, password } = req.body;
 
   // Joi validation
@@ -76,9 +76,12 @@ export const loginUser = async (req, res) => {
     // Find user by email or mobile
     const user = await User.findOne({ 
       $or: [{ email }, { mobile }] 
-    }).select("+password");
+    }).select("+password +isDeleted"); // Include isDeleted field
 
     if (!user) return res.status(400).json({ message: "Invalid email/mobile or password" });
+
+    // Check if user is deleted
+    if (user.isDeleted) return res.status(403).json({ message: "Your account has been deactivated. Please contact support." });
 
     // Check password
     const isMatch = await bcrypt.compare(password, user.password);
@@ -92,6 +95,7 @@ export const loginUser = async (req, res) => {
     res.status(500).json({ message: "Login failed", error: error.message });
   }
 };
+
 
 // Get User Profile
 export const getUserProfile = async (req, res) => {
