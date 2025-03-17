@@ -2,32 +2,65 @@ import Nifty500Data from '../../models/Nifty500DataModal.js';
 
 export const saveNifty500Data = async (formattedData) => {
   try {
-    // Check if there's already data for this timestamp
-    const existingData = await Nifty500Data.findOne({
-      fetchTime: {
-        $gte: new Date(Date.now() - 1000 * 60), // Within last minute
-      }
-    });
-
-    if (existingData) {
-      console.log('No changes. Data remains the same.');
-      return existingData;
+    // Validate input
+    if (!formattedData || !formattedData.stocks || formattedData.stocks.length === 0) {
+      console.error('❌ Invalid data: No stocks to save');
+      return null;
     }
+
+    // Log detailed input data
+    console.log('Saving Nifty 500 Data:', {
+      fetchTime: formattedData.fetchTime,
+      stockCount: formattedData.stocks.length,
+      firstStock: formattedData.stocks[0]
+    });
 
     // Create new document
     const newData = new Nifty500Data({
-      fetchTime: new Date(),
+      fetchTime: formattedData.fetchTime || new Date(),
       stocks: formattedData.stocks
     });
 
+    // Validate the document
+    try {
+      await newData.validate();
+    } catch (validationError) {
+      console.error('❌ Validation Error:', validationError.message);
+      console.error('Validation Errors:', validationError.errors);
+      return null;
+    }
+
     // Save to database
     const savedData = await newData.save();
-    console.log('✅ Data saved to database successfully');
-    console.log('📊 Stocks saved:', savedData.stocks.length);
+    
+    console.log('✅ Data saved to database successfully', {
+      savedStockCount: savedData.stocks.length,
+      savedFetchTime: savedData.fetchTime
+    });
+
     return savedData;
   } catch (error) {
-    console.error('❌ Error saving to database:', error);
-    // Don't throw the error, just log it and return null
+    console.error('❌ Detailed Error saving to database:', {
+      errorName: error.name,
+      errorMessage: error.message,
+      errorStack: error.stack,
+      validationErrors: error.errors ? Object.keys(error.errors) : 'No validation errors'
+    });
+    
+    // Additional error handling for specific MongoDB errors
+    if (error.name === 'MongoServerError') {
+      switch (error.code) {
+        case 11000:
+          console.error('Duplicate key error');
+          break;
+        case 18:
+          console.error('Validation error');
+          break;
+        default:
+          console.error('Unhandled MongoDB error');
+      }
+    }
+    
     return null;
   }
 };
