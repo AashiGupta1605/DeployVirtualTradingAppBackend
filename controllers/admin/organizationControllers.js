@@ -54,6 +54,7 @@ export const registerOrganization = async (req, res) => {
     // Send single response with all information
     res.status(201).json({
       success: true,
+      statusCode: 201,
       message: 'Organization registered successfully and welcome email sent',
       organization
     });
@@ -62,6 +63,7 @@ export const registerOrganization = async (req, res) => {
     console.error('Registration error:', error);
     res.status(500).json({
       success: false,
+      statusCode: 500,
       message: 'Failed to register organization',
       error: error.message
     });
