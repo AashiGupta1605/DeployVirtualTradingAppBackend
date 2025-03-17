@@ -522,7 +522,8 @@ export const createFeedback = async (req, res) => {
             feedbackMessage,
             rating,
             recommend,
-            suggestions
+            suggestions,
+            feedbackType: "user",
         });
   
         await newFeedback.save();
