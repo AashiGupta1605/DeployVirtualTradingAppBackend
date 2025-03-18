@@ -36,7 +36,54 @@ import {
 } from '../../helpers/messages.js';
 
 
+// export const organizationUserRegistration = async (req, res) => {
+//   const { error } = organizationUserRegistrationValidationSchema.validate(req.body);
+//   if (error) {
+//     return res.status(400).json({ success: false, msg: error.details[0].message });
+//   }
+
+//   const { name, email, mobile, gender, dob, addedby, status } = req.body;
+
+//   try {
+//     // Check if the user already exists
+//     let user = await UserModal.findOne({ email });
+//     if (user) {
+//       return res.status(400).json({ success: false, msg: 'User already exists' });
+//     }
+
+//     // Generate a unique password
+//     const password = `${name}${crypto.randomBytes(3).toString('hex')}`;
+
+//     // Create a new user
+//     user = new UserModal({
+//       name,
+//       email,
+//       mobile,
+//       gender,
+//       dob,
+//       password,
+//       addedby,
+//       status,
+//     });
+
+//     // Hash the password
+//     user.password = await hashPassword(password);
+
+//     await user.save();
+
+//     // Send registration email
+//     await sendRegistrationEmail(email, name, password);
+
+//     res.status(201).json({ msg: 'User registered successfully. An email has been sent with login details.' });
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(500).json({ success: false, msg: 'Server error' });
+//   }
+// };
+
+
 export const organizationUserRegistration = async (req, res) => {
+  // Validate the request body
   const { error } = organizationUserRegistrationValidationSchema.validate(req.body);
   if (error) {
     return res.status(400).json({ success: false, msg: error.details[0].message });
@@ -45,17 +92,23 @@ export const organizationUserRegistration = async (req, res) => {
   const { name, email, mobile, gender, dob, addedby, status } = req.body;
 
   try {
-    // Check if the user already exists
-    let user = await UserModal.findOne({ email });
-    if (user) {
-      return res.status(400).json({ success: false, msg: 'User already exists' });
+    // Check if the user already exists by email or mobile
+    const existingUserByEmail = await UserModal.findOne({ email });
+    const existingUserByMobile = await UserModal.findOne({ mobile });
+
+    if (existingUserByEmail) {
+      return res.status(400).json({ success: false, msg: 'User already exists with the same email' });
+    }
+
+    if (existingUserByMobile) {
+      return res.status(400).json({ success: false, msg: 'User already exists with the same mobile number' });
     }
 
     // Generate a unique password
     const password = `${name}${crypto.randomBytes(3).toString('hex')}`;
 
     // Create a new user
-    user = new UserModal({
+    const user = new UserModal({
       name,
       email,
       mobile,
@@ -69,17 +122,19 @@ export const organizationUserRegistration = async (req, res) => {
     // Hash the password
     user.password = await hashPassword(password);
 
+    // Save the user to the database
     await user.save();
 
     // Send registration email
     await sendRegistrationEmail(email, name, password);
 
-    res.status(201).json({ msg: 'User registered successfully. An email has been sent with login details.' });
+    res.status(201).json({ success: true, msg: 'User registered successfully. An email has been sent with login details.' });
   } catch (error) {
-    console.error(error.message);
+    console.error("Error registering user:", error);
     res.status(500).json({ success: false, msg: 'Server error' });
   }
 };
+
 
 
 export const organizationUsersDisplay = async (req, res) => {

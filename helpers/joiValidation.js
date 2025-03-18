@@ -11,7 +11,28 @@ export const organizationRegistrationValidationSchema = Joi.object({
   approvalStatus: Joi.string().valid("approved", "rejected", "pending").default("pending").label('Approval Status'),
   password: Joi.string().min(8).required().label('Password'),
   accreditation:Joi.string().label("Accreditation"),
-  photo:Joi.string().label("photo") // ad this line here and your registration will start working..
+  photo:Joi.string().label("photo"), // ad this line here and your registration will start working..
+  confirmPassword: Joi.string() // Add confirmPassword to the schema
+  .valid(Joi.ref('password')) // Ensure it matches the password field
+  .messages({ 'any.only': 'Passwords do not match' }) // Custom error message
+  .optional(),
+});
+
+export const organizationUpdateValidationSchema = Joi.object({
+  name: Joi.string().required().label('Name'),
+  address: Joi.string().required().label('Address'),
+  website: Joi.string().uri().label('Website'),
+  contactPerson: Joi.string().required().label('Contact Person'),
+  email: Joi.string().email().required().label('Email'),
+  mobile: Joi.string().pattern(/^[9876]\d{9}$/).required().label('Mobile'),
+  approvalStatus: Joi.string().valid("approved", "rejected", "pending").default("pending").label('Approval Status'),
+  // password: Joi.string().min(8).required().label('Password'),
+  accreditation:Joi.string().label("Accreditation"),
+  photo:Joi.string().label("photo"), // ad this line here and your registration will start working..
+  // confirmPassword: Joi.string() // Add confirmPassword to the schema
+  // .valid(Joi.ref('password')) // Ensure it matches the password field
+  // .messages({ 'any.only': 'Passwords do not match' }) // Custom error message
+  // .optional(),
 });
 
 

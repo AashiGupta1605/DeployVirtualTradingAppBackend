@@ -49,10 +49,32 @@ export const organizationRegister = async (req, res) => {
 
   try {
     // Check if the organization already exists
-    const existingOrg = await OrgRegistration.findOne({ email });
-    if (existingOrg) {
-      return res.status(400).json({ message: 'Organization already exists' });
+    // const existingOrg = await OrgRegistration.findOne({ email });
+    // if (existingOrg) {
+    //   return res.status(400).json({ message: 'Organization already exists' });
+    // }
+
+    const existingOrgByName = await OrgRegistration.findOne({ name });
+    const existingOrgByEmail = await OrgRegistration.findOne({ email });
+    const existingOrgByMobile = await OrgRegistration.findOne({ mobile });
+    const existingOrgByWebsite = await OrgRegistration.findOne({ website });
+
+    if (existingOrgByName) {
+      return res.status(400).json({ message: 'Organization already exists with the same Name' });
     }
+
+    if (existingOrgByEmail) {
+      return res.status(400).json({ message: 'Organization already exists with the same email' });
+    }
+
+    if (existingOrgByMobile) {
+      return res.status(400).json({ message: 'Organization already exists with the same mobile number' });
+    }
+
+    if (existingOrgByWebsite) {
+      return res.status(400).json({ message: 'Organization already exists with the same website' });
+    }
+
 
     // Hash the password
     const hashedPassword = await hashPassword(password);
@@ -97,14 +119,14 @@ export const organizationLogin = async (req, res) => {
     // Check if the organization exists by email or mobile
     const existingOrg = await OrgRegistration.findOne({
       $or: [
-        { email: email.trim().toLowerCase() }, // Case-insensitive email match
+        { email: email?.trim().toLowerCase() }, // Case-insensitive email match
         { mobile: mobile?.trim() } // Optional: Trim mobile if provided
       ]
     });
 
     if (!existingOrg) {
       console.log("Organization not found for:", { email, mobile });
-      return res.status(400).json({ success: false, message: 'Invalid credentials' });
+      return res.status(400).json({ success: false, message: 'Not a registered organization..' });
     }
 
     console.log("Organization found:", existingOrg);
