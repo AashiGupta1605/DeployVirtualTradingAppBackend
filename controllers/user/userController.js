@@ -73,13 +73,16 @@ export const loginUser = async (req, res) => {
   if (error) return res.status(400).json({ message: error.details[0].message });
 
   try {
+    console.log("Login request received for:", { email, mobile });
     // Find user by email or mobile
     const user = await User.findOne({ 
       $or: [{ email }, { mobile }] 
     }).select("+password +isDeleted"); // Include isDeleted field
 
-    if (!user) return res.status(400).json({ message: "Invalid email/mobile or password" });
+    if (!user) return res.status(400).json({ message: "not a registered user" });
 
+    console.log(user);
+    
     // Check if user is deleted
     if (user.isDeleted) return res.status(403).json({ message: "Your account has been deactivated. Please contact support." });
 
