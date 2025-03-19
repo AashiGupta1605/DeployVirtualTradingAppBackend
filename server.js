@@ -13,7 +13,6 @@ import adminRoute from "./routes/admin/adminRoute.js";
 import organizationRoute from "./routes/organization/index.js";
 import guestUserRoute from "./routes/guestUser/guestUserRoute.js";
 import { errorHandler } from './middlewares/errorHandler.js';
-
 dotenv.config();
 
 const app = express();

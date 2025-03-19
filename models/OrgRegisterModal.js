@@ -53,7 +53,7 @@ const orgRegistrationSchema = new mongoose.Schema({
 });
 
 // Add indexes for better query performance
-orgRegistrationSchema.index({ email: 1 }, { unique: true });
+// orgRegistrationSchema.index({ email: 1 });
 orgRegistrationSchema.index({ approvalStatus: 1 });
 orgRegistrationSchema.index({ isDeleted: 1 });
 
