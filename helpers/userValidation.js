@@ -49,6 +49,7 @@ export const updateProfileSchema = Joi.object({
   gender: Joi.string().valid('male', 'female', 'other'),
   dob: Joi.date().less('now'),
   // orgtype: Joi.string().valid('company', 'individual') // Added to profile update schema
+  // photo:Joi.string().label("photo")
 });
 
 // Validation schema for deleting user

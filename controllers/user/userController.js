@@ -140,6 +140,7 @@ export const updateProfile = async (req, res) => {
   }
 };
 
+
 // Delete User (Soft Delete)
 export const deleteUser = async (req, res) => { 
   const { id } = req.user; // Authenticated user ID

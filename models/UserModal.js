@@ -15,4 +15,6 @@ const userSchema = new mongoose.Schema({
   updatedDate: { type: Date, default: Date.now }
 });
 
+userSchema.index({ gender: 1 });
+
 export default mongoose.model("User", userSchema);

@@ -13,10 +13,10 @@ dotenv.config({ path: path.join(__dirname, '../.env') });
 const config = {
   mongodb: {
     uri: process.env.MONGODB_URI,
-    options: {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
+    // options: {
+    //   useNewUrlParser: true,
+    //   useUnifiedTopology: true,
+    // }
   },
   server: {
     port: process.env.PORT || 5000,
