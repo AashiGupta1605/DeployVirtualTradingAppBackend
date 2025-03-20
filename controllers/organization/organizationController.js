@@ -6,7 +6,7 @@ import { hashPassword, comparePassword } from '../../helpers/hashHelper.js';
 import jwt from 'jsonwebtoken';
 import { sendOrganizationRegistrationEmail } from '../../helpers/emailService.js';
 import mongoose from 'mongoose';
-import cloudinary from '../../helpers/cloudinary.js';
+// import cloudinary from '../../helpers/cloudinary.js';
 
 import {
   ORG_REGISTRATION_SUCCESS,
@@ -26,7 +26,68 @@ import {
 } from '../../helpers/messages.js';
 
 
-// register
+// try to reolve image cloud issue
+
+// real code
+// // register
+// export const organizationRegister = async (req, res) => {
+//   const { name, address, website, contactPerson, email, mobile, approvalStatus, password, accreditation } = req.body;
+
+//   // Validate the request body
+//   const { error } = organizationRegistrationValidationSchema.validate(req.body);
+//   if (error) {
+//     return res.status(400).json({ message: error.details[0].message });
+//   }
+
+//   try {
+//     const existingOrgByName = await OrgRegistration.findOne({ name });
+//     const existingOrgByEmail = await OrgRegistration.findOne({ email });
+//     const existingOrgByMobile = await OrgRegistration.findOne({ mobile });
+//     const existingOrgByWebsite = await OrgRegistration.findOne({ website });
+
+//     if (existingOrgByName) {
+//       return res.status(400).json({ message: ORG_ALREADY_EXISTS_NAME, success:false });
+//     }
+
+//     if (existingOrgByEmail) {
+//       return res.status(400).json({ message: ORG_ALREADY_EXISTS_EMAIL, success:false });
+//     }
+
+//     if (existingOrgByMobile) {
+//       return res.status(400).json({ message: ORG_ALREADY_EXISTS_PHONE, success:false });
+//     }
+
+//     if (existingOrgByWebsite) {
+//       return res.status(400).json({ message: ORG_ALREADY_EXISTS_WEBSITE, success:false });
+//     }
+
+
+//     // Hash the password
+//     const hashedPassword = await hashPassword(password);
+
+//     // Create a new organization
+//     const newOrg = new OrgRegistration({
+//       name,
+//       address,
+//       website,
+//       contactPerson,
+//       email,
+//       mobile,
+//       accreditation,
+//       approvalStatus,
+//       password: hashedPassword
+//     });
+
+//     // Save the organization to the database
+//     await newOrg.save();
+//     await sendOrganizationRegistrationEmail(email, name, password);
+//     res.status(201).json({ message: ORG_REGISTRATION_SUCCESS, success:true });
+//   } catch (error) {
+//     console.error("Error registering organization:", error);
+//     res.status(500).json({ message: SERVER_ERROR, success:false, error:error.message });
+//   }
+// };
+
 export const organizationRegister = async (req, res) => {
   const { name, address, website, contactPerson, email, mobile, approvalStatus, password, accreditation } = req.body;
 
@@ -37,25 +98,31 @@ export const organizationRegister = async (req, res) => {
   }
 
   try {
+    // Check if the organization already exists
+    // const existingOrg = await OrgRegistration.findOne({ email });
+    // if (existingOrg) {
+    //   return res.status(400).json({ message: 'Organization already exists' });
+    // }
+
     const existingOrgByName = await OrgRegistration.findOne({ name });
     const existingOrgByEmail = await OrgRegistration.findOne({ email });
     const existingOrgByMobile = await OrgRegistration.findOne({ mobile });
     const existingOrgByWebsite = await OrgRegistration.findOne({ website });
 
     if (existingOrgByName) {
-      return res.status(400).json({ message: ORG_ALREADY_EXISTS_NAME, success:false });
+      return res.status(400).json({ message: 'Organization already exists with the same Name' });
     }
 
     if (existingOrgByEmail) {
-      return res.status(400).json({ message: ORG_ALREADY_EXISTS_EMAIL, success:false });
+      return res.status(400).json({ message: 'Organization already exists with the same email' });
     }
 
     if (existingOrgByMobile) {
-      return res.status(400).json({ message: ORG_ALREADY_EXISTS_PHONE, success:false });
+      return res.status(400).json({ message: 'Organization already exists with the same mobile number' });
     }
 
     if (existingOrgByWebsite) {
-      return res.status(400).json({ message: ORG_ALREADY_EXISTS_WEBSITE, success:false });
+      return res.status(400).json({ message: 'Organization already exists with the same website' });
     }
 
 
@@ -78,13 +145,12 @@ export const organizationRegister = async (req, res) => {
     // Save the organization to the database
     await newOrg.save();
     await sendOrganizationRegistrationEmail(email, name, password);
-    res.status(201).json({ message: ORG_REGISTRATION_SUCCESS, success:true });
+    res.status(201).json({ message: 'Organization registration successful' });
   } catch (error) {
     console.error("Error registering organization:", error);
-    res.status(500).json({ message: SERVER_ERROR, success:false, error:error.message });
+    res.status(500).json({ message: 'Server error' });
   }
 };
-
 
 // login
 export const organizationLogin = async (req, res) => {
@@ -230,27 +296,129 @@ export const updateOrganizationByName = async (req, res) => {
 
 
 // Get Organization by ID
+// real code for get and update
+// // GET organization by ID
+// export const getOrganizationById = async (req, res) => {
+//   const { orgId } = req.query; // Use orgId instead of orgName
+
+//   if (!orgId) {
+//     return res.status(400).json({ success: false, message: ORG_ID_REQUIRED });
+//   }
+
+//   try {
+//     // Fetch the organization by ID and exclude the password field
+//     const org = await OrgRegistration.findById(orgId).select('-password');
+//     if (!org) {
+//       return res.status(404).json({ success: false, message: ORG_NOT_FOUND });
+//     }
+
+//     console.log("Organization Data:", org); // Log the organization data
+//     res.status(200).json({ success: true, data: org, message:ORG_GET_DATA_SUCCESS});
+//   } catch (error) {
+//     console.error("Error fetching organization:", error);
+//     res.status(500).json({ success: false, message: SERVER_ERROR, error:error.message  });
+//   }
+// };
+
+
+// // new photo remove
+
+// export const updateOrganizationById = async (req, res) => {
+//   const { orgId } = req.query; // Use orgId instead of orgName
+//   const updateData = req.body; // Data to update
+
+//   if (!orgId) {
+//     return res.status(400).json({ success: false, message: ORG_ID_REQUIRED });
+//   }
+
+
+
+//   try {
+
+//     const { error } = organizationUpdateValidationSchema.validate(updateData);
+//     if (error) {
+//       return res.status(400).json({ message: error.details[0].message, success:false});
+//     }
+
+//     // Log the update data for debugging
+//     console.log("Update Data:", updateData);
+
+//     // If the update includes a password, hash it before saving
+//     if (updateData.password) {
+//       const salt = await bcrypt.genSalt(10);
+//       updateData.password = await bcrypt.hash(updateData.password, salt);
+//     }
+
+//     // Handle photo upload to Cloudinary
+//     if (updateData.photo && updateData.photo.startsWith('data:image')) {
+//       // Delete the old photo from Cloudinary if it exists
+//       const org = await OrgRegistration.findById(orgId);
+//       if (org.photo && org.photo !== "https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png") {
+//         const publicId = org.photo.split('/').pop().split('.')[0];
+//         await cloudinary.uploader.destroy(`organization_photos/${publicId}`);
+//       }
+
+//       // Upload the new photo to Cloudinary
+//       const result = await cloudinary.uploader.upload(updateData.photo, {
+//         folder: 'organization_photos',
+//       });
+//       updateData.photo = result.secure_url;
+//     }
+
+//     // Handle photo removal
+//     if (updateData.photo === "https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png") {
+//       const org = await OrgRegistration.findById(orgId);
+//       if (org.photo && org.photo !== "https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png") {
+//         const publicId = org.photo.split('/').pop().split('.')[0];
+//         await cloudinary.uploader.destroy(`organization_photos/${publicId}`);
+//       }
+//       updateData.photo = "https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png";
+//     }
+
+//     // Find the organization by ID and update it
+//     const updatedOrg = await OrgRegistration.findByIdAndUpdate(
+//       orgId, // Query by ID
+//       { $set: updateData }, // Use $set to update only the specified fields
+//       { new: true, runValidators: true } // Return the updated document and run validators
+//     ).select('-password'); // Exclude the password field from the response
+
+//     if (!updatedOrg) {
+//       return res.status(404).json({ success: false, message: ORG_NOT_FOUND });
+//     }
+
+//     // Log the updated organization for debugging
+//     console.log("Updated Organization:", updatedOrg);
+
+//     res.status(200).json({ success: true, data: updatedOrg, message:ORG_PROFILE_UPDATED_SUCCESS });
+//   } catch (error) {
+//     console.error("Error updating organization:", error);
+//     res.status(500).json({ success: false, message: SERVER_ERROR, error:error.message  });
+//   }
+// };
+  
+
+import cloudinary from '../../helpers/cloudinary.js';
 
 // GET organization by ID
 export const getOrganizationById = async (req, res) => {
   const { orgId } = req.query; // Use orgId instead of orgName
 
   if (!orgId) {
-    return res.status(400).json({ success: false, message: ORG_ID_REQUIRED });
+    return res.status(400).json({ success: false, message: 'Organization ID is required' });
   }
 
   try {
     // Fetch the organization by ID and exclude the password field
     const org = await OrgRegistration.findById(orgId).select('-password');
     if (!org) {
-      return res.status(404).json({ success: false, message: ORG_NOT_FOUND });
+      return res.status(404).json({ success: false, message: 'Organization not found' });
     }
 
     console.log("Organization Data:", org); // Log the organization data
-    res.status(200).json({ success: true, data: org, message:ORG_GET_DATA_SUCCESS});
+    res.status(200).json({ success: true, data: org });
   } catch (error) {
     console.error("Error fetching organization:", error);
-    res.status(500).json({ success: false, message: SERVER_ERROR, error:error.message  });
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 };
 
@@ -262,7 +430,7 @@ export const updateOrganizationById = async (req, res) => {
   const updateData = req.body; // Data to update
 
   if (!orgId) {
-    return res.status(400).json({ success: false, message: ORG_ID_REQUIRED });
+    return res.status(400).json({ success: false, message: 'Organization ID is required' });
   }
 
   try {
@@ -309,19 +477,20 @@ export const updateOrganizationById = async (req, res) => {
     ).select('-password'); // Exclude the password field from the response
 
     if (!updatedOrg) {
-      return res.status(404).json({ success: false, message: ORG_NOT_FOUND });
+      return res.status(404).json({ success: false, message: 'Organization not found' });
     }
 
     // Log the updated organization for debugging
     console.log("Updated Organization:", updatedOrg);
 
-    res.status(200).json({ success: true, data: updatedOrg, message:ORG_PROFILE_UPDATED_SUCCESS });
+    res.status(200).json({ success: true, data: updatedOrg });
   } catch (error) {
     console.error("Error updating organization:", error);
-    res.status(500).json({ success: false, message: SERVER_ERROR, error:error.message  });
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 };
-  
+
+
 //Admin
 
 
