@@ -56,6 +56,19 @@ export const ORG_AVERAGE_AGE_USER_FETCHED_SUCCESS = "Organization average age us
 
 
 
+// ORGANIZATION USERS FEEDBACK MESSAGES
+
+export const ORG_FEEDBACK_DELETE_SUCCESS = "Feedaback deleted successfully";
+export const ORG_FEEDBACK_UPDATE_SUCCESS = "Feedaback Updated successfully";
+export const ORG_FEEDBACK_REGISTER_SUCCESS = "Feedback register successfully";
+export const ORG_FEEDBACK_FETCHED_SUCCESS = "Feedaback deleted successfully";
+export const ORG_FEEDBACK_NOT_FOUND = "Feedaback not found";
+export const ORG_FEEDBACK_STATUS_SUCCESS = "Feedaback status updated successfully";
+
+export const ORG_FEEDABACK_INVALID_STATUS_VALUE = "Invalid status value";
+
+
+
 
 
 

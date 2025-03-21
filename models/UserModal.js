@@ -11,6 +11,10 @@ const userSchema = new mongoose.Schema({
   addedby: { type: String, default:"self" },
   orgtype: { type: String },
   isDeleted: { type: Boolean, default: false },
+  userPhoto: { 
+    type: String, 
+    default: "https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png"
+  },
   createdDate: { type: Date, default: Date.now },
   updatedDate: { type: Date, default: Date.now }
 });
