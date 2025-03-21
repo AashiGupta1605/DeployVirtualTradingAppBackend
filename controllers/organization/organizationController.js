@@ -1,4 +1,4 @@
-// organization crud opeartion such as registration login -----------------
+// ORGANIZATION CRUD OPERATION ==========================================================================
 
 import OrgRegistration from '../../models/OrgRegisterModal.js';
 import { organizationRegistrationValidationSchema, organizationLoginValidationSchema, getUserByOrgNameValidation} from '../../helpers/joiValidation.js';
@@ -26,70 +26,10 @@ import {
 } from '../../helpers/messages.js';
 
 
-// try to reolve image cloud issue
-
-// real code
-// // register
-// export const organizationRegister = async (req, res) => {
-//   const { name, address, website, contactPerson, email, mobile, approvalStatus, password, accreditation } = req.body;
-
-//   // Validate the request body
-//   const { error } = organizationRegistrationValidationSchema.validate(req.body);
-//   if (error) {
-//     return res.status(400).json({ message: error.details[0].message });
-//   }
-
-//   try {
-//     const existingOrgByName = await OrgRegistration.findOne({ name });
-//     const existingOrgByEmail = await OrgRegistration.findOne({ email });
-//     const existingOrgByMobile = await OrgRegistration.findOne({ mobile });
-//     const existingOrgByWebsite = await OrgRegistration.findOne({ website });
-
-//     if (existingOrgByName) {
-//       return res.status(400).json({ message: ORG_ALREADY_EXISTS_NAME, success:false });
-//     }
-
-//     if (existingOrgByEmail) {
-//       return res.status(400).json({ message: ORG_ALREADY_EXISTS_EMAIL, success:false });
-//     }
-
-//     if (existingOrgByMobile) {
-//       return res.status(400).json({ message: ORG_ALREADY_EXISTS_PHONE, success:false });
-//     }
-
-//     if (existingOrgByWebsite) {
-//       return res.status(400).json({ message: ORG_ALREADY_EXISTS_WEBSITE, success:false });
-//     }
-
-
-//     // Hash the password
-//     const hashedPassword = await hashPassword(password);
-
-//     // Create a new organization
-//     const newOrg = new OrgRegistration({
-//       name,
-//       address,
-//       website,
-//       contactPerson,
-//       email,
-//       mobile,
-//       accreditation,
-//       approvalStatus,
-//       password: hashedPassword
-//     });
-
-//     // Save the organization to the database
-//     await newOrg.save();
-//     await sendOrganizationRegistrationEmail(email, name, password);
-//     res.status(201).json({ message: ORG_REGISTRATION_SUCCESS, success:true });
-//   } catch (error) {
-//     console.error("Error registering organization:", error);
-//     res.status(500).json({ message: SERVER_ERROR, success:false, error:error.message });
-//   }
-// };
-
+// ORGANIZATION REGISTRATION CONTROLLER ----------------------------------------------------------
+// add confirm password and remove acrrediation
 export const organizationRegister = async (req, res) => {
-  const { name, address, website, contactPerson, email, mobile, approvalStatus, password, accreditation } = req.body;
+  const { name, address, website, contactPerson, email, mobile, approvalStatus, password } = req.body;
 
   // Validate the request body
   const { error } = organizationRegistrationValidationSchema.validate(req.body);
@@ -99,32 +39,26 @@ export const organizationRegister = async (req, res) => {
 
   try {
     // Check if the organization already exists
-    // const existingOrg = await OrgRegistration.findOne({ email });
-    // if (existingOrg) {
-    //   return res.status(400).json({ message: 'Organization already exists' });
-    // }
-
     const existingOrgByName = await OrgRegistration.findOne({ name });
     const existingOrgByEmail = await OrgRegistration.findOne({ email });
     const existingOrgByMobile = await OrgRegistration.findOne({ mobile });
     const existingOrgByWebsite = await OrgRegistration.findOne({ website });
 
     if (existingOrgByName) {
-      return res.status(400).json({ message: 'Organization already exists with the same Name' });
+      return res.status(400).json({ message: ORG_ALREADY_EXISTS_NAME, success:false });
     }
 
     if (existingOrgByEmail) {
-      return res.status(400).json({ message: 'Organization already exists with the same email' });
+      return res.status(400).json({ message: ORG_ALREADY_EXISTS_EMAIL , success:false });
     }
 
     if (existingOrgByMobile) {
-      return res.status(400).json({ message: 'Organization already exists with the same mobile number' });
+      return res.status(400).json({ message: ORG_ALREADY_EXISTS_PHONE, success:false });
     }
 
     if (existingOrgByWebsite) {
-      return res.status(400).json({ message: 'Organization already exists with the same website' });
+      return res.status(400).json({ message: ORG_ALREADY_EXISTS_WEBSITE, success:false });
     }
-
 
     // Hash the password
     const hashedPassword = await hashPassword(password);
@@ -137,7 +71,6 @@ export const organizationRegister = async (req, res) => {
       contactPerson,
       email,
       mobile,
-      accreditation,
       approvalStatus,
       password: hashedPassword
     });
@@ -145,13 +78,16 @@ export const organizationRegister = async (req, res) => {
     // Save the organization to the database
     await newOrg.save();
     await sendOrganizationRegistrationEmail(email, name, password);
-    res.status(201).json({ message: 'Organization registration successful' });
+    res.status(201).json({ message: ORG_REGISTRATION_SUCCESS, success:true });
   } catch (error) {
     console.error("Error registering organization:", error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: SERVER_ERROR, success:false });
   }
 };
 
+
+
+// ORGANIZATION LOGIN CONTROLLER ----------------------------------------------------------
 // login
 export const organizationLogin = async (req, res) => {
   const { email, mobile, password } = req.body;
@@ -204,7 +140,7 @@ export const organizationLogin = async (req, res) => {
     const token = jwt.sign(
       { orgId: existingOrg._id, orgName: existingOrg.name },
       process.env.JWT_SECRET,
-      { expiresIn: '1h' }
+      { expiresIn: '2m' }
     );
 
     console.log("Login successful for:", { email, mobile });
@@ -231,218 +167,48 @@ export const organizationLogin = async (req, res) => {
 import bcrypt from 'bcryptjs';
 
 // // Get Organization by Name
-export const getOrganizationByName = async (req, res) => {
-  const { orgName } = req.query; // Use req.query for GET request
-
-  if (!orgName) {
-    return res.status(400).json({ success: false, message: ORG_NAME_REQUIRED });
-  }
-
-  try {
-    // Fetch the organization by name and exclude the password field
-    const org = await OrgRegistration.findOne({ name: orgName }).select('-password');
-    if (!org) {
-      return res.status(404).json({ success: false, message: ORG_NOT_FOUND });
-    }
-
-    console.log("Organization Data:", org); // Log the organization data
-    res.status(200).json({ success: true, data: org, message:ORG_GET_DATA_SUCCESS});
-  } catch (error) {
-    console.error("Error fetching organization:", error);
-    res.status(500).json({ success: false, message: SERVER_ERROR, error:error.message  });
-  }
-};
-
-// Update Organization by Name
-export const updateOrganizationByName = async (req, res) => {
-  const { orgName } = req.query; // Use req.query to get orgName
-  const updateData = req.body; // Data to update
-
-  if (!orgName) {
-    return res.status(400).json({ success: false, message: ORG_NAME_REQUIRED });
-  }
-
-  try {
-    // Log the update data for debugging
-    console.log("Update Data:", updateData);
-
-    // If the update includes a password, hash it before saving
-    if (updateData.password) {
-      const salt = await bcrypt.genSalt(10);
-      updateData.password = await bcrypt.hash(updateData.password, salt);
-    }
-
-    // Find the organization by name and update it
-    const updatedOrg = await OrgRegistration.findOneAndUpdate(
-      { name: orgName }, // Query by name
-      { $set: updateData }, // Use $set to update only the specified fields
-      { new: true, runValidators: true } // Return the updated document and run validators
-    ).select('-password'); // Exclude the password field from the response
-
-    if (!updatedOrg) {
-      return res.status(404).json({ success: false, message: ORG_NOT_FOUND });
-    }
-
-    // Log the updated organization for debugging
-    console.log("Updated Organization:", updatedOrg);
-
-    res.status(200).json({ success: true, data: updatedOrg, message:ORG_PROFILE_UPDATED_SUCCESS});
-  } catch (error) {
-    console.error("Error updating organization:", error);
-    res.status(500).json({ success: false, message: SERVER_ERROR, error:error.message  });
-  }
-};
-  
-
-
-// Get Organization by ID
-// real code for get and update
-// // GET organization by ID
-// export const getOrganizationById = async (req, res) => {
-//   const { orgId } = req.query; // Use orgId instead of orgName
-
-//   if (!orgId) {
-//     return res.status(400).json({ success: false, message: ORG_ID_REQUIRED });
-//   }
-
-//   try {
-//     // Fetch the organization by ID and exclude the password field
-//     const org = await OrgRegistration.findById(orgId).select('-password');
-//     if (!org) {
-//       return res.status(404).json({ success: false, message: ORG_NOT_FOUND });
-//     }
-
-//     console.log("Organization Data:", org); // Log the organization data
-//     res.status(200).json({ success: true, data: org, message:ORG_GET_DATA_SUCCESS});
-//   } catch (error) {
-//     console.error("Error fetching organization:", error);
-//     res.status(500).json({ success: false, message: SERVER_ERROR, error:error.message  });
-//   }
-// };
-
-
-// // new photo remove
-
-// export const updateOrganizationById = async (req, res) => {
-//   const { orgId } = req.query; // Use orgId instead of orgName
-//   const updateData = req.body; // Data to update
-
-//   if (!orgId) {
-//     return res.status(400).json({ success: false, message: ORG_ID_REQUIRED });
-//   }
-
-
-
-//   try {
-
-//     const { error } = organizationUpdateValidationSchema.validate(updateData);
-//     if (error) {
-//       return res.status(400).json({ message: error.details[0].message, success:false});
-//     }
-
-//     // Log the update data for debugging
-//     console.log("Update Data:", updateData);
-
-//     // If the update includes a password, hash it before saving
-//     if (updateData.password) {
-//       const salt = await bcrypt.genSalt(10);
-//       updateData.password = await bcrypt.hash(updateData.password, salt);
-//     }
-
-//     // Handle photo upload to Cloudinary
-//     if (updateData.photo && updateData.photo.startsWith('data:image')) {
-//       // Delete the old photo from Cloudinary if it exists
-//       const org = await OrgRegistration.findById(orgId);
-//       if (org.photo && org.photo !== "https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png") {
-//         const publicId = org.photo.split('/').pop().split('.')[0];
-//         await cloudinary.uploader.destroy(`organization_photos/${publicId}`);
-//       }
-
-//       // Upload the new photo to Cloudinary
-//       const result = await cloudinary.uploader.upload(updateData.photo, {
-//         folder: 'organization_photos',
-//       });
-//       updateData.photo = result.secure_url;
-//     }
-
-//     // Handle photo removal
-//     if (updateData.photo === "https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png") {
-//       const org = await OrgRegistration.findById(orgId);
-//       if (org.photo && org.photo !== "https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png") {
-//         const publicId = org.photo.split('/').pop().split('.')[0];
-//         await cloudinary.uploader.destroy(`organization_photos/${publicId}`);
-//       }
-//       updateData.photo = "https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png";
-//     }
-
-//     // Find the organization by ID and update it
-//     const updatedOrg = await OrgRegistration.findByIdAndUpdate(
-//       orgId, // Query by ID
-//       { $set: updateData }, // Use $set to update only the specified fields
-//       { new: true, runValidators: true } // Return the updated document and run validators
-//     ).select('-password'); // Exclude the password field from the response
-
-//     if (!updatedOrg) {
-//       return res.status(404).json({ success: false, message: ORG_NOT_FOUND });
-//     }
-
-//     // Log the updated organization for debugging
-//     console.log("Updated Organization:", updatedOrg);
-
-//     res.status(200).json({ success: true, data: updatedOrg, message:ORG_PROFILE_UPDATED_SUCCESS });
-//   } catch (error) {
-//     console.error("Error updating organization:", error);
-//     res.status(500).json({ success: false, message: SERVER_ERROR, error:error.message  });
-//   }
-// };
-  
 
 import cloudinary from '../../helpers/cloudinary.js';
 
 // GET organization by ID
+// ORGANIZATION FETCHED ID CONTROLLER ----------------------------------------------------------
 export const getOrganizationById = async (req, res) => {
   const { orgId } = req.query; // Use orgId instead of orgName
 
   if (!orgId) {
-    return res.status(400).json({ success: false, message: 'Organization ID is required' });
+    return res.status(400).json({ success: false, message: ORG_ID_REQUIRED });
   }
 
   try {
     // Fetch the organization by ID and exclude the password field
     const org = await OrgRegistration.findById(orgId).select('-password');
     if (!org) {
-      return res.status(404).json({ success: false, message: 'Organization not found' });
+      return res.status(404).json({ success: false, message: ORG_NOT_FOUND });
     }
 
     console.log("Organization Data:", org); // Log the organization data
     res.status(200).json({ success: true, data: org });
   } catch (error) {
     console.error("Error fetching organization:", error);
-    res.status(500).json({ success: false, message: 'Server error' });
+    res.status(500).json({ message: SERVER_ERROR, success:false });
   }
 };
 
 
 // new photo remove
 
+// ORGANIZATION UPDATE ID CONTROLLER ----------------------------------------------------------
 export const updateOrganizationById = async (req, res) => {
   const { orgId } = req.query; // Use orgId instead of orgName
   const updateData = req.body; // Data to update
 
   if (!orgId) {
-    return res.status(400).json({ success: false, message: 'Organization ID is required' });
+    return res.status(400).json({ success: false, message: ORG_ID_REQUIRED });
   }
 
   try {
     // Log the update data for debugging
     console.log("Update Data:", updateData);
-
-    // If the update includes a password, hash it before saving
-    if (updateData.password) {
-      const salt = await bcrypt.genSalt(10);
-      updateData.password = await bcrypt.hash(updateData.password, salt);
-    }
-
     // Handle photo upload to Cloudinary
     if (updateData.photo && updateData.photo.startsWith('data:image')) {
       // Delete the old photo from Cloudinary if it exists
@@ -477,7 +243,7 @@ export const updateOrganizationById = async (req, res) => {
     ).select('-password'); // Exclude the password field from the response
 
     if (!updatedOrg) {
-      return res.status(404).json({ success: false, message: 'Organization not found' });
+      return res.status(404).json({ success: false, message: ORG_NOT_FOUND });
     }
 
     // Log the updated organization for debugging
@@ -486,7 +252,7 @@ export const updateOrganizationById = async (req, res) => {
     res.status(200).json({ success: true, data: updatedOrg });
   } catch (error) {
     console.error("Error updating organization:", error);
-    res.status(500).json({ success: false, message: 'Server error' });
+    res.status(500).json({ message: SERVER_ERROR, success:false  });
   }
 };
 
