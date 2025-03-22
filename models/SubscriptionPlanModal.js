@@ -23,7 +23,12 @@ const subscriptionPlanSchema = new mongoose.Schema({
   paymentStatus: { type: String, enum: ["Pending", "Completed", "Failed"], default: "Pending" },
   isDeleted: { type: Boolean, default: false },
   createdDate: { type: Date, default: Date.now },
-  updatedDate: { type: Date, default: Date.now }
+  updatedDate: { type: Date, default: Date.now },
+  tradingPreference: { 
+    type: String, 
+    enum: ["Market Hours", "Off-Market Hours"], 
+    default: "Market Hours" 
+  }
 });
 
 // Middleware to update `updatedDate` on document update

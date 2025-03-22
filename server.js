@@ -1,4 +1,3 @@
-// server.js
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -42,7 +41,15 @@ const scrapeWithRetry = async (scraperFn, name, maxRetries = 3) => {
       const result = await scraperFn();
       return result ? { success: true, data: result } : { success: false, error: 'No data' };
     } catch (error) {
-      if (i === maxRetries - 1) return { success: false, error: error.message };
+      console.error(`Error in ${name} scraper (Attempt ${i + 1}):`, error.message);
+      
+      if (i === maxRetries - 1) {
+        return { 
+          success: false, 
+          error: error.message 
+        };
+      }
+      
       await new Promise(resolve => setTimeout(resolve, 5000));
     }
   }
@@ -50,20 +57,52 @@ const scrapeWithRetry = async (scraperFn, name, maxRetries = 3) => {
 
 const runAllScrapers = async () => {
   const scrapers = [
-    { fn: scrapeAndStoreETFData, name: 'ETF' },
-    { fn: fetchNifty50Data, name: 'Nifty 50' },
-    { fn: fetchNifty500Data, name: 'Nifty 500' }
+    { 
+      fn: scrapeAndStoreETFData, 
+      name: 'ETF',
+      enabled: true // You can conditionally enable/disable scrapers
+    },
+    { 
+      fn: fetchNifty50Data, 
+      name: 'Nifty 50',
+      enabled: true 
+    },
+    { 
+      fn: fetchNifty500Data, 
+      name: 'Nifty 500',
+      enabled: true 
+    }
   ];
 
+  // Filter only enabled scrapers
+  const enabledScrapers = scrapers.filter(scraper => scraper.enabled);
+
   const results = await Promise.allSettled(
-    scrapers.map(scraper => scrapeWithRetry(scraper.fn, scraper.name))
+    enabledScrapers.map(scraper => scrapeWithRetry(scraper.fn, scraper.name))
   );
 
-  return results.reduce((summary, result, index) => {
-    const success = result.status === 'fulfilled' && result.value.success;
-    summary[scrapers[index].name] = success ? 'success' : 'failed';
-    return summary;
+  const summary = results.reduce((acc, result, index) => {
+    const scraper = enabledScrapers[index];
+    
+    if (result.status === 'fulfilled') {
+      acc[scraper.name] = result.value.success ? 'success' : 'failed';
+      
+      // Log detailed error if scraper failed
+      if (!result.value.success) {
+        console.error(`${scraper.name} Scraper Failed:`, result.value.error);
+      }
+    } else {
+      acc[scraper.name] = 'failed';
+      console.error(`${scraper.name} Scraper Threw an Unhandled Error:`, result.reason);
+    }
+    
+    return acc;
   }, {});
+
+  // Log overall scraping summary
+  console.log('Scraping Summary:', summary);
+
+  return summary;
 };
 
 // Server startup
@@ -72,20 +111,41 @@ const startServer = async () => {
     await connectDB();
     
     // Setup cron jobs
-    cron.schedule('*/1 * * * *', runAllScrapers);
-    cron.schedule('0 0 * * *', () => console.log('Daily cleanup job'));
+    cron.schedule('*/1 * * * *', () => {
+      runAllScrapers().catch(error => {
+        console.error('Error in scheduled scraping:', error);
+      });
+    });
+
+    // Daily cleanup job (example)
+    cron.schedule('0 0 * * *', () => {
+      console.log('Daily cleanup job');
+      // Add any daily maintenance tasks
+    });
 
     const PORT = process.env.PORT || 5000;
-    const server = app.listen(PORT, () => {
+    const server = app.listen(PORT, async () => {
       console.log(`🚀 Server running on port ${PORT}`);
-      runAllScrapers(); // Initial scraping
+      
+      // Initial scraping with error handling
+      try {
+        await runAllScrapers();
+      } catch (scrapingError) {
+        console.error('Initial scraping failed:', scrapingError);
+      }
     });
 
     // Graceful shutdown
     const shutdown = async () => {
-      server.close();
-      await mongoose.connection.close();
-      process.exit(0);
+      try {
+        server.close();
+        await mongoose.connection.close();
+        console.log('Server and database connection closed');
+      } catch (error) {
+        console.error('Error during shutdown:', error);
+      } finally {
+        process.exit(0);
+      }
     };
 
     process.on('SIGTERM', shutdown);
@@ -98,15 +158,18 @@ const startServer = async () => {
   }
 };
 
-// Error handlers
+// Global error handlers
 process.on('uncaughtException', error => {
   console.error('Uncaught Exception:', error);
+  // Optionally send error to monitoring service
   process.exit(1);
 });
 
 process.on('unhandledRejection', (reason, promise) => {
   console.error('Unhandled Rejection:', reason);
-  process.exit(1);
+  // Optionally send error to monitoring service
+  // You might want to log the full promise for debugging
+  console.error('Unhandled Promise:', promise);
 });
 
 startServer();

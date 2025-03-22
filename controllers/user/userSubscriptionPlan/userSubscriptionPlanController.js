@@ -5,7 +5,7 @@ import User from '../../../models/UserModal.js';
 // Create new subscription plan
 export const createSubscriptionPlan = async (req, res) => {
   try {
-    const { userId, plan, vertualAmount, duration, startDate, endDate } = req.body;
+    const { userId, plan, vertualAmount, duration, startDate, endDate, tradingPreference } = req.body;
 
     // Check if user exists
     const user = await User.findById(userId);
@@ -37,6 +37,7 @@ export const createSubscriptionPlan = async (req, res) => {
       duration,
       startDate,
       endDate,
+      tradingPreference, // Add this line
       status: 'Active',
       paymentStatus: 'Completed'
     });
@@ -79,8 +80,6 @@ export const getSubscriptionPlan = async (req, res) => {
 };
 
 // Get user's subscription plans
-// controllers/user/userSubscriptionPlan/userSubscriptionPlanController.js
-
 export const getUserSubscriptionPlans = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -110,8 +109,6 @@ export const getUserSubscriptionPlans = async (req, res) => {
 };
 
 // Update subscription plan
-// controllers/user/userSubscriptionPlan/userSubscriptionPlanController.js
-
 export const updateSubscriptionPlan = async (req, res) => {
   try {
     const { id } = req.params;
@@ -231,10 +228,7 @@ export const getAllSubscriptionPlans = async (req, res) => {
   }
 };
 
-// controllers/user/userSubscriptionPlan/userSubscriptionPlanController.js
-
-// ... existing functions
-
+// Update subscription plan balance
 export const updateSubscriptionPlanBalance = async (req, res) => {
   try {
     const { id } = req.params;
@@ -264,4 +258,4 @@ export const updateSubscriptionPlanBalance = async (req, res) => {
       message: error.message || 'Internal server error'
     });
   }
-};
+}; 
