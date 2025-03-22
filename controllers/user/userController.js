@@ -65,7 +65,7 @@ export const registerUser = async (req, res) => {
 //     res.status(500).json({ message: "Login failed", error: error.message });
 //   }
 // };
-export const loginUser = async (req, res) => {
+export const loginUser = async (req, res) => { 
   const { email, mobile, password } = req.body;
 
   // Joi validation
@@ -73,12 +73,18 @@ export const loginUser = async (req, res) => {
   if (error) return res.status(400).json({ message: error.details[0].message });
 
   try {
+    console.log("Login request received for:", { email, mobile });
     // Find user by email or mobile
     const user = await User.findOne({ 
       $or: [{ email }, { mobile }] 
-    }).select("+password");
+    }).select("+password +isDeleted"); // Include isDeleted field
 
-    if (!user) return res.status(400).json({ message: "Invalid email/mobile or password" });
+    if (!user) return res.status(400).json({ message: "not a registered user" });
+
+    console.log(user);
+    
+    // Check if user is deleted
+    if (user.isDeleted) return res.status(403).json({ message: "Your account has been deactivated. Please contact support." });
 
     // Check password
     const isMatch = await bcrypt.compare(password, user.password);
@@ -92,6 +98,7 @@ export const loginUser = async (req, res) => {
     res.status(500).json({ message: "Login failed", error: error.message });
   }
 };
+
 
 // Get User Profile
 export const getUserProfile = async (req, res) => {
@@ -110,28 +117,94 @@ export const getUserProfile = async (req, res) => {
 
 
 // Update User Profile (without email change)
+// export const updateProfile = async (req, res) => {
+//   const { id } = req.user; // User ID from auth middleware
+//   const { name, email, mobile, gender, dob} = req.body;
+
+//   // Joi validation
+//   const { error } = updateProfileSchema.validate(req.body);
+//   if (error) return res.status(400).json({ message: error.details[0].message });
+
+//   try {
+//     const updatedUser = await User.findByIdAndUpdate(
+//       id,
+//       { name, email, mobile, gender, dob },
+//       { new: true, runValidators: true }
+//     );
+
+//     if (!updatedUser) return res.status(404).json({ message: "User not found" });
+
+//     res.json({ message: "Profile updated successfully", user: updatedUser });
+//   } catch (error) {
+//     res.status(500).json({ message: "Profile update failed", error: error.message });
+//   }
+// };
+
+
+// abhsihek udpate image
+
+import cloudinary from '../../helpers/cloudinary.js'; // Adjust the path as necessary
+
 export const updateProfile = async (req, res) => {
   const { id } = req.user; // User ID from auth middleware
-  const { name, email, mobile, gender, dob} = req.body;
+  const updateData = req.body; // Data to update
 
-  // Joi validation
-  const { error } = updateProfileSchema.validate(req.body);
-  if (error) return res.status(400).json({ message: error.details[0].message });
+  if (!id) {
+    return res.status(400).json({ success: false, message: "User ID is required" });
+  }
 
   try {
+    // Log the update data for debugging
+    console.log("Update Data:", updateData);
+
+    // Handle photo upload to Cloudinary
+    if (updateData.userPhoto && updateData.userPhoto.startsWith('data:image')) {
+      // Find the user to get the current photo URL
+      const user = await User.findById(id);
+      if (user.userPhoto && user.userPhoto !== "https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png") {
+        // Extract the public_id from the URL
+        const publicId = user.userPhoto.split('/').pop().split('.')[0];
+        await cloudinary.uploader.destroy(`user_photos/${publicId}`); // Delete the old image from Cloudinary
+      }
+
+      // Upload the new photo to Cloudinary
+      const result = await cloudinary.uploader.upload(updateData.userPhoto, {
+        folder: 'user_photos', // Optional: Organize images in a folder
+      });
+      updateData.userPhoto = result.secure_url; // Update with the new photo URL
+    }
+
+    // Handle photo removal (reset to default image)
+    if (updateData.userPhoto === "https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png") {
+      const user = await User.findById(id);
+      if (user.userPhoto && user.userPhoto !== "https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png") {
+        const publicId = user.userPhoto.split('/').pop().split('.')[0];
+        await cloudinary.uploader.destroy(`user_photos/${publicId}`); // Delete the old image from Cloudinary
+      }
+      updateData.userPhoto = "https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png"; // Set to default image
+    }
+
+    // Find the user by ID and update it
     const updatedUser = await User.findByIdAndUpdate(
-      id,
-      { name, email, mobile, gender, dob },
-      { new: true, runValidators: true }
-    );
+      id, // Query by ID
+      { $set: updateData }, // Use $set to update only the specified fields
+      { new: true, runValidators: true } // Return the updated document and run validators
+    ).select('-password'); // Exclude the password field from the response
 
-    if (!updatedUser) return res.status(404).json({ message: "User not found" });
+    if (!updatedUser) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
 
-    res.json({ message: "Profile updated successfully", user: updatedUser });
+    // Log the updated user for debugging
+    console.log("Updated User:", updatedUser);
+
+    res.status(200).json({ success: true, data: updatedUser });
   } catch (error) {
-    res.status(500).json({ message: "Profile update failed", error: error.message });
+    console.error("Error updating user profile:", error);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
 
 // Delete User (Soft Delete)
 export const deleteUser = async (req, res) => { 

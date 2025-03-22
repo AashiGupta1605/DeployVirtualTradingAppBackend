@@ -1,6 +1,8 @@
 // import { organizationFeedbackValidationSchema } from "../../helpers/joiValidation.js";
 import { buildDateQuery, buildSearchQuery } from "../../helpers/dataHandler.js";
+import { ORG_FEEDABACK_INVALID_STATUS_VALUE, ORG_FEEDBACK_DELETE_SUCCESS, ORG_FEEDBACK_FETCHED_SUCCESS, ORG_FEEDBACK_NOT_FOUND, ORG_FEEDBACK_STATUS_SUCCESS, ORG_FEEDBACK_UPDATE_SUCCESS, ORG_ID_REQUIRED, SERVER_ERROR } from "../../helpers/messages.js";
 import Feedback from "../../models/FeedbackModel.js";
+
 
 //-------------------------------------------Guest User side--------------------------------------------------
 
@@ -127,6 +129,7 @@ export const getAllOrganizationsFeedbacks = async(req,res)=>{
 
 // Display organization users' feedback
 
+
 // export const organizationUsersFeedbackDisplay = async (req, res) => {
 //   try {
 //     const orgName = req.params.orgName;
@@ -137,6 +140,7 @@ export const getAllOrganizationsFeedbacks = async(req,res)=>{
 
 //     const feedbacks = await Feedback.find({
 //       addedby: orgName,
+//       feedbackType: "user",
 //       isDeleted: false,
 //       ...dateQuery,
 //     })
@@ -153,12 +157,14 @@ export const getAllOrganizationsFeedbacks = async(req,res)=>{
 
 //     const totalFeedbacks = await Feedback.countDocuments({
 //       addedby: orgName,
+//       feedbackType: "user",
 //       isDeleted: false,
 //       ...dateQuery,
-//     }).populate({
-//       path: "userId",
-//       match: searchQuery,
 //     });
+//     // .populate({
+//     //   path: "userId",
+//     //   match: searchQuery,
+//     // });
 
 //     res.status(200).json({
 //       feedbacks: filteredFeedbacks,
@@ -166,18 +172,29 @@ export const getAllOrganizationsFeedbacks = async(req,res)=>{
 //       currentPage: Number(page),
 //     });
 //   } catch (error) {
-//     console.error("Error fetching feedbacks by organization:", error);
+//     console.error("Error fetching feedbacks by organization users:", error);
 //     res.status(500).json({ error: "Failed to fetch feedbacks." });
 //   }
 // };
+
+
+
+// ======================================ORGANIZATION USER FEEDABCKS CONTROLLER=======================================
 
 export const organizationUsersFeedbackDisplay = async (req, res) => {
   try {
     const orgName = req.params.orgName;
     const { page = 1, limit = 10, search = "", startDate, endDate } = req.query;
 
+    console.log("orgName:", orgName);
+    console.log("search:", search);
+    console.log("startDate:", startDate, "endDate:", endDate);
+
     const searchQuery = buildSearchQuery(search);
     const dateQuery = buildDateQuery(startDate, endDate);
+
+    console.log("searchQuery:", searchQuery);
+    console.log("dateQuery:", dateQuery);
 
     const feedbacks = await Feedback.find({
       addedby: orgName,
@@ -194,28 +211,36 @@ export const organizationUsersFeedbackDisplay = async (req, res) => {
       .limit(Number(limit))
       .exec();
 
+    console.log("feedbacks before filtering:", feedbacks);
+
     const filteredFeedbacks = feedbacks.filter((feedback) => feedback.userId !== null);
+
+    console.log("filteredFeedbacks:", filteredFeedbacks);
 
     const totalFeedbacks = await Feedback.countDocuments({
       addedby: orgName,
       feedbackType: "user",
       isDeleted: false,
       ...dateQuery,
-    }).populate({
-      path: "userId",
-      match: searchQuery,
     });
+
+    console.log("totalFeedbacks:", totalFeedbacks);
 
     res.status(200).json({
       feedbacks: filteredFeedbacks,
       totalPages: Math.ceil(totalFeedbacks / limit),
       currentPage: Number(page),
+      msg:ORG_FEEDBACK_FETCHED_SUCCESS,
+      success:true, 
     });
   } catch (error) {
     console.error("Error fetching feedbacks by organization users:", error);
-    res.status(500).json({ error: "Failed to fetch feedbacks." });
+    res.status(500).json({ error: error.msg, success:false, msg:SERVER_ERROR });
   }
 };
+
+// new one by id
+
 
 // Delete organization user's feedback
 
@@ -223,7 +248,7 @@ export const organizationUsersFeedbackDelete = async (req, res) => {
   try {
     const feedback = await Feedback.findById(req.params.id);
     if (!feedback || feedback.isDeleted) {
-      return res.json({ success: false, msg: "Feedback not found" });
+      return res.json({ success: false, msg: ORG_FEEDBACK_NOT_FOUND });
     }
 
     feedback.isDeleted = true;
@@ -231,12 +256,15 @@ export const organizationUsersFeedbackDelete = async (req, res) => {
 
     await feedback.save();
 
-    res.status(200).json({ success: true, msg: "Feedback deleted successfully." });
+    res.status(200).json({ success: true, msg: ORG_FEEDBACK_DELETE_SUCCESS });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ success: false, msg: "Server error" });
+    res.status(500).json({ error: error.msg, success:false, msg:SERVER_ERROR  });
   }
 };
+
+
+// new one by id
 
 // Update organization user's feedback
 export const updateOrganizationUsersFeedback = async (req, res) => {
@@ -245,7 +273,7 @@ export const updateOrganizationUsersFeedback = async (req, res) => {
     const feedback = await Feedback.findById(req.params.id);
 
     if (!feedback || feedback.isDeleted) {
-      return res.status(404).json({ success: false, msg: "Feedback not found" });
+      return res.status(404).json({ success: false, msg: ORG_FEEDBACK_NOT_FOUND });
     }
 
     feedback.feedbackCategory = feedbackCategory;
@@ -257,12 +285,18 @@ export const updateOrganizationUsersFeedback = async (req, res) => {
 
     await feedback.save();
 
-    res.status(200).json({ success: true, msg: "Feedback updated successfully.", feedback });
+    res.status(200).json({ success: true, msg: ORG_FEEDBACK_UPDATE_SUCCESS, feedback });
   } catch (error) {
     console.error("Error updating feedback:", error);
-    res.status(500).json({ success: false, msg: "Failed to update feedback." });
+    res.status(500).json({ error: error.msg, success:false, msg:SERVER_ERROR });
   }
 };
+
+
+
+// by id 
+
+
 
 // Update feedback status
 export const updateUsersFeedbackStatus = async (req, res) => {
@@ -271,7 +305,7 @@ export const updateUsersFeedbackStatus = async (req, res) => {
     const { status } = req.body;
 
     if (!["approved", "rejected"].includes(status)) {
-      return res.status(400).json({ success: false, msg: "Invalid status value." });
+      return res.status(400).json({ success: false, msg: ORG_FEEDABACK_INVALID_STATUS_VALUE });
     }
 
     const feedback = await Feedback.findByIdAndUpdate(
@@ -281,15 +315,19 @@ export const updateUsersFeedbackStatus = async (req, res) => {
     );
 
     if (!feedback) {
-      return res.status(404).json({ success: false, msg: "Feedback not found." });
+      return res.status(404).json({ success: false, msg: ORG_FEEDBACK_NOT_FOUND });
     }
 
-    res.status(200).json({ success: true, msg: "Feedback status updated successfully.", feedback });
+    res.status(200).json({ success: true, msg: ORG_FEEDBACK_STATUS_SUCCESS, feedback });
   } catch (error) {
     console.error("Error updating feedback status:", error);
-    res.status(500).json({ success: false, msg: "Failed to update feedback status." });
+    res.status(500).json({ error: error.msg, success:false, msg:SERVER_ERROR });
   }
 };
+
+
+// by id 
+
 
 
 // organization feedbacks  - crud opeartions
@@ -304,7 +342,7 @@ export const registerOrganizationFeedback = async (req, res) => {
 
         // Validate that organizationId is provided
         if (!organizationId) {
-          return res.status(400).json({ success: false, message: "Organization ID is required" });
+          return res.status(400).json({ success: false, message: ORG_ID_REQUIRED });
         }
 
         
@@ -328,7 +366,7 @@ export const registerOrganizationFeedback = async (req, res) => {
     });
   } catch (error) {
     console.error("Error submitting feedback:", error);
-    res.status(500).json({ success: false, message: "Failed to submit feedback" });
+    res.status(500).json({ error: error.message, success:false, message:SERVER_ERROR});
   }
 };
 
@@ -401,10 +439,11 @@ export const displayOrganizationFeedback = async (req, res) => {
       feedbacks,
       totalPages: Math.ceil(totalFeedbacks / limit),
       currentPage: Number(page),
+      msg:ORG_FEEDBACK_FETCHED_SUCCESS
     });
   } catch (error) {
     console.error("Error fetching organization feedback:", error);
-    res.status(500).json({ success: false, message: "Failed to fetch feedback" });
+    res.status(500).json({ error: error.msg, success:false, msg:SERVER_ERROR });
   }
 };
 
@@ -464,17 +503,17 @@ try {
   );
 
   if (!updatedFeedback) {
-    return res.status(404).json({ success: false, message: "Feedback not found" });
+    return res.status(404).json({ success: false, message: ORG_FEEDBACK_NOT_FOUND });
   }
 
   res.status(200).json({
     success: true,
-    message: "Feedback updated successfully",
+    message: ORG_FEEDBACK_UPDATE_SUCCESS,
     feedback: updatedFeedback,
   });
 } catch (error) {
   console.error("Error updating feedback:", error);
-  res.status(500).json({ success: false, message: "Failed to update feedback" });
+  res.status(500).json({ error: error.message, success:false, message:SERVER_ERROR});
 }
 };
 
@@ -490,17 +529,17 @@ try {
   );
 
   if (!deletedFeedback) {
-    return res.status(404).json({ success: false, message: "Feedback not found" });
+    return res.status(404).json({ success: false, message: ORG_FEEDBACK_NOT_FOUND });
   }
 
   res.status(200).json({
     success: true,
-    message: "Feedback deleted successfully",
+    message: ORG_FEEDBACK_DELETE_SUCCESS,
     feedback: deletedFeedback,
   });
 } catch (error) {
   console.error("Error deleting feedback:", error);
-  res.status(500).json({ success: false, message: "Failed to delete feedback" });
+  res.status(500).json({ error: error.message, success:false, message:SERVER_ERROR});
 }
 };
 
@@ -514,34 +553,101 @@ try {
 
 import User from "../../models/UserModal.js";
 
-// Create Feedback
+// // Create Feedback
+// export const createFeedback = async (req, res) => {
+//     try {
+//         const { userId, feedbackCategory, feedbackMessage, rating, recommend, suggestions } = req.body;
+  
+//         // Check if user exists
+//         const userExists = await User.findById(userId);
+//         if (!userExists) {
+//             return res.status(404).json({ message: "User not found" });
+//         }
+  
+//         const newFeedback = new Feedback({
+//             userId,
+//             feedbackCategory,
+//             feedbackMessage,
+//             rating,
+//             recommend,
+//             suggestions
+//         });
+  
+//         await newFeedback.save();
+//         res.status(201).json({ message: "Feedback submitted successfully", feedback: newFeedback });
+//     } catch (error) {
+//         res.status(500).json({ message: "Internal Server Error", error: error.message });
+//     }
+//   };
+  
+
+// new one:
+
+// export const createFeedback = async (req, res) => {
+//   try {
+//     const { userId, organizationId, feedbackCategory, feedbackMessage, rating, recommend, suggestions } = req.body;
+//     // if(userId){
+//     //   return res.status(400).json({message:"user id does not exisit", success:false});
+//     // }
+
+//     // const user = await User.findById({_id:userId});
+//     // console.log(user);
+
+//     const feedback = new Feedback({
+//       userId,
+//       organizationId,
+//       feedbackCategory,
+//       feedbackMessage,
+//       rating,
+//       recommend,
+//       suggestions,
+//       feedbackType:"user",
+//       // addedby:user.addedby
+//     });
+
+//     await feedback.save();
+
+//     res.status(201).json({ success: true, msg: "Feedback created successfully.", feedback });
+//   } catch (error) {
+//     console.error("Error creating feedback:", error);
+//     res.status(500).json({ success: false, msg: "Failed to create feedback." });
+//   }
+// };
+
+
+
 export const createFeedback = async (req, res) => {
-    try {
-        const { userId, feedbackCategory, feedbackMessage, rating, recommend, suggestions } = req.body;
-  
-        // Check if user exists
-        const userExists = await User.findById(userId);
-        if (!userExists) {
-            return res.status(404).json({ message: "User not found" });
-        }
-  
-        const newFeedback = new Feedback({
-            userId,
-            feedbackCategory,
-            feedbackMessage,
-            rating,
-            recommend,
-            suggestions,
-            feedbackType: "user",
-        });
-  
-        await newFeedback.save();
-        res.status(201).json({ message: "Feedback submitted successfully", feedback: newFeedback });
-    } catch (error) {
-        res.status(500).json({ message: "Internal Server Error", error: error.message });
+  try {
+    const { userId, organizationId, feedbackCategory, feedbackMessage, rating, recommend, suggestions } = req.body;
+
+    // Fetch the user to get the addedby field
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(400).json({ message: "User not found", success: false });
     }
-  };
-  
+
+    const feedback = new Feedback({
+      userId,
+      organizationId,
+      feedbackCategory,
+      feedbackMessage,
+      rating,
+      recommend,
+      suggestions,
+      feedbackType: "user",
+      addedby: user.addedby, // Include the addedby field from the user
+    });
+
+    await feedback.save();
+
+    res.status(201).json({ success: true, msg: "Feedback created successfully.", feedback });
+  } catch (error) {
+    console.error("Error creating feedback:", error);
+    res.status(500).json({ success: false, msg: "Failed to create feedback." });
+  }
+};
+
+
   // Get All Feedbacks
   export const getAllFeedbacks = async (req, res) => {
     try {

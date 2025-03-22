@@ -1,4 +1,4 @@
-// organization user crud operations:
+// ORGANIZATION USER CRUD CONTROLLERS FUNCTIONS===============================================================
 
 import UserModal from '../../models/UserModal.js';
 import { organizationUserRegistrationValidationSchema } from '../../helpers/joiValidation.js';
@@ -9,34 +9,25 @@ import {buildDateQuery, buildSearchQuery, buildGenderQuery} from "../../helpers/
 import moment from "moment";
 
 import {
-  ORG_REGISTRATION_SUCCESS,
-  ORG_ALREADY_EXISTS,
-  ORG_LOGIN_SUCCESS,
-  ORG_LOGIN_INVALID_CREDENTIALS,
-  ORG_LOGIN_PENDING_APPROVAL,
-  ORG_LOGIN_REJECTED,
-  ORG_NOT_FOUND,
-  ORG_UPDATED_SUCCESS,
-  ORG_SOFT_DELETED_SUCCESS,
-  ORG_APPROVAL_STATUS_UPDATED,
   USER_REGISTRATION_SUCCESS,
-  USER_ALREADY_EXISTS,
+  ORG_TOTAL_USER_FETCHED_SUCCESS,
+  ORG_MALE_USER_FETCHED_SUCCESS,
+  ORG_FEMALE_USER_FETCHED_SUCCESS,
+  ORG_AVERAGE_AGE_USER_FETCHED_SUCCESS,
+  ORG_ACTIVE_USER_FETCHED_SUCCESS,
+  ORG_DEACTIVE_USER_FETCHED_SUCCESS,
+  ORG_NEW_USER_FETCHED_SUCCESS,
   USER_NOT_FOUND,
   USER_UPDATED_SUCCESS,
   USER_SOFT_DELETED_SUCCESS,
   SERVER_ERROR,
-  TOTAL_USERS_FETCHED,
-  NEW_USERS_LAST_WEEK_FETCHED,
-  MALE_USERS_FETCHED,
-  FEMALE_USERS_FETCHED,
-  ACTIVE_USERS_FETCHED,
-  DEACTIVE_USERS_FETCHED,
-  AVERAGE_USER_AGE_FETCHED,
-  ORG_USERS_FETCHED,
+  USER_ALREADY_EXIST_EMAIL,
+  USER_ALREADY_EXIST_PHONE,
 } from '../../helpers/messages.js';
 
 
 export const organizationUserRegistration = async (req, res) => {
+  // Validate the request body
   const { error } = organizationUserRegistrationValidationSchema.validate(req.body);
   if (error) {
     return res.status(400).json({ success: false, msg: error.details[0].message });
@@ -45,17 +36,23 @@ export const organizationUserRegistration = async (req, res) => {
   const { name, email, mobile, gender, dob, addedby, status } = req.body;
 
   try {
-    // Check if the user already exists
-    let user = await UserModal.findOne({ email });
-    if (user) {
-      return res.status(400).json({ success: false, msg: 'User already exists' });
+    // Check if the user already exists by email or mobile
+    const existingUserByEmail = await UserModal.findOne({ email });
+    const existingUserByMobile = await UserModal.findOne({ mobile });
+
+    if (existingUserByEmail) {
+      return res.status(400).json({ success: false, msg: USER_ALREADY_EXIST_EMAIL });
+    }
+
+    if (existingUserByMobile) {
+      return res.status(400).json({ success: false, msg: USER_ALREADY_EXIST_PHONE });
     }
 
     // Generate a unique password
     const password = `${name}${crypto.randomBytes(3).toString('hex')}`;
 
     // Create a new user
-    user = new UserModal({
+    const user = new UserModal({
       name,
       email,
       mobile,
@@ -69,17 +66,19 @@ export const organizationUserRegistration = async (req, res) => {
     // Hash the password
     user.password = await hashPassword(password);
 
+    // Save the user to the database
     await user.save();
 
     // Send registration email
     await sendRegistrationEmail(email, name, password);
 
-    res.status(201).json({ msg: 'User registered successfully. An email has been sent with login details.' });
+    res.status(201).json({ success: true, msg: USER_REGISTRATION_SUCCESS });
   } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ success: false, msg: 'Server error' });
+    console.error("Error registering user:", error);
+    res.status(500).json({ success: false, msg: SERVER_ERROR, error:error.msg });
   }
 };
+
 
 
 export const organizationUsersDisplay = async (req, res) => {
@@ -118,7 +117,7 @@ export const organizationUsersDisplay = async (req, res) => {
     });
   } catch (error) {
     console.error('Error fetching users by organization:', error);
-    res.status(500).json({ error: SERVER_ERROR });
+    res.status(500).json({ msg: SERVER_ERROR, error:error.msg, success:false });
   }
 };
 
@@ -127,12 +126,12 @@ export const organizationgetUserDisplayById = async (req, res) => {
   try {
     const user = await UserModal.findById(req.params.id);
     if (!user || user.isDeleted) {
-      return res.status(404).json({ msg: USER_NOT_FOUND });
+      return res.status(404).json({ msg: USER_NOT_FOUND, success:false });
     }
     res.status(200).json(user);
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ success: false, msg: SERVER_ERROR });
+    res.status(500).json({ success: false, msg: SERVER_ERROR, error:error.msg });
   }
 };
 
@@ -160,11 +159,6 @@ export const organizationUpdateUser = async (req, res) => {
     user.addedby = addedby;
     user.status = status;
 
-    // if (password) {
-    //   user.password = await hashPassword(password);
-    // }
-
-
     user.updatedDate = Date.now();
 
     await user.save();
@@ -172,7 +166,7 @@ export const organizationUpdateUser = async (req, res) => {
     res.status(200).json({ success: true, msg: USER_UPDATED_SUCCESS });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ success: false, msg: SERVER_ERROR });
+    res.status(500).json({ success: false, msg: SERVER_ERROR, error:error.msg });
   }
 };
 
@@ -195,14 +189,14 @@ export const organizationUserDelete = async (req, res) => {
     res.status(200).json({ success: true, msg: USER_SOFT_DELETED_SUCCESS });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ success: false, msg: SERVER_ERROR });
+    res.status(500).json({ success: false, msg: SERVER_ERROR, error:error.msg });
   }
 };
 
 
 
 
-// organization users count for each like totol user count, male user, etc - statistics
+// ORGANIZATION STATS CARDS CONTROLLER FUNCTIONS =====================================================================
 
 // Function to get the total number of users for a specific organization
 export const organizationTotalUsers = async (req, res) => {
@@ -213,7 +207,7 @@ export const organizationTotalUsers = async (req, res) => {
     res.status(200).json({ success: true, count });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ success: false, msg: SERVER_ERROR });
+    res.status(500).json({ success: false, msg: SERVER_ERROR, error:error.msg, msg:ORG_TOTAL_USER_FETCHED_SUCCESS  });
   }
 };
 
@@ -228,10 +222,10 @@ export const organizationNewUsersLastWeek = async (req, res) => {
       isDeleted: false,
       addedby: orgName
     });
-    res.status(200).json({ success: true, count: newUsersCount });
+    res.status(200).json({ success: true, count: newUsersCount, msg:ORG_NEW_USER_FETCHED_SUCCESS  });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ success: false, msg: SERVER_ERROR });
+    res.status(500).json({ success: false, msg: SERVER_ERROR, error:error.msg });
   }
 };
 
@@ -247,7 +241,7 @@ export const organizationMaleUsers = async (req, res) => {
     res.status(200).json({ success: true, count: maleUsersCount });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ success: false, msg: SERVER_ERROR });
+    res.status(500).json({ success: false, msg: SERVER_ERROR, error:error.msg, msg:ORG_MALE_USER_FETCHED_SUCCESS  });
   }
 };
 
@@ -263,7 +257,7 @@ export const organizationFemaleUsers = async (req, res) => {
     res.status(200).json({ success: true, count: femaleUsersCount });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ success: false, msg: SERVER_ERROR });
+    res.status(500).json({ success: false, msg: SERVER_ERROR, error:error.msg, msg:ORG_FEMALE_USER_FETCHED_SUCCESS  });
   }
 };
 
@@ -276,10 +270,10 @@ export const organizationActiveUsers = async (req, res) => {
       isDeleted: false,
       addedby: orgName
     });
-    res.status(200).json({ success: true, count: activeUsersCount });
+    res.status(200).json({ success: true, count: activeUsersCount, msg:ORG_ACTIVE_USER_FETCHED_SUCCESS  });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ success: false, msg: SERVER_ERROR });
+    res.status(500).json({ success: false, msg: SERVER_ERROR, error:error.msg });
   }
 };
 
@@ -292,10 +286,10 @@ export const organizationDeactiveUsers = async (req, res) => {
       isDeleted: false,
       addedby: orgName
     });
-    res.status(200).json({ success: true, count: deactiveUsersCount });
+    res.status(200).json({ success: true, count: deactiveUsersCount, msg:ORG_DEACTIVE_USER_FETCHED_SUCCESS  });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ success: false, msg: SERVER_ERROR });
+    res.status(500).json({ success: false, msg: SERVER_ERROR, error:error.msg });
   }
 };
 
@@ -309,10 +303,10 @@ export const organizationAverageUserAge = async (req, res) => {
       return sum + age;
     }, 0);
     const averageAge = totalAge / users.length;
-    res.status(200).json({ success: true, averageAge: averageAge.toFixed(2) });
+    res.status(200).json({ success: true, averageAge: averageAge.toFixed(2), msg:ORG_AVERAGE_AGE_USER_FETCHED_SUCCESS });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ success: false, msg: SERVER_ERROR });
+    res.status(500).json({ success: false, msg: SERVER_ERROR, error:error.msg });
   }
 };
 

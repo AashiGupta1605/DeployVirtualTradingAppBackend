@@ -38,12 +38,14 @@ export const buildDateQuery = (startDate, endDate) => {
   return dateQuery;
 };
 
+
 // export const buildGenderQuery = (gender) => {
 //   if (!gender) return {};
-//   return { gender: { $regex: gender, $options: 'i' } };
+//   return { gender: { $eq: gender } }; // Use exact match instead of regex
 // };
+
 
 export const buildGenderQuery = (gender) => {
   if (!gender) return {};
-  return { gender: { $eq: gender } }; // Use exact match instead of regex
+  return { gender: { $regex: new RegExp(`^${gender}$`, 'i') } }; // Case-insensitive match
 };
