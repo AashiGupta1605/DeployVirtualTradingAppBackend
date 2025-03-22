@@ -27,16 +27,16 @@ export const getAllUsersFeedbacks = async (req, res) => {
         if(recommend && recommend.trim()!=="" && recommend !== "all"){
           filter.recommend = recommend
         }
-        if (search && search.trim() !== "" && search !== "all") {
-          filter.$or = [
-              { feedbackMessage: { $regex: new RegExp(search, "i") } },
-              { suggestions: { $regex: new RegExp(search, "i") } }
-          ];
-        }
+
+        // if (search && search.trim() !== "" && search !== "all") {
+        //   filter.$or = [
+        //       { feedbackMessage: { $regex: new RegExp(search, "i") } },
+        //       { suggestions: { $regex: new RegExp(search, "i") } }
+        //   ];
+        // }
         // Fetch filtered & sorted feedback data
         // const feedbackData = await Feedback.find(filter).sort({ [sortBy]: sortOrder });
 
-        // Fetch feedbacks and populate organization details
         let feedbackData = await Feedback.find(filter)
             .populate({
                 path: "userId",  // Populates `userId`
@@ -46,13 +46,22 @@ export const getAllUsersFeedbacks = async (req, res) => {
               path: "organizationId",  
               select: "name",  // Only fetches organization name
           })
-            .sort({ [sortBy]: sortOrder });
+          .sort({ [sortBy]: sortOrder });
 
         // If organization name is provided, filter feedbackData manually
         if (organization && organization.trim() !== "" && organization !== "all" && organization!=="All") {
             feedbackData = feedbackData.filter(
                 (feedback) => feedback.organizationId?.name === organization
             );
+        }
+
+        if (search && search.trim() !== "" && search !== "all") {
+          feedbackData = feedbackData.filter(
+            (feedback) =>
+              feedback.userId?.name?.toLowerCase().includes(search.toLowerCase()) ||
+              feedback.feedbackMessage.toLowerCase().includes(search.toLowerCase()) ||
+              feedback.suggestions.toLowerCase().includes(search.toLowerCase())
+          );
         }
 
         res.status(200).json({ success: true, feedbackData });
