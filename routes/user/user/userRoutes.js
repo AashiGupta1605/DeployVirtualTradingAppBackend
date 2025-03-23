@@ -7,7 +7,8 @@ import {
   // Add these admin-related controllers
   getUsers,
   updateUser,
-  deleteUserById
+  deleteUserById, 
+  changePassword 
 } from '../../../controllers/user/userController.js';
 import userMiddleware from '../../../middlewares/userMiddleware.js';
 
@@ -17,6 +18,9 @@ const router = express.Router();
 router.get('/profile', userMiddleware, getUserProfile);
 router.put('/update', userMiddleware, updateProfile);
 router.delete('/delete', userMiddleware, deleteUser);
+
+// Change Password Route
+router.put('/change-password', userMiddleware, changePassword);
 
 // Admin User Management Routes
 router.get("/display-users", getUsers);

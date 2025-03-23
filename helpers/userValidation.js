@@ -58,3 +58,21 @@ export const updateProfileSchema = Joi.object({
 export const deleteUserSchema = Joi.object({
   id: Joi.string().required(),
 });
+
+
+export const changePasswordSchema = Joi.object({
+  userId: Joi.string().required().messages({
+    "string.empty": "User ID is required",
+    "any.required": "User ID is required",
+  }),
+  oldPassword: Joi.string().min(6).required().messages({
+    "string.empty": "Old password is required",
+    "string.min": "Old password must be at least 6 characters",
+    "any.required": "Old password is required",
+  }),
+  newPassword: Joi.string().min(6).required().messages({
+    "string.empty": "New password is required",
+    "string.min": "New password must be at least 6 characters",
+    "any.required": "New password is required",
+  }),
+});
