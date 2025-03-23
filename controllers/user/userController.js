@@ -1,10 +1,12 @@
 import User from "../../models/UserModal.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { registerUserSchema, loginUserSchema, updateProfileSchema } from "../../helpers/userValidation.js"; // Import Joi schemas
+  changePasswordSchema
+  import { registerUserSchema, loginUserSchema, changePasswordSchema  } from "../../helpers/userValidation.js"; // Import Joi schemas
 import {
   updateUserValidation,
   deleteUserValidation,
+  
 } from '../../helpers/joiValidation.js';
 // User registration
 export const registerUser = async (req, res) => {
@@ -100,7 +102,90 @@ export const loginUser = async (req, res) => {
 };
 
 
+// export const changePassword = async (req, res) => {
+//   try {
+//     // Ensure `req.user.id` is coming from authentication middleware
+//     const userId = req.user ? req.user.id : req.body.userId;
+//     const { oldPassword, newPassword } = req.body;
+
+//     if (!userId) return res.status(400).json({ message: "User ID is required" });
+
+//     // Find user in the database
+//     const user = await User.findById(userId);
+//     if (!user) return res.status(404).json({ message: "User not found" });
+
+//     // Check if old password matches
+//     const isMatch = await bcrypt.compare(oldPassword, user.password);
+//     if (!isMatch) return res.status(401).json({ message: "Old password is incorrect" });
+
+//     // Hash new password before saving
+//     const salt = await bcrypt.genSalt(10);
+//     user.password = await bcrypt.hash(newPassword, salt);
+
+//     // Save the updated user
+//     await user.save();
+
+//     res.status(200).json({ message: "Password updated successfully" });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 // Get User Profile
+export const changePassword = async (req, res) => {
+  try {
+    console.log("🔹 Received password change request:", req.body);
+
+    // ✅ Validate input using Joi
+    const { error } = changePasswordSchema.validate(req.body, { abortEarly: false });
+
+    if (error) {
+      console.log("❌ Joi Validation Error:", error.details);
+      return res.status(400).json({
+        message: "Validation failed",
+        errors: error.details.map((err) => err.message),
+      });
+    }
+
+    const { userId, oldPassword, newPassword } = req.body;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      console.log("❌ User not found");
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    console.log("✅ User found:", user.email);
+
+    // 🔹 Check if old password is correct
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      console.log("❌ Old password is incorrect");
+      return res.status(401).json({ message: "Old password is incorrect" });
+    }
+
+    // 🔹 Check if old password and new password are the same
+    if (oldPassword === newPassword) {
+      console.log("❌ New password must be different");
+      return res.status(400).json({ message: "New password must be different from the old password" });
+    }
+
+    // 🔹 Hash new password
+    console.log("🔹 Hashing new password...");
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+
+    await user.save();
+    console.log("✅ Password updated successfully");
+
+    res.status(200).json({ message: "Password updated successfully" });
+  } catch (error) {
+    console.error("❌ Error in changePassword controller:", error);
+    res.status(500).json({ message: "Password change failed", error: error.message });
+  }
+};
+
+
+
 export const getUserProfile = async (req, res) => {
   try {
     const user = req.user; // Retrieved from userMiddleware
