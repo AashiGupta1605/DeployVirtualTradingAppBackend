@@ -37,6 +37,7 @@ const FeedbackSchema = new mongoose.Schema({
     feedbackType: {
       type: String,
       enum: ["organization", "user"],
+      // default: "user"
       // required: true,
     },
     
