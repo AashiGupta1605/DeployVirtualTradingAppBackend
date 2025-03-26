@@ -135,54 +135,57 @@ export const changePassword = async (req, res) => {
   try {
     console.log("🔹 Received password change request:", req.body);
 
-    // ✅ Validate input using Joi
+    // ✅ Validate input without userId
     const { error } = changePasswordSchema.validate(req.body, { abortEarly: false });
 
     if (error) {
-      console.log("❌ Joi Validation Error:", error.details);
+      console.log(" Joi Validation Error:", error.details);
       return res.status(400).json({
         message: "Validation failed",
         errors: error.details.map((err) => err.message),
       });
     }
 
-    const { userId, oldPassword, newPassword } = req.body;
+    const { oldPassword, newPassword } = req.body;
+    const userId = req.user.id; // Extract userId from JWT
+
+    console.log(" Extracted User ID from JWT:", userId);
 
     const user = await User.findById(userId);
     if (!user) {
-      console.log("❌ User not found");
+      console.log(" User not found");
       return res.status(404).json({ message: "User not found" });
     }
 
-    console.log("✅ User found:", user.email);
+    console.log(" User found:", user.email);
 
     // 🔹 Check if old password is correct
     const isMatch = await bcrypt.compare(oldPassword, user.password);
     if (!isMatch) {
-      console.log("❌ Old password is incorrect");
+      console.log(" Old password is incorrect");
       return res.status(401).json({ message: "Old password is incorrect" });
     }
 
-    // 🔹 Check if old password and new password are the same
+    // 🔹 Prevent changing to the same password
     if (oldPassword === newPassword) {
-      console.log("❌ New password must be different");
+      console.log("New password must be different");
       return res.status(400).json({ message: "New password must be different from the old password" });
     }
 
-    // 🔹 Hash new password
+    // 🔹 Hash and update the new password
     console.log("🔹 Hashing new password...");
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(newPassword, salt);
-
     await user.save();
-    console.log("✅ Password updated successfully");
 
+    console.log("✅ Password updated successfully");
     res.status(200).json({ message: "Password updated successfully" });
   } catch (error) {
-    console.error("❌ Error in changePassword controller:", error);
+    console.error(" Error in changePassword controller:", error);
     res.status(500).json({ message: "Password change failed", error: error.message });
   }
 };
+
 
 
 
