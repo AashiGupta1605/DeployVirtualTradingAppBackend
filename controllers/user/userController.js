@@ -1,10 +1,12 @@
 import User from "../../models/UserModal.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { registerUserSchema, loginUserSchema, updateProfileSchema } from "../../helpers/userValidation.js"; // Import Joi schemas
+  changePasswordSchema
+  import { registerUserSchema, loginUserSchema, changePasswordSchema  } from "../../helpers/userValidation.js"; // Import Joi schemas
 import {
   updateUserValidation,
   deleteUserValidation,
+  
 } from '../../helpers/joiValidation.js';
 // User registration
 export const registerUser = async (req, res) => {
@@ -100,7 +102,93 @@ export const loginUser = async (req, res) => {
 };
 
 
+// export const changePassword = async (req, res) => {
+//   try {
+//     // Ensure `req.user.id` is coming from authentication middleware
+//     const userId = req.user ? req.user.id : req.body.userId;
+//     const { oldPassword, newPassword } = req.body;
+
+//     if (!userId) return res.status(400).json({ message: "User ID is required" });
+
+//     // Find user in the database
+//     const user = await User.findById(userId);
+//     if (!user) return res.status(404).json({ message: "User not found" });
+
+//     // Check if old password matches
+//     const isMatch = await bcrypt.compare(oldPassword, user.password);
+//     if (!isMatch) return res.status(401).json({ message: "Old password is incorrect" });
+
+//     // Hash new password before saving
+//     const salt = await bcrypt.genSalt(10);
+//     user.password = await bcrypt.hash(newPassword, salt);
+
+//     // Save the updated user
+//     await user.save();
+
+//     res.status(200).json({ message: "Password updated successfully" });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 // Get User Profile
+export const changePassword = async (req, res) => {
+  try {
+    console.log("🔹 Received password change request:", req.body);
+
+    // ✅ Validate input without userId
+    const { error } = changePasswordSchema.validate(req.body, { abortEarly: false });
+
+    if (error) {
+      console.log(" Joi Validation Error:", error.details);
+      return res.status(400).json({
+        message: "Validation failed",
+        errors: error.details.map((err) => err.message),
+      });
+    }
+
+    const { oldPassword, newPassword } = req.body;
+    const userId = req.user.id; // Extract userId from JWT
+
+    console.log(" Extracted User ID from JWT:", userId);
+
+    const user = await User.findById(userId);
+    if (!user) {
+      console.log(" User not found");
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    console.log(" User found:", user.email);
+
+    // 🔹 Check if old password is correct
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      console.log(" Old password is incorrect");
+      return res.status(401).json({ message: "Old password is incorrect" });
+    }
+
+    // 🔹 Prevent changing to the same password
+    if (oldPassword === newPassword) {
+      console.log("New password must be different");
+      return res.status(400).json({ message: "New password must be different from the old password" });
+    }
+
+    // 🔹 Hash and update the new password
+    console.log("🔹 Hashing new password...");
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    await user.save();
+
+    console.log("✅ Password updated successfully");
+    res.status(200).json({ message: "Password updated successfully" });
+  } catch (error) {
+    console.error(" Error in changePassword controller:", error);
+    res.status(500).json({ message: "Password change failed", error: error.message });
+  }
+};
+
+
+
+
 export const getUserProfile = async (req, res) => {
   try {
     const user = req.user; // Retrieved from userMiddleware
@@ -117,26 +205,91 @@ export const getUserProfile = async (req, res) => {
 
 
 // Update User Profile (without email change)
+// export const updateProfile = async (req, res) => {
+//   const { id } = req.user; // User ID from auth middleware
+//   const { name, email, mobile, gender, dob} = req.body;
+
+//   // Joi validation
+//   const { error } = updateProfileSchema.validate(req.body);
+//   if (error) return res.status(400).json({ message: error.details[0].message });
+
+//   try {
+//     const updatedUser = await User.findByIdAndUpdate(
+//       id,
+//       { name, email, mobile, gender, dob },
+//       { new: true, runValidators: true }
+//     );
+
+//     if (!updatedUser) return res.status(404).json({ message: "User not found" });
+
+//     res.json({ message: "Profile updated successfully", user: updatedUser });
+//   } catch (error) {
+//     res.status(500).json({ message: "Profile update failed", error: error.message });
+//   }
+// };
+
+
+// abhsihek udpate image
+
+import cloudinary from '../../helpers/cloudinary.js'; // Adjust the path as necessary
+
 export const updateProfile = async (req, res) => {
   const { id } = req.user; // User ID from auth middleware
-  const { name, email, mobile, gender, dob} = req.body;
+  const updateData = req.body; // Data to update
 
-  // Joi validation
-  const { error } = updateProfileSchema.validate(req.body);
-  if (error) return res.status(400).json({ message: error.details[0].message });
+  if (!id) {
+    return res.status(400).json({ success: false, message: "User ID is required" });
+  }
 
   try {
+    // Log the update data for debugging
+    console.log("Update Data:", updateData);
+
+    // Handle photo upload to Cloudinary
+    if (updateData.userPhoto && updateData.userPhoto.startsWith('data:image')) {
+      // Find the user to get the current photo URL
+      const user = await User.findById(id);
+      if (user.userPhoto && user.userPhoto !== "https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png") {
+        // Extract the public_id from the URL
+        const publicId = user.userPhoto.split('/').pop().split('.')[0];
+        await cloudinary.uploader.destroy(`user_photos/${publicId}`); // Delete the old image from Cloudinary
+      }
+
+      // Upload the new photo to Cloudinary
+      const result = await cloudinary.uploader.upload(updateData.userPhoto, {
+        folder: 'user_photos', // Optional: Organize images in a folder
+      });
+      updateData.userPhoto = result.secure_url; // Update with the new photo URL
+    }
+
+    // Handle photo removal (reset to default image)
+    if (updateData.userPhoto === "https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png") {
+      const user = await User.findById(id);
+      if (user.userPhoto && user.userPhoto !== "https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png") {
+        const publicId = user.userPhoto.split('/').pop().split('.')[0];
+        await cloudinary.uploader.destroy(`user_photos/${publicId}`); // Delete the old image from Cloudinary
+      }
+      updateData.userPhoto = "https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png"; // Set to default image
+    }
+
+    // Find the user by ID and update it
     const updatedUser = await User.findByIdAndUpdate(
-      id,
-      { name, email, mobile, gender, dob },
-      { new: true, runValidators: true }
-    );
+      id, // Query by ID
+      { $set: updateData }, // Use $set to update only the specified fields
+      { new: true, runValidators: true } // Return the updated document and run validators
+    ).select('-password'); // Exclude the password field from the response
 
-    if (!updatedUser) return res.status(404).json({ message: "User not found" });
+    if (!updatedUser) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
 
-    res.json({ message: "Profile updated successfully", user: updatedUser });
+    // Log the updated user for debugging
+    console.log("Updated User:", updatedUser);
+
+    res.status(200).json({ success: true, data: updatedUser });
   } catch (error) {
-    res.status(500).json({ message: "Profile update failed", error: error.message });
+    console.error("Error updating user profile:", error);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
 

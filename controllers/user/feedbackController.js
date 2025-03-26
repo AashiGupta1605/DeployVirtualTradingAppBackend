@@ -1,5 +1,6 @@
 // import { organizationFeedbackValidationSchema } from "../../helpers/joiValidation.js";
 import { buildDateQuery, buildSearchQuery } from "../../helpers/dataHandler.js";
+import { ORG_FEEDABACK_INVALID_STATUS_VALUE, ORG_FEEDBACK_DELETE_SUCCESS, ORG_FEEDBACK_FETCHED_SUCCESS, ORG_FEEDBACK_NOT_FOUND, ORG_FEEDBACK_STATUS_SUCCESS, ORG_FEEDBACK_UPDATE_SUCCESS, ORG_ID_REQUIRED, SERVER_ERROR } from "../../helpers/messages.js";
 import Feedback from "../../models/FeedbackModel.js";
 
 
@@ -28,16 +29,16 @@ export const getAllUsersFeedbacks = async (req, res) => {
         if(recommend && recommend.trim()!=="" && recommend !== "all"){
           filter.recommend = recommend
         }
-        if (search && search.trim() !== "" && search !== "all") {
-          filter.$or = [
-              { feedbackMessage: { $regex: new RegExp(search, "i") } },
-              { suggestions: { $regex: new RegExp(search, "i") } }
-          ];
-        }
+
+        // if (search && search.trim() !== "" && search !== "all") {
+        //   filter.$or = [
+        //       { feedbackMessage: { $regex: new RegExp(search, "i") } },
+        //       { suggestions: { $regex: new RegExp(search, "i") } }
+        //   ];
+        // }
         // Fetch filtered & sorted feedback data
         // const feedbackData = await Feedback.find(filter).sort({ [sortBy]: sortOrder });
 
-        // Fetch feedbacks and populate organization details
         let feedbackData = await Feedback.find(filter)
             .populate({
                 path: "userId",  // Populates `userId`
@@ -47,13 +48,22 @@ export const getAllUsersFeedbacks = async (req, res) => {
               path: "organizationId",  
               select: "name",  // Only fetches organization name
           })
-            .sort({ [sortBy]: sortOrder });
+          .sort({ [sortBy]: sortOrder });
 
         // If organization name is provided, filter feedbackData manually
         if (organization && organization.trim() !== "" && organization !== "all" && organization!=="All") {
             feedbackData = feedbackData.filter(
                 (feedback) => feedback.organizationId?.name === organization
             );
+        }
+
+        if (search && search.trim() !== "" && search !== "all") {
+          feedbackData = feedbackData.filter(
+            (feedback) =>
+              feedback.userId?.name?.toLowerCase().includes(search.toLowerCase()) ||
+              feedback.feedbackMessage.toLowerCase().includes(search.toLowerCase()) ||
+              feedback.suggestions.toLowerCase().includes(search.toLowerCase())
+          );
         }
 
         res.status(200).json({ success: true, feedbackData });
@@ -77,9 +87,10 @@ export const getAllCompleteFeedbacks = async(req,res)=>{
 
 export const getAllOrganizationsFeedbacks = async(req,res)=>{
   try {
-    const {organization, category, recommend, search, sortBy, order} = req.params
+    const {category, recommend, search, sortBy, order} = req.params
 
     const sortOrder = order === "increasing" ? 1 : -1;
+
     const filter = { isDeleted: false, status:"approved", feedbackType:"organization"};
 
     if (category && category.trim() !== "" && category !== "all") {
@@ -88,30 +99,28 @@ export const getAllOrganizationsFeedbacks = async(req,res)=>{
     if(recommend && recommend.trim()!=="" && recommend !== "all" ){
       filter.recommend = recommend
     }
-    if (search && search.trim() !== "" && search !== "all") {
-      filter.$or = [
-          { feedbackMessage: { $regex: new RegExp(search, "i") } },
-          { suggestions: { $regex: new RegExp(search, "i") } }
-      ];
-    }
-    let feedbackData = await Feedback.find(filter)
-        .populate({
-            path: "organizationId",  
-            select: "name", 
-        })
-        .sort({ [sortBy]: sortOrder });
 
-    if (organization && organization.trim() !== "" && organization !== "all" && organization!=="All" ) {
-        feedbackData = feedbackData.filter(
-            (feedback) => feedback.organizationId?.name === organization
-        );
+    let feedbackData = await Feedback.find(filter)
+    .populate({
+        path: "organizationId",  
+        select: "name", 
+    })
+    .sort({ [sortBy]: sortOrder });
+
+    if (search && search.trim() !== "" && search !== "all") {
+      feedbackData = feedbackData.filter(
+        (feedback) =>
+          feedback.organizationId?.name?.toLowerCase().includes(search.toLowerCase()) ||
+          feedback.feedbackMessage.toLowerCase().includes(search.toLowerCase()) ||
+          feedback.suggestions.toLowerCase().includes(search.toLowerCase())
+      );
     }
     res.status(200).json({ success: true, feedbackData });
-} 
-catch (error) {
+  } 
+  catch (error) {
     console.error('Error in geting user feedbacks data: ', error);
     res.status(500).json({ success: false, message: "Failed to get feedback data from database.", error });
-}
+  }
 }
 
 //-----------------------------------------Guest User side-----------------------------------------------------
@@ -170,6 +179,7 @@ catch (error) {
 
 
 
+// ======================================ORGANIZATION USER FEEDABCKS CONTROLLER=======================================
 
 export const organizationUsersFeedbackDisplay = async (req, res) => {
   try {
@@ -220,10 +230,12 @@ export const organizationUsersFeedbackDisplay = async (req, res) => {
       feedbacks: filteredFeedbacks,
       totalPages: Math.ceil(totalFeedbacks / limit),
       currentPage: Number(page),
+      msg:ORG_FEEDBACK_FETCHED_SUCCESS,
+      success:true, 
     });
   } catch (error) {
     console.error("Error fetching feedbacks by organization users:", error);
-    res.status(500).json({ error: "Failed to fetch feedbacks." });
+    res.status(500).json({ error: error.msg, success:false, msg:SERVER_ERROR });
   }
 };
 
@@ -236,7 +248,7 @@ export const organizationUsersFeedbackDelete = async (req, res) => {
   try {
     const feedback = await Feedback.findById(req.params.id);
     if (!feedback || feedback.isDeleted) {
-      return res.json({ success: false, msg: "Feedback not found" });
+      return res.json({ success: false, msg: ORG_FEEDBACK_NOT_FOUND });
     }
 
     feedback.isDeleted = true;
@@ -244,10 +256,10 @@ export const organizationUsersFeedbackDelete = async (req, res) => {
 
     await feedback.save();
 
-    res.status(200).json({ success: true, msg: "Feedback deleted successfully." });
+    res.status(200).json({ success: true, msg: ORG_FEEDBACK_DELETE_SUCCESS });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ success: false, msg: "Server error" });
+    res.status(500).json({ error: error.msg, success:false, msg:SERVER_ERROR  });
   }
 };
 
@@ -261,7 +273,7 @@ export const updateOrganizationUsersFeedback = async (req, res) => {
     const feedback = await Feedback.findById(req.params.id);
 
     if (!feedback || feedback.isDeleted) {
-      return res.status(404).json({ success: false, msg: "Feedback not found" });
+      return res.status(404).json({ success: false, msg: ORG_FEEDBACK_NOT_FOUND });
     }
 
     feedback.feedbackCategory = feedbackCategory;
@@ -273,10 +285,10 @@ export const updateOrganizationUsersFeedback = async (req, res) => {
 
     await feedback.save();
 
-    res.status(200).json({ success: true, msg: "Feedback updated successfully.", feedback });
+    res.status(200).json({ success: true, msg: ORG_FEEDBACK_UPDATE_SUCCESS, feedback });
   } catch (error) {
     console.error("Error updating feedback:", error);
-    res.status(500).json({ success: false, msg: "Failed to update feedback." });
+    res.status(500).json({ error: error.msg, success:false, msg:SERVER_ERROR });
   }
 };
 
@@ -293,7 +305,7 @@ export const updateUsersFeedbackStatus = async (req, res) => {
     const { status } = req.body;
 
     if (!["approved", "rejected"].includes(status)) {
-      return res.status(400).json({ success: false, msg: "Invalid status value." });
+      return res.status(400).json({ success: false, msg: ORG_FEEDABACK_INVALID_STATUS_VALUE });
     }
 
     const feedback = await Feedback.findByIdAndUpdate(
@@ -303,13 +315,13 @@ export const updateUsersFeedbackStatus = async (req, res) => {
     );
 
     if (!feedback) {
-      return res.status(404).json({ success: false, msg: "Feedback not found." });
+      return res.status(404).json({ success: false, msg: ORG_FEEDBACK_NOT_FOUND });
     }
 
-    res.status(200).json({ success: true, msg: "Feedback status updated successfully.", feedback });
+    res.status(200).json({ success: true, msg: ORG_FEEDBACK_STATUS_SUCCESS, feedback });
   } catch (error) {
     console.error("Error updating feedback status:", error);
-    res.status(500).json({ success: false, msg: "Failed to update feedback status." });
+    res.status(500).json({ error: error.msg, success:false, msg:SERVER_ERROR });
   }
 };
 
@@ -330,7 +342,7 @@ export const registerOrganizationFeedback = async (req, res) => {
 
         // Validate that organizationId is provided
         if (!organizationId) {
-          return res.status(400).json({ success: false, message: "Organization ID is required" });
+          return res.status(400).json({ success: false, message: ORG_ID_REQUIRED });
         }
 
         
@@ -354,7 +366,7 @@ export const registerOrganizationFeedback = async (req, res) => {
     });
   } catch (error) {
     console.error("Error submitting feedback:", error);
-    res.status(500).json({ success: false, message: "Failed to submit feedback" });
+    res.status(500).json({ error: error.message, success:false, message:SERVER_ERROR});
   }
 };
 
@@ -427,10 +439,11 @@ export const displayOrganizationFeedback = async (req, res) => {
       feedbacks,
       totalPages: Math.ceil(totalFeedbacks / limit),
       currentPage: Number(page),
+      msg:ORG_FEEDBACK_FETCHED_SUCCESS
     });
   } catch (error) {
     console.error("Error fetching organization feedback:", error);
-    res.status(500).json({ success: false, message: "Failed to fetch feedback" });
+    res.status(500).json({ error: error.msg, success:false, msg:SERVER_ERROR });
   }
 };
 
@@ -490,17 +503,17 @@ try {
   );
 
   if (!updatedFeedback) {
-    return res.status(404).json({ success: false, message: "Feedback not found" });
+    return res.status(404).json({ success: false, message: ORG_FEEDBACK_NOT_FOUND });
   }
 
   res.status(200).json({
     success: true,
-    message: "Feedback updated successfully",
+    message: ORG_FEEDBACK_UPDATE_SUCCESS,
     feedback: updatedFeedback,
   });
 } catch (error) {
   console.error("Error updating feedback:", error);
-  res.status(500).json({ success: false, message: "Failed to update feedback" });
+  res.status(500).json({ error: error.message, success:false, message:SERVER_ERROR});
 }
 };
 
@@ -516,17 +529,17 @@ try {
   );
 
   if (!deletedFeedback) {
-    return res.status(404).json({ success: false, message: "Feedback not found" });
+    return res.status(404).json({ success: false, message: ORG_FEEDBACK_NOT_FOUND });
   }
 
   res.status(200).json({
     success: true,
-    message: "Feedback deleted successfully",
+    message: ORG_FEEDBACK_DELETE_SUCCESS,
     feedback: deletedFeedback,
   });
 } catch (error) {
   console.error("Error deleting feedback:", error);
-  res.status(500).json({ success: false, message: "Failed to delete feedback" });
+  res.status(500).json({ error: error.message, success:false, message:SERVER_ERROR});
 }
 };
 

@@ -6,6 +6,7 @@ export const registerUserSchema = Joi.object({
   password: Joi.string().min(6).required(),
   mobile: Joi.string().pattern(/^[0-9]{10}$/).required(),
   gender: Joi.string().required(),
+  userPhoto: Joi.string().label("userPhoto"),
   dob: Joi.date()
     .required()
     .custom((value, helpers) => {
@@ -48,6 +49,7 @@ export const updateProfileSchema = Joi.object({
   mobile: Joi.string().pattern(/^[0-9]{10}$/),
   gender: Joi.string().valid('male', 'female', 'other'),
   dob: Joi.date().less('now'),
+  userPhoto: Joi.string()
   // orgtype: Joi.string().valid('company', 'individual') // Added to profile update schema
   // photo:Joi.string().label("photo")
 });
@@ -55,4 +57,10 @@ export const updateProfileSchema = Joi.object({
 // Validation schema for deleting user
 export const deleteUserSchema = Joi.object({
   id: Joi.string().required(),
+});
+
+
+export const changePasswordSchema = Joi.object({
+  oldPassword: Joi.string().min(6).required(),
+  newPassword: Joi.string().min(6).required(),
 });
