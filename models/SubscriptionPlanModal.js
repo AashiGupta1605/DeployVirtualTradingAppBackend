@@ -6,6 +6,10 @@ const subscriptionPlanSchema = new mongoose.Schema({
     ref: "User", 
     required: true 
   },
+  planPrice: {
+    type: Number,
+    required: true,
+  },
   plan: { 
     type: String, 
     enum: ["Gold", "Silver", "Platinum", "Diamond"], 
@@ -38,3 +42,5 @@ subscriptionPlanSchema.pre("save", function (next) {
 });
 
 export default mongoose.model("SubscriptionPlan", subscriptionPlanSchema);
+
+

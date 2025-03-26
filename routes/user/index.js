@@ -21,6 +21,7 @@ import feedbackRoutes from './feedback/feedbackRoutes.js';
 import contactRoutes from './contact/contactRoutes.js';
 import subscriptionRoutes from './userSubscriptionPlanRoutes/userSubscriptionPlanRoutes.js';
 import userTradingRoute from "./userTradingRoute/userTradingRoute.js";
+import userPayment from "./userPayment/userPaymentRoute.js";
 const router = express.Router();
 
 // Auth Routes
@@ -40,5 +41,8 @@ router.use('/subscription', subscriptionRoutes);
 
 router.use('/', userTradingRoute);
 // trading route
+
+router.use('/payment', userPayment);
+// payment route
 
 export default router;
