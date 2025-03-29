@@ -2,6 +2,8 @@ import User from "../../models/UserModal.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import transporter from '../../config/emailColfig.js'; 
+
+import sendEmail from "../../utils/emailController.js";
   changePasswordSchema
   import { registerUserSchema, loginUserSchema, changePasswordSchema  } from "../../helpers/userValidation.js"; // Import Joi schemas
 import {
@@ -10,10 +12,43 @@ import {
   
 } from '../../helpers/joiValidation.js';
 // User registration
+// export const registerUser = async (req, res) => {
+//   const { name, email, password, confirmPassword, mobile, gender, dob, orgtype } = req.body;
+
+//   // Exclude confirmPassword from validation
+//   const { error } = registerUserSchema.validate({ name, email, password, mobile, gender, dob });
+//   if (error) return res.status(400).json({ message: error.details[0].message });
+
+//   try {
+//     const existingUser = await User.findOne({ email });
+//     if (existingUser) return res.status(400).json({ message: "User already exists" });
+
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     const newUserData = {
+//       name,
+//       email,
+//       password: hashedPassword,
+//       mobile,
+//       gender,
+//       dob,
+//     };
+
+//     // if (orgtype) newUserData.orgtype = orgtype; // Only include if provided
+
+//     const newUser = await User.create(newUserData);
+
+//     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+//     res.status(201).json({ message: "User registered successfully", token, user: newUser });
+//   } catch (error) {
+//     res.status(500).json({ message: "Registration failed", error: error.message });
+//   }
+// };
 export const registerUser = async (req, res) => {
   const { name, email, password, confirmPassword, mobile, gender, dob, orgtype } = req.body;
 
-  // Exclude confirmPassword from validation
+  // Validate input (Exclude confirmPassword from validation)
   const { error } = registerUserSchema.validate({ name, email, password, mobile, gender, dob });
   if (error) return res.status(400).json({ message: error.details[0].message });
 
@@ -32,11 +67,13 @@ export const registerUser = async (req, res) => {
       dob,
     };
 
-    // if (orgtype) newUserData.orgtype = orgtype; // Only include if provided
-
     const newUser = await User.create(newUserData);
-
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+    // ✅ **Send Welcome Email**
+    const subject = "Welcome to PGR Virtual Trading Platform!";
+    const message = `Hello ${name}, <br> Welcome to PGR Virtual Trading Platform! Start your trading journey today.`;
+    await sendEmail(email, subject, message);
 
     res.status(201).json({ message: "User registered successfully", token, user: newUser });
   } catch (error) {
@@ -220,6 +257,34 @@ export const forgotPassword = async (req, res) => {
 };
 
 // Reset Password Handler
+// export const resetPassword = async (req, res) => {
+//   try {
+//     const { token } = req.params;
+//     const { newPassword, confirmPassword } = req.body;
+
+//     if (newPassword !== confirmPassword) {
+//       return res.status(400).json({ message: "Passwords do not match" });
+//     }
+
+//     // Verify Token
+//     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+//     const user = await User.findById(decoded.id);
+
+//     if (!user) {
+//       return res.status(404).json({ message: "Invalid or expired token" });
+//     }
+
+//     // Hash New Password
+//     const salt = await bcrypt.genSalt(10);
+//     user.password = await bcrypt.hash(newPassword, salt);
+
+//     await user.save();
+//     res.status(200).json({ message: "Password reset successfully" });
+//   } catch (error) {
+//     res.status(500).json({ message: "Error resetting password", error: error.message });
+//   }
+// };
+
 export const resetPassword = async (req, res) => {
   try {
     const { token } = req.params;
@@ -229,12 +294,19 @@ export const resetPassword = async (req, res) => {
       return res.status(400).json({ message: "Passwords do not match" });
     }
 
-    // Verify Token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id);
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (error) {
+      if (error.name === "TokenExpiredError") {
+        return res.status(400).json({ message: "Reset link has expired. Please request a new one." });
+      }
+      return res.status(400).json({ message: "Invalid reset token" });
+    }
 
+    const user = await User.findById(decoded.id);
     if (!user) {
-      return res.status(404).json({ message: "Invalid or expired token" });
+      return res.status(404).json({ message: "User not found" });
     }
 
     // Hash New Password
@@ -243,6 +315,7 @@ export const resetPassword = async (req, res) => {
 
     await user.save();
     res.status(200).json({ message: "Password reset successfully" });
+
   } catch (error) {
     res.status(500).json({ message: "Error resetting password", error: error.message });
   }
