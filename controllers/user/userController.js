@@ -1,16 +1,54 @@
 import User from "../../models/UserModal.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { registerUserSchema, loginUserSchema, updateProfileSchema } from "../../helpers/userValidation.js"; // Import Joi schemas
+import transporter from '../../config/emailColfig.js'; 
+
+import sendEmail from "../../utils/emailController.js";
+  changePasswordSchema
+  import { registerUserSchema, loginUserSchema, changePasswordSchema  } from "../../helpers/userValidation.js"; // Import Joi schemas
 import {
   updateUserValidation,
   deleteUserValidation,
+  
 } from '../../helpers/joiValidation.js';
 // User registration
+// export const registerUser = async (req, res) => {
+//   const { name, email, password, confirmPassword, mobile, gender, dob, orgtype } = req.body;
+
+//   // Exclude confirmPassword from validation
+//   const { error } = registerUserSchema.validate({ name, email, password, mobile, gender, dob });
+//   if (error) return res.status(400).json({ message: error.details[0].message });
+
+//   try {
+//     const existingUser = await User.findOne({ email });
+//     if (existingUser) return res.status(400).json({ message: "User already exists" });
+
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     const newUserData = {
+//       name,
+//       email,
+//       password: hashedPassword,
+//       mobile,
+//       gender,
+//       dob,
+//     };
+
+//     // if (orgtype) newUserData.orgtype = orgtype; // Only include if provided
+
+//     const newUser = await User.create(newUserData);
+
+//     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+//     res.status(201).json({ message: "User registered successfully", token, user: newUser });
+//   } catch (error) {
+//     res.status(500).json({ message: "Registration failed", error: error.message });
+//   }
+// };
 export const registerUser = async (req, res) => {
   const { name, email, password, confirmPassword, mobile, gender, dob, orgtype } = req.body;
 
-  // Exclude confirmPassword from validation
+  // Validate input (Exclude confirmPassword from validation)
   const { error } = registerUserSchema.validate({ name, email, password, mobile, gender, dob });
   if (error) return res.status(400).json({ message: error.details[0].message });
 
@@ -29,11 +67,13 @@ export const registerUser = async (req, res) => {
       dob,
     };
 
-    // if (orgtype) newUserData.orgtype = orgtype; // Only include if provided
-
     const newUser = await User.create(newUserData);
-
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+    // ✅ **Send Welcome Email**
+    const subject = "Welcome to PGR Virtual Trading App!";
+    const message = `Hello ${name}, <br> Welcome to PGR Virtual Trading App! Start your trading journey today.`;
+    await sendEmail(email, subject, message);
 
     res.status(201).json({ message: "User registered successfully", token, user: newUser });
   } catch (error) {
@@ -100,7 +140,188 @@ export const loginUser = async (req, res) => {
 };
 
 
+// export const changePassword = async (req, res) => {
+//   try {
+//     // Ensure `req.user.id` is coming from authentication middleware
+//     const userId = req.user ? req.user.id : req.body.userId;
+//     const { oldPassword, newPassword } = req.body;
+
+//     if (!userId) return res.status(400).json({ message: "User ID is required" });
+
+//     // Find user in the database
+//     const user = await User.findById(userId);
+//     if (!user) return res.status(404).json({ message: "User not found" });
+
+//     // Check if old password matches
+//     const isMatch = await bcrypt.compare(oldPassword, user.password);
+//     if (!isMatch) return res.status(401).json({ message: "Old password is incorrect" });
+
+//     // Hash new password before saving
+//     const salt = await bcrypt.genSalt(10);
+//     user.password = await bcrypt.hash(newPassword, salt);
+
+//     // Save the updated user
+//     await user.save();
+
+//     res.status(200).json({ message: "Password updated successfully" });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 // Get User Profile
+export const changePassword = async (req, res) => {
+  try {
+    console.log("🔹 Received password change request:", req.body);
+
+    // ✅ Validate input without userId
+    const { error } = changePasswordSchema.validate(req.body, { abortEarly: false });
+
+    if (error) {
+      console.log(" Joi Validation Error:", error.details);
+      return res.status(400).json({
+        message: "Validation failed",
+        errors: error.details.map((err) => err.message),
+      });
+    }
+
+    const { oldPassword, newPassword } = req.body;
+    const userId = req.user.id; // Extract userId from JWT
+
+    console.log(" Extracted User ID from JWT:", userId);
+
+    const user = await User.findById(userId);
+    if (!user) {
+      console.log(" User not found");
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    console.log(" User found:", user.email);
+
+    // 🔹 Check if old password is correct
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      console.log(" Old password is incorrect");
+      return res.status(401).json({ message: "Old password is incorrect" });
+    }
+
+    // 🔹 Prevent changing to the same password
+    if (oldPassword === newPassword) {
+      console.log("New password must be different");
+      return res.status(400).json({ message: "New password must be different from the old password" });
+    }
+
+    // 🔹 Hash and update the new password
+    console.log("🔹 Hashing new password...");
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    await user.save();
+
+    console.log("✅ Password updated successfully");
+    res.status(200).json({ message: "Password updated successfully" });
+  } catch (error) {
+    console.error(" Error in changePassword controller:", error);
+    res.status(500).json({ message: "Password change failed", error: error.message });
+  }
+};
+
+
+// Forgot Password Handler
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+     //Generate Reset Token (expires in 15 minutes)
+     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "15m" });
+     const resetLink = `${process.env.FRONTEND_URL}/reset-password/${token}`;
+ 
+     console.log("Generated Reset Token:", token);
+     console.log("Reset Link:", resetLink);
+ 
+     //Send Reset Email
+     const subject = "Password Reset Request";
+     const message = "Click the button below to reset your password. This link expires in 15 minutes.";
+     
+     await sendEmail(email, subject, message, "Reset Password", resetLink, false);
+ 
+     res.status(200).json({ message: "Password reset link sent to your email" });
+   } catch (error) {
+     console.error("Error in forgotPassword:", error);
+     res.status(500).json({ message: "Error sending email", error: error.message });
+   }
+};
+
+// Reset Password Handler
+// export const resetPassword = async (req, res) => {
+//   try {
+//     const { token } = req.params;
+//     const { newPassword, confirmPassword } = req.body;
+
+//     if (newPassword !== confirmPassword) {
+//       return res.status(400).json({ message: "Passwords do not match" });
+//     }
+
+//     // Verify Token
+//     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+//     const user = await User.findById(decoded.id);
+
+//     if (!user) {
+//       return res.status(404).json({ message: "Invalid or expired token" });
+//     }
+
+//     // Hash New Password
+//     const salt = await bcrypt.genSalt(10);
+//     user.password = await bcrypt.hash(newPassword, salt);
+
+//     await user.save();
+//     res.status(200).json({ message: "Password reset successfully" });
+//   } catch (error) {
+//     res.status(500).json({ message: "Error resetting password", error: error.message });
+//   }
+// };
+
+export const resetPassword = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const { newPassword, confirmPassword } = req.body;
+
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ message: "Passwords do not match" });
+    }
+
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (error) {
+      if (error.name === "TokenExpiredError") {
+        return res.status(400).json({ message: "Reset link has expired. Please request a new one." });
+      }
+      return res.status(400).json({ message: "Invalid reset token" });
+    }
+
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Hash New Password
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+
+    await user.save();
+    res.status(200).json({ message: "Password reset successfully" });
+
+  } catch (error) {
+    res.status(500).json({ message: "Error resetting password", error: error.message });
+  }
+};
+
+
+
 export const getUserProfile = async (req, res) => {
   try {
     const user = req.user; // Retrieved from userMiddleware

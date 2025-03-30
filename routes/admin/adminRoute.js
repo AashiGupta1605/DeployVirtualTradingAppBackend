@@ -2,13 +2,17 @@
 import express from 'express';
 import niftyDataRoutes from './niftyRoutes/niftyDataRoutes.js';
 import nifty500DataRoutes from './niftyRoutes/nifty500dataRoutes.js';
-// import etfRoutes from '../../routes/admin/niftyRoutes/niftyDataRoutes.js';
 import organizationRoutes from './organizationRoutes/organizationRoutes.js';
 import userRoutes from './userRoutes/userRoutes.js';
-import { getETFData } from '../../scripts/scraper2.js';
 import etfRoutes from '../admin/etfRoutes/etfDataRoutes.js';
+<<<<<<< HEAD
 import galleryCategoryRoutes from '../admin/galleryRoutes/galleryCategoryRoutes.js'
 import galleryDataRoutes from '../admin/galleryRoutes/galleryDataRoutes.js'
+=======
+import eventRoutes from './eventRoutes/eventRoutes.js'; // Import the event routes
+
+import { getETFData } from '../../scripts/scraper2.js';
+>>>>>>> 2865f2a15d4fa33ca1b8d79403a26d4f79552aa8
 
 const router = express.Router();
 
@@ -26,8 +30,13 @@ router.use('/', organizationRoutes);
 // User Routes
 router.use('/', userRoutes);
 
+<<<<<<< HEAD
 //Gallery Routes
 router.use('/galleryCategory', galleryCategoryRoutes)
 router.use('/gallery', galleryDataRoutes)
+=======
+// Event Routes
+router.use('/events', eventRoutes); // Add the event routes
+>>>>>>> 2865f2a15d4fa33ca1b8d79403a26d4f79552aa8
 
 export default router;

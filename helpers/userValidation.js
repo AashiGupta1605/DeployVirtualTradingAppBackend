@@ -58,3 +58,9 @@ export const updateProfileSchema = Joi.object({
 export const deleteUserSchema = Joi.object({
   id: Joi.string().required(),
 });
+
+
+export const changePasswordSchema = Joi.object({
+  oldPassword: Joi.string().min(6).required(),
+  newPassword: Joi.string().min(6).required(),
+});
