@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 
-const sendEmail = async (to, subject, message) => {
+const sendEmail = async (to, subject, message, buttonText = "", buttonLink = "", showHomeLink = true) => {
   try {
     let transporter = nodemailer.createTransport({
       service: "gmail",
@@ -15,16 +15,16 @@ const sendEmail = async (to, subject, message) => {
     });
 
     let mailOptions = {
-      from: `"PGR - Virtual Trading Platform" <${process.env.EMAIL_USER}>`,
+      from: `"PGR - Virtual Trading App" <${process.env.EMAIL_USER}>`,
       to,
       subject,
-      html: generateEmailTemplate({ subject, message }),
+      html: generateEmailTemplate({ subject, message ,buttonText, buttonLink , showHomeLink }),
     };
 
     await transporter.sendMail(mailOptions);
-    console.log(`✅ Email sent to ${to}`);
+    console.log(`Email sent to ${to}`);
   } catch (error) {
-    console.error(`❌ Error sending email: ${error}`);
+    console.error(` Error sending email: ${error}`);
   }
 };
 

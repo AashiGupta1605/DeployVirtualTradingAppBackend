@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import path from "path";
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import connectDB from './config/db.js';
@@ -12,9 +13,14 @@ import adminRoute from "./routes/admin/adminRoute.js";
 import organizationRoute from "./routes/organization/index.js";
 import guestUserRoute from "./routes/guestUser/guestUserRoute.js";
 import { errorHandler } from './middlewares/errorHandler.js';
+
 dotenv.config();
 
 const app = express();
+
+// Get the absolute path of the current directory
+const __dirname = path.resolve(); // Ensure correct path handling
+app.use("/img", express.static(path.join(__dirname, "utils/img")));
 
 // Middleware
 app.use(cors({ origin: "*", credentials: true }));

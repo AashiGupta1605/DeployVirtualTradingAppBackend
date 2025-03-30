@@ -71,8 +71,8 @@ export const registerUser = async (req, res) => {
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
     // ✅ **Send Welcome Email**
-    const subject = "Welcome to PGR Virtual Trading Platform!";
-    const message = `Hello ${name}, <br> Welcome to PGR Virtual Trading Platform! Start your trading journey today.`;
+    const subject = "Welcome to PGR Virtual Trading App!";
+    const message = `Hello ${name}, <br> Welcome to PGR Virtual Trading App! Start your trading journey today.`;
     await sendEmail(email, subject, message);
 
     res.status(201).json({ message: "User registered successfully", token, user: newUser });
@@ -235,25 +235,24 @@ export const forgotPassword = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Generate Reset Token
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "15m" });
-    console.log("Token:", token);
-    // Send Email
-    const resetLink = `${process.env.FRONTEND_URL}/reset-password/${token}`;
-    console.log("Reset Link:", resetLink);
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: "Password Reset Request",
-      html: `<p>Click the link below to reset your password:</p>
-             <a href="${resetLink}">${resetLink}</a>
-             <p>This link expires in 15 minutes.</p>`,
-    });
-
-    res.status(200).json({ message: "Password reset link sent to your email" });
-  } catch (error) {
-    res.status(500).json({ message: "Error sending email", error: error.message });
-  }
+     //Generate Reset Token (expires in 15 minutes)
+     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "15m" });
+     const resetLink = `${process.env.FRONTEND_URL}/reset-password/${token}`;
+ 
+     console.log("Generated Reset Token:", token);
+     console.log("Reset Link:", resetLink);
+ 
+     //Send Reset Email
+     const subject = "Password Reset Request";
+     const message = "Click the button below to reset your password. This link expires in 15 minutes.";
+     
+     await sendEmail(email, subject, message, "Reset Password", resetLink, false);
+ 
+     res.status(200).json({ message: "Password reset link sent to your email" });
+   } catch (error) {
+     console.error("Error in forgotPassword:", error);
+     res.status(500).json({ message: "Error sending email", error: error.message });
+   }
 };
 
 // Reset Password Handler
