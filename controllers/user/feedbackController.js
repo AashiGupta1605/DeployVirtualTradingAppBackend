@@ -50,7 +50,6 @@ export const getAllUsersFeedbacks = async (req, res) => {
           })
           .sort({ [sortBy]: sortOrder });
 
-        // If organization name is provided, filter feedbackData manually
         if (organization && organization.trim() !== "" && organization !== "all" && organization!=="All") {
             feedbackData = feedbackData.filter(
                 (feedback) => feedback.organizationId?.name === organization
@@ -58,15 +57,25 @@ export const getAllUsersFeedbacks = async (req, res) => {
         }
 
         if (search && search.trim() !== "" && search !== "all") {
+
+          let MatchesByUserNameFirstLetter = feedbackData.filter(
+            (feedback) => feedback.userId?.name?.toLowerCase().startsWith(search.toLowerCase())
+          );
+    
+          if (MatchesByUserNameFirstLetter.length > 0) {
+            return res.status(201).json({ success: true, feedbackData: MatchesByUserNameFirstLetter });
+          }
+    
           feedbackData = feedbackData.filter(
             (feedback) =>
               feedback.userId?.name?.toLowerCase().includes(search.toLowerCase()) ||
-              feedback.feedbackMessage.toLowerCase().includes(search.toLowerCase()) ||
-              feedback.suggestions.toLowerCase().includes(search.toLowerCase())
+              feedback.feedbackMessage?.toLowerCase().includes(search.toLowerCase()) ||
+              feedback.suggestions?.toLowerCase().includes(search.toLowerCase())
           );
+
         }
 
-        res.status(200).json({ success: true, feedbackData });
+        res.status(201).json({ success: true, feedbackData });
     } 
     catch (error) {
         console.error('Error in geting user feedbacks data: ', error);
@@ -77,7 +86,7 @@ export const getAllUsersFeedbacks = async (req, res) => {
 export const getAllCompleteFeedbacks = async(req,res)=>{
     try{
         const feedbackData = await Feedback.find({ isDeleted: false })
-        res.status(200).json({ success: true, feedbackData });
+        res.status(201).json({ success: true, feedbackData });
     }
     catch(error){
         console.log('Error in geting user feedbacks data: ', error);
@@ -108,14 +117,25 @@ export const getAllOrganizationsFeedbacks = async(req,res)=>{
     .sort({ [sortBy]: sortOrder });
 
     if (search && search.trim() !== "" && search !== "all") {
+
+      let MatchesByOrganizationNameFirstLetter = feedbackData.filter(
+        (feedback) => feedback.organizationId?.name?.toLowerCase().startsWith(search.toLowerCase())
+      );
+
+      if (MatchesByOrganizationNameFirstLetter.length > 0) {
+        return res.status(201).json({ success: true, feedbackData: MatchesByOrganizationNameFirstLetter });
+      }
+
       feedbackData = feedbackData.filter(
         (feedback) =>
           feedback.organizationId?.name?.toLowerCase().includes(search.toLowerCase()) ||
-          feedback.feedbackMessage.toLowerCase().includes(search.toLowerCase()) ||
-          feedback.suggestions.toLowerCase().includes(search.toLowerCase())
+          feedback.feedbackMessage?.toLowerCase().includes(search.toLowerCase()) ||
+          feedback.suggestions?.toLowerCase().includes(search.toLowerCase())
       );
+
     }
-    res.status(200).json({ success: true, feedbackData });
+
+    res.status(201).json({ success: true, feedbackData });
   } 
   catch (error) {
     console.error('Error in geting user feedbacks data: ', error);
