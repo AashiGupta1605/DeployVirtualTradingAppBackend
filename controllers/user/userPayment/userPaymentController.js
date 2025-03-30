@@ -1,183 +1,12 @@
-// import Payment from "../../../models/PaymentModal.js";
-// import SubscriptionPlan from "../../../models/SubscriptionPlanModal.js";
-// import gateway from "../../../helpers/braintree.js";
-// // Configure Braintree
-
-// // Generate client token
-// export const generateClientToken = async (req, res) => {
-//   try {
-//     const response = await gateway.clientToken.generate({});
-//     res.send(response.clientToken);
-//   } catch (error) {
-//     res.status(500).send(error);
-//   }
-// };
-
-// // Process payment
-
-// // Process payment
-
-
-// export const processPayment = async (req, res) => {
-//     const { userId, paymentMethodNonce, amount, subscriptionData } = req.body;
-  
-//     try {
-//       // Validate required fields
-//       if (!paymentMethodNonce || !amount || !subscriptionData) {
-//         return res.status(400).send("Missing required fields.");
-//       }
-  
-//       // Create a transaction in Braintree
-//       const result = await gateway.transaction.sale({
-//         amount: amount.toString(), // Convert to string (Braintree expects a string)
-//         paymentMethodNonce: paymentMethodNonce,
-//           paymentMethodNonce: paymentMethodNonce,
-//          merchantAccountId: process.env.MERCHANT_ID,
-//         options: {
-//           submitForSettlement: true,
-//         },
-//       });
-  
-//       if (result.success) {
-//         // Save payment details in the database
-//         const payment = new Payment({
-//           userId,
-//           paymentMethod: "Braintree",
-//           amount,
-//           transactionId: result.transaction.id,
-//           status: "Completed",
-//         });
-//         await payment.save();
-  
-//         // Create subscription plan
-//         const subscription = new SubscriptionPlan({
-//           ...subscriptionData,
-//           userId,
-//           status: "Active",
-//         });
-//         await subscription.save();
-  
-//         res.send("Payment and subscription successful!");
-//       } else {
-//         console.error("Braintree Transaction Error:", result.message);
-//         res.status(500).send("Payment failed. Please try again.");
-//       }
-//     } catch (error) {
-//       console.error("Server Error:", error);
-//       res.status(500).send("Internal Server Error");
-//     }
-//   };
-
-
-
-
-// controllers/user/userPayment/userPaymentController.js
-// import Payment from "../../../models/PaymentModal.js";
-// import SubscriptionPlan from "../../../models/SubscriptionPlanModal.js";
-// import razorpay from "../../../helpers/razorPay.js";
-
-// // Create Razorpay order
-// export const createOrder = async (req, res) => {
-//   const { amount, currency = 'INR', receipt, notes } = req.body;
-
-//   try {
-//     const options = {
-//       amount: amount * 100, // Razorpay expects amount in paise
-//       currency,
-//       receipt,
-//       notes
-//     };
-
-//     const order = await razorpay.orders.create(options);
-    
-//     res.json({
-//       success: true,
-//       order
-//     });
-//   } catch (error) {
-//     console.error('Razorpay order creation error:', error);
-//     res.status(500).json({
-//       success: false,
-//       message: 'Failed to create payment order'
-//     });
-//   }
-// };
-
-// // Verify payment and create subscription
-// export const verifyPayment = async (req, res) => {
-//   const {
-//     razorpay_payment_id,
-//     razorpay_order_id,
-//     razorpay_signature,
-//     subscriptionData,
-//     userId
-//   } = req.body;
-
-//   try {
-//     // Verify payment signature (you should implement proper signature verification)
-//     const generatedSignature = crypto
-//       .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
-//       .update(razorpay_order_id + "|" + razorpay_payment_id)
-//       .digest('hex');
-
-//     if (generatedSignature !== razorpay_signature) {
-//       return res.status(400).json({
-//         success: false,
-//         message: 'Payment verification failed'
-//       });
-//     }
-
-//     // Save payment details in the database
-//     const payment = new Payment({
-//       // userId,
-//       // paymentMethod: "Razorpay",
-//       // amount: subscriptionData.planPrice,
-//       // transactionId: razorpay_payment_id,
-//       // orderId: razorpay_order_id,
-//       // status: "Completed",
-
-//       userId,
-//       amount: subscriptionData.planPrice,
-//       currency: 'INR',
-//       razorpayOrderId: order.id,
-//       status: 'Created',
-//       planName: subscriptionData.plan,
-//       duration: subscriptionData.duration
-//     });
-//     await payment.save();
-
-//     // Create subscription plan
-//     const subscription = new SubscriptionPlan({
-//       ...subscriptionData,
-//       userId,
-//       status: "Active",
-//     });
-//     await subscription.save();
-
-//     res.json({
-//       success: true,
-//       message: 'Payment and subscription successful!'
-//     });
-//   } catch (error) {
-//     console.error('Payment verification error:', error);
-//     res.status(500).json({
-//       success: false,
-//       message: 'Internal Server Error'
-//     });
-//   }
-// };
-
-
-
-
-
 // razor pay
 
 import Payment from "../../../models/PaymentModal.js";
 import SubscriptionPlan from "../../../models/SubscriptionPlanModal.js";
 import razorpay from "../../../helpers/razorPay.js";
 import crypto from 'crypto';
-
+import sendEmail from "../../../utils/emailController.js"
+import User from "../../../models/UserModal.js"
+import sendPaymentStatusEmail from "../../../utils/sendPaymentStatusEmail.js";
 /**
  * @desc    Create Razorpay order and initial payment record
  * @route   POST /api/user/payment/create-order
@@ -187,14 +16,6 @@ export const createOrder = async (req, res) => {
   const { userId, amount, subscriptionData } = req.body;
 
   try {
-    // Validate required fields
-    // if (!userId || !amount || !subscriptionData?.plan || !subscriptionData?.duration) {
-    //   return res.status(400).json({
-    //     success: false,
-    //     message: 'Missing required fields: userId, amount, or subscription data'
-    //   });
-    // }
-    // In createOrder controller
 if (!userId || !amount || !subscriptionData?.plan || !subscriptionData?.duration) {
   console.log('Received data:', { userId, amount, subscriptionData });
   return res.status(400).json({
@@ -288,6 +109,15 @@ export const verifyPayment = async (req, res) => {
       };
       await payment.save();
 
+      await sendPaymentStatusEmail(
+        userId, 
+        payment, 
+        subscriptionData, 
+        'signature_mismatch', 
+        'Payment signature mismatch'
+      );
+
+
       return res.status(400).json({
         success: false,
         message: 'Payment verification failed: Invalid signature'
@@ -316,6 +146,44 @@ export const verifyPayment = async (req, res) => {
     };
     payment.updatedAt = new Date();
     await payment.save();
+    
+    // new one
+    // await sendPaymentStatusEmail(userId, payment, subscriptionData, 'success');
+    setTimeout(async () => {
+      try {
+        await sendPaymentStatusEmail(userId, payment, subscriptionData, 'success');
+      } catch (emailError) {
+        console.error('Email sending failed:', emailError);
+      }
+    }, 2000);
+    
+    // adding mail for success transaction
+    // try {
+    //   const user = await User.findById(userId).select('email');
+    //   if (!user) {
+    //     return res.status(404).json({
+    //       success: false,
+    //       message: 'User not found'
+    //     });
+    //   }
+    //   const emailSubject = `Payment Confirmation - ${subscriptionData.plan} Subscription`;
+    //   const emailMessage = `
+    //     <p>Thank you for subscribing to our <strong>${subscriptionData.plan}</strong> plan!</p>
+    //     <p><strong>Payment Details:</strong></p>
+    //     <ul>
+    //       <li>Amount: ₹${payment.amount}</li>
+    //       <li>Plan: ${subscriptionData.plan}</li>
+    //       <li>Duration: ${subscriptionData.duration}</li>
+    //       <li>Order ID: ${razorpay_order_id}</li>
+    //     </ul>
+    //     <p>Your subscription is now active. You can access all premium features immediately.</p>
+    //   `;
+
+    //   await sendEmail(user.email, emailSubject, emailMessage);
+    //   console.log(`Confirmation email sent to ${userEmail}`);
+    // } catch (emailError) {
+    //   console.error('Failed to send confirmation email:', emailError);
+    // }
 
     res.json({
       success: true,
@@ -335,6 +203,15 @@ export const verifyPayment = async (req, res) => {
         verificationError: error.message
       };
       await Payment.save();
+
+      await sendPaymentStatusEmail(
+        userId, 
+        Payment, 
+        subscriptionData, 
+        'failed', 
+        error.message
+      );
+
     }
 
     res.status(500).json({
