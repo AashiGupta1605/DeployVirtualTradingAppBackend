@@ -167,6 +167,24 @@ export const deleteEvent = async (req, res) => {
   }
 };
 
+
+
+
+
+
+
+
+
+// card stats for admin
+
+export const totalEvents = async (req, res) => {
+
+  try {
+    const count = await Event.countDocuments({ isDeleted: false });
+    res.status(200).json({ success: true, count });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ success: false, msg: "server error", error:error.msg, msg:"total event count fetched succesffully"  });
 // Event Registration Operations
 export const registerForEvent = async (req, res) => {
   try {
