@@ -1,11 +1,13 @@
 // razor pay
 
-import Payment from "../../../models/PaymentModal.js";
+import Event from '../../../models/EventModal.js';
+import EventRegistration from '../../../models/EventRegistrationModal.js';
+import Payment from '../../../models/PaymentModal.js';
+import User from '../../../models/UserModal.js';
 import SubscriptionPlan from "../../../models/SubscriptionPlanModal.js";
 import razorpay from "../../../helpers/razorPay.js";
 import crypto from 'crypto';
 import sendEmail from "../../../utils/emailController.js"
-import User from "../../../models/UserModal.js"
 import sendPaymentStatusEmail from "../../../utils/sendPaymentStatusEmail.js";
 /**
  * @desc    Create Razorpay order and initial payment record
@@ -278,6 +280,220 @@ export const getUserPayments = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Failed to get user payments',
+      error: error.message
+    });
+  }
+};
+
+// controllers/user/userPayment/userPaymentController.js
+
+// Add these new methods to your existing payment controller
+
+export const createEventOrder = async (req, res) => {
+  const { userId, eventId, amount } = req.body;
+
+  try {
+    console.log('Creating event order with:', { userId, eventId, amount });
+
+    // Validate input
+    if (!userId || !eventId || amount === undefined) {
+      return res.status(400).json({
+        success: false,
+        message: 'Missing required fields: userId, eventId, or amount'
+      });
+    }
+
+    // Verify the event exists
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: 'Event not found'
+      });
+    }
+
+    // Validate amount matches event entry fee
+    if (amount !== event.entryFee) {
+      return res.status(400).json({
+        success: false,
+        message: 'Payment amount does not match event entry fee'
+      });
+    }
+
+    // Create Razorpay order
+    const options = {
+      amount: Math.round(amount * 100),
+      currency: 'INR',
+      receipt: `event_${Date.now()}`,
+      notes: {
+        userId: userId.toString(),
+        eventId: eventId.toString(),
+        eventTitle: event.title
+      },
+      payment_capture: 1
+    };
+
+    const order = await razorpay.orders.create(options);
+
+    // Create payment record
+    const payment = new Payment({
+      userId,
+      amount,
+      currency: 'INR',
+      razorpayOrderId: order.id,
+      status: 'Created',
+      paymentDetails: order,
+      paymentMethod: 'Razorpay',
+      planName: `Event: ${event.title}`
+    });
+
+    await payment.save();
+
+    // Create event registration record
+    const registration = new EventRegistration({
+      userId,
+      eventId,
+      paymentId: payment._id,
+      entryFee: amount,
+      status: 'Pending'
+    });
+
+    await registration.save();
+
+    res.status(201).json({
+      success: true,
+      order,
+      paymentId: payment._id,
+      registrationId: registration._id
+    });
+
+  } catch (error) {
+    console.error('Create event order error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to create event payment order',
+      error: error.message
+    });
+  }
+};
+
+export const verifyEventPayment = async (req, res) => {
+  const {
+    razorpay_payment_id,
+    razorpay_order_id,
+    razorpay_signature,
+    paymentId,
+    registrationId,
+    userId,
+    eventId
+  } = req.body;
+  
+
+  try {
+    // Find the existing payment record
+    const payment = await Payment.findById(paymentId);
+    if (!payment) {
+      return res.status(404).json({
+        success: false,
+        message: 'Payment record not found'
+      });
+    }
+
+    // Verify the payment signature
+    const generatedSignature = crypto
+      .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+      .update(`${razorpay_order_id}|${razorpay_payment_id}`)
+      .digest('hex');
+
+    if (generatedSignature !== razorpay_signature) {
+      payment.status = 'Failed';
+      payment.paymentDetails = { 
+        ...payment.paymentDetails,
+        verificationError: 'Signature mismatch'
+      };
+      await payment.save();
+
+      // Update registration status
+      await EventRegistration.findByIdAndUpdate(registrationId, {
+        status: 'Cancelled'
+      });
+
+      return res.status(400).json({
+        success: false,
+        message: 'Payment verification failed: Invalid signature'
+      });
+    }
+
+    // Update payment record
+    payment.razorpayPaymentId = razorpay_payment_id;
+    payment.razorpaySignature = razorpay_signature;
+    payment.status = 'Paid';
+    payment.updatedAt = new Date();
+    await payment.save();
+
+    // Update registration status
+    const registration = await EventRegistration.findByIdAndUpdate(
+      registrationId,
+      {
+        status: 'Registered'
+      },
+      { new: true }
+    ).populate('eventId');
+
+    // Update event participants count
+    await Event.findByIdAndUpdate(eventId, {
+      $inc: { participants: 1 }
+    });
+
+    // Send confirmation email
+    const user = await User.findById(userId);
+    const event = await Event.findById(eventId);
+
+    if (user && event) {
+      const emailSubject = `Registration Confirmation - ${event.title}`;
+      const emailMessage = `
+        <p>Thank you for registering for <strong>${event.title}</strong>!</p>
+        <p><strong>Event Details:</strong></p>
+        <ul>
+          <li>Event: ${event.title}</li>
+          <li>Date: ${new Date(event.startDate).toLocaleDateString()} - ${new Date(event.endDate).toLocaleDateString()}</li>
+          <li>Entry Fee: ₹${payment.amount}</li>
+          <li>Payment ID: ${razorpay_payment_id}</li>
+        </ul>
+        <p>You can now access the event from your dashboard.</p>
+      `;
+
+      await sendEmail(user.email, emailSubject, emailMessage);
+    }
+
+    res.json({
+      success: true,
+      message: 'Payment verified and event registration completed',
+      payment,
+      registration
+    });
+
+  } catch (error) {
+    console.error('Event payment verification error:', error);
+    
+    // Update payment status if we have the payment record
+    if (payment) {
+      payment.status = 'Failed';
+      payment.paymentDetails = {
+        ...payment.paymentDetails,
+        verificationError: error.message
+      };
+      await payment.save();
+
+      // Update registration status
+      await EventRegistration.findByIdAndUpdate(registrationId, {
+        status: 'Cancelled'
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      message: 'Event payment verification failed',
       error: error.message
     });
   }
