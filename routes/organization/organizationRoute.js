@@ -13,7 +13,8 @@ import {
   updateApprovalStatus,
   searchOrganizations,
   getOrganizationById,
-  updateOrganizationById
+  updateOrganizationById,
+  totalOrganizations
 } from '../../controllers/organization/organizationController.js';
 import authMiddleware from '../../middlewares/organizationMiddleware.js';
 
@@ -42,5 +43,12 @@ router.put('/status/:id', updateApprovalStatus);
 
 // User related routes
 // router.get('/users/:orgName', verifyToken, getUserByOrgName);
+
+
+
+// organization stats route for admin cards
+
+router.get("/organizationCount/total", totalOrganizations);
+
 
 export default router;

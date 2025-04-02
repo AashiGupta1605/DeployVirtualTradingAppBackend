@@ -6,7 +6,7 @@ import organizationRoutes from './organizationRoutes/organizationRoutes.js';
 import userRoutes from './userRoutes/userRoutes.js';
 import etfRoutes from '../admin/etfRoutes/etfDataRoutes.js';
 import eventRoutes from './eventRoutes/eventRoutes.js'; // Import the event routes
-
+import statsRoute from "./statsRoute/statsRoute.js";
 import { getETFData } from '../../scripts/scraper2.js';
 
 const router = express.Router();
@@ -27,5 +27,12 @@ router.use('/', userRoutes);
 
 // Event Routes
 router.use('/events', eventRoutes); // Add the event routes
+
+
+// Stats Route
+
+router.use('/stats', statsRoute); // Add the event routes
+
+
 
 export default router;

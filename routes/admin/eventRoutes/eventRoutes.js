@@ -3,7 +3,8 @@ import {
   createEvent,
   getAllEvents,
   updateEvent,
-  deleteEvent
+  deleteEvent,
+  totalEvents
 } from '../../../controllers/admin/eventController.js';
 // import { adminProtect } from '../middleware/authMiddleware';
 
@@ -17,4 +18,10 @@ router.route('/:id')
   .put( updateEvent)
   .delete( deleteEvent);
 
+
+
+  // user stats for admin cards
+
+  router.get("/eventCount/total", totalEvents);
+  
 export default router;

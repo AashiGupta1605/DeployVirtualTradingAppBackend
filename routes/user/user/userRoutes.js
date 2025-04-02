@@ -8,7 +8,13 @@ import {
   getUsers,
   updateUser,
   deleteUserById, 
-  changePassword 
+  changePassword, 
+  maleUsers,
+  femaleUsers,
+  activeUsers,
+  deactiveUsers,
+  averageUserAge,
+  totalUsers
 } from '../../../controllers/user/userController.js';
 import userMiddleware from '../../../middlewares/userMiddleware.js';
 
@@ -26,5 +32,17 @@ router.put('/change-password', userMiddleware, changePassword);
 router.get("/display-users", getUsers);
 router.put("/users/:id", updateUser);
 router.delete("/users/:id", deleteUserById);// Changed from /users/:id to /admin/users/:id
+
+
+// users stats count
+router.get("/userCount/total", totalUsers);
+router.get("/userCount/male", maleUsers);
+router.get("/userCount/female", femaleUsers);
+router.get("/userCount/active", activeUsers);
+router.get("/userCount/deactive", deactiveUsers);
+router.get("/userCount/averageAge", averageUserAge);
+
+// router.get("/userCount/", getUsers);
+
 
 export default router;

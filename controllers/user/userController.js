@@ -2,7 +2,7 @@ import User from "../../models/UserModal.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import transporter from '../../config/emailColfig.js'; 
-
+import moment from "moment";
 import sendEmail from "../../utils/emailController.js";
   changePasswordSchema
   import { registerUserSchema, loginUserSchema, changePasswordSchema  } from "../../helpers/userValidation.js"; // Import Joi schemas
@@ -536,5 +536,99 @@ export const getApprovedUsers = async (req, res) => {
     res.status(200).json({ success: true, data: approvedUsers });
   } catch (error) {
     res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+
+
+
+
+
+
+
+
+
+// user stats for admin cards ---------------------------
+
+export const totalUsers = async (req, res) => {
+
+  try {
+    const count = await User.countDocuments({ isDeleted: false });
+    res.status(200).json({ success: true, count });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ success: false, msg: "server error", error:error.msg, msg:"total user fetched succesffully"  });
+  }
+};
+
+
+export const maleUsers = async (req, res) => {
+
+  try {
+    const maleUsersCount = await User.countDocuments({
+      gender: "Male",
+      isDeleted: false,
+    });
+    res.status(200).json({ success: true, count: maleUsersCount });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ success: false, msg: "server error", error:error.msg, msg:"error in fetching male users"  });
+  }
+};
+
+export const femaleUsers = async (req, res) => {
+
+  try {
+    const femaleUsersCount = await User.countDocuments({
+      gender: "Female",
+      isDeleted: false,
+    });
+    res.status(200).json({ success: true, count: femaleUsersCount });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ success: false, msg: "server error", error:error.msg, msg:"error in fetching female users"  });
+  }
+};
+
+
+export const activeUsers = async (req, res) => {
+  try {
+    const activeUsersCount = await User.countDocuments({
+      status: true,
+      isDeleted: false,
+    });
+    res.status(200).json({ success: true, count: activeUsersCount, msg:"fetched active user successfully" });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ success: false, msg: "server error", error:error.msg });
+  }
+};
+
+export const deactiveUsers = async (req, res) => {
+
+  try {
+    const deactiveUsersCount = await User.countDocuments({
+      status: false,
+      isDeleted: false,
+    });
+    res.status(200).json({ success: true, count: deactiveUsersCount, msg:"fetched inactive user successfully" }  );
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ success: false, msg: SERVER_ERROR, error:error.msg });
+  }
+};
+
+export const averageUserAge = async (req, res) => {
+  try {
+    const users = await User.find({ isDeleted: false }, 'dob');
+    const totalAge = users.reduce((sum, user) => {
+      const age = moment().diff(user.dob, 'years');
+      return sum + age;
+    }, 0);
+    const averageAge = totalAge / users.length;
+    res.status(200).json({ success: true, averageAge: averageAge.toFixed(2), msg:"average age fetch succesfully" });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ success: false, msg: "server error", error:error.msg });
   }
 };

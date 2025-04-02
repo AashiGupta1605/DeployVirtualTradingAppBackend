@@ -511,3 +511,15 @@ export const searchOrganizations = async (req, res) => {
 
 
 
+// orgainzation stats for admin cards controllers
+
+export const totalOrganizations = async (req, res) => {
+
+  try {
+    const count = await OrgRegistration.countDocuments({ isDeleted: false });
+    res.status(200).json({ success: true, count });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ success: false, msg: "server error", error:error.msg, msg:"total organization count fetched succesffully"  });
+  }
+};
