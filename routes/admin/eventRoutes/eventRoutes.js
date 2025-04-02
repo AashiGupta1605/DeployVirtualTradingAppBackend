@@ -5,8 +5,11 @@ import {
   updateEvent,
   deleteEvent,
   totalEvents
+  registerForEvent,
+  verifyEventPayment,
+  getMyRegisteredEvents
 } from '../../../controllers/admin/eventController.js';
-// import { adminProtect } from '../middleware/authMiddleware';
+import { protect } from '../../../middlewares/userMiddleware.js';
 
 const router = express.Router();
 
@@ -24,4 +27,10 @@ router.route('/:id')
 
   router.get("/eventCount/total", totalEvents);
   
+  router.post('/register', registerForEvent);
+  router.post('/verify-event', verifyEventPayment);
+
+  router.get('/my-events', protect, getMyRegisteredEvents);
+  
+
 export default router;

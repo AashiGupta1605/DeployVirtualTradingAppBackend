@@ -1,7 +1,6 @@
 import dotenv from "dotenv"; 
 dotenv.config();
 
-const backendURL = process.env.BACKEND_URL || "http://localhost:5000"; // Change this when deploying
 
 const generateEmailTemplate = ({ subject, message, buttonText = "", buttonLink = "" ,showHomeLink = true}) => {
   return `
@@ -39,7 +38,11 @@ const generateEmailTemplate = ({ subject, message, buttonText = "", buttonLink =
       </head>
       <body>
         <div class="container">
-          <img src="https://res.cloudinary.com/dufmoqkie/image/upload/v1743314060/PGR_logo_refoho.jpg" alt="PGR Logo" class="logo"> 
+        <div align="center" style="margin: 0 auto; max-width: 100%;">
+          <img src="https://res.cloudinary.com/dufmoqkie/image/upload/v1743314060/PGR_logo_refoho.jpg" alt="PGR Logo" class="logo"  style="display: block; width: 120px; height: 120px; border-radius: 50%; border: 2px solid #f4f4f4;"
+    width="120"
+    height="120"> 
+    </div>
           <div class="header">PGR - Virtual Trading App</div>
           <hr>
           <div class="content">

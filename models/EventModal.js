@@ -8,7 +8,7 @@ const EventSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ['ongoing', 'upcoming'],
+    enum: ['ongoing', 'upcoming', 'completed'],
     required: true
   },
   description: {
@@ -35,18 +35,28 @@ const EventSchema = new mongoose.Schema({
     position: String,
     reward: String
   }],
+  rewardTiers: [{
+    tier: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String,
+      required: true
+    }
+  }],
   cashbackPercentage: {
     type: Number,
-    required: true
+    default: 0
   },
   difficulty: {
     type: String,
-    enum: ['Beginner', 'Advanced', 'Expert'],
-    required: true
+    enum: ['Beginner', 'Intermediate', 'Advanced', 'Expert'],
+    default: 'Beginner'
   },
   entryFee: {
     type: Number,
-    required: true
+    default: 0
   },
   rewards: [String],
   backgroundColor: {
@@ -57,22 +67,41 @@ const EventSchema = new mongoose.Schema({
   requirements: String,
   progress: {
     type: Number,
-    default: 0
+    default: 0,
+    min: 0,
+    max: 100
   },
   progressText: String,
   icon: {
     type: String,
     default: 'Trophy'
   },
+  coverImage: String,
+  location: String,
   isActive: {
     type: Boolean,
     default: true
   },
   isDeleted: {
     type: Boolean,
-    default: false,
-    select: true // Ensures this field is returned in queries
-  }
-}, { timestamps: true });
+    default: false
+  },
+  maxParticipants: Number,
+  registrationDeadline: Date,
+  organizer: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  tags: [String]
+}, { 
+  timestamps: true,
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
+});
+
+EventSchema.index({ title: 'text', description: 'text' });
+EventSchema.index({ startDate: 1 });
+EventSchema.index({ endDate: 1 });
+EventSchema.index({ isActive: 1, isDeleted: 1 });
 
 export default mongoose.model('Event', EventSchema);

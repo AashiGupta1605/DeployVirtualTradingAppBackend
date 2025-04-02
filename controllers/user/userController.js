@@ -237,7 +237,7 @@ export const forgotPassword = async (req, res) => {
 
      //Generate Reset Token (expires in 15 minutes)
      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "15m" });
-     const resetLink = `${process.env.FRONTEND_URL}/reset-password/${token}`;
+     const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${token}&role=user`;
  
      console.log("Generated Reset Token:", token);
      console.log("Reset Link:", resetLink);
