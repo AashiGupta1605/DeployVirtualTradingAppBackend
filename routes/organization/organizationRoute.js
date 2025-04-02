@@ -4,7 +4,7 @@ import {
   // Auth controllers
   organizationRegister,
   organizationLogin,
-  
+  organizationForgotPassword, organizationResetPassword,
   // Organization controllers
   getAllOrgs,
   getOrgById,
@@ -24,6 +24,12 @@ router.post('/register', organizationRegister);
 router.post('/login', organizationLogin);
 // router.get('/by-name', getOrganizationByName);
 // router.put('/update-by-name', updateOrganizationByName);
+
+// Forgot Password - Send Reset Link
+router.post("/forgot-password", organizationForgotPassword);
+
+// Reset Password - Update New Password
+router.post("/reset-password/:token", organizationResetPassword);
 
 router.get("/by-id", authMiddleware, getOrganizationById); // GET organization by ID
 router.put("/update-by-id", authMiddleware, updateOrganizationById);
