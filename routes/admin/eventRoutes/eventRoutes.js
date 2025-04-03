@@ -4,6 +4,7 @@ import {
   getAllEvents,
   updateEvent,
   deleteEvent,
+  totalEvents,
   registerForEvent,
   verifyEventPayment,
   getMyRegisteredEvents
@@ -20,6 +21,12 @@ router.route('/:id')
   .put( updateEvent)
   .delete( deleteEvent);
 
+
+
+  // user stats for admin cards
+
+  router.get("/eventCount/total", totalEvents);
+  
   router.post('/register', registerForEvent);
   router.post('/verify-event', verifyEventPayment);
 

@@ -4,7 +4,7 @@ import {
   // Auth controllers
   organizationRegister,
   organizationLogin,
-  
+  organizationForgotPassword, organizationResetPassword,
   // Organization controllers
   getAllOrgs,
   getOrgById,
@@ -13,7 +13,9 @@ import {
   updateApprovalStatus,
   searchOrganizations,
   getOrganizationById,
-  updateOrganizationById
+  updateOrganizationById,
+  totalOrganizations,
+  changeOrganizationPassword
 } from '../../controllers/organization/organizationController.js';
 import authMiddleware from '../../middlewares/organizationMiddleware.js';
 
@@ -25,8 +27,18 @@ router.post('/login', organizationLogin);
 // router.get('/by-name', getOrganizationByName);
 // router.put('/update-by-name', updateOrganizationByName);
 
+// Forgot Password - Send Reset Link
+router.post("/forgot-password", organizationForgotPassword);
+
+// Reset Password - Update New Password
+router.post("/reset-password/:token", organizationResetPassword);
+
 router.get("/by-id", authMiddleware, getOrganizationById); // GET organization by ID
 router.put("/update-by-id", authMiddleware, updateOrganizationById);
+
+//change password
+router.put("/change-password", authMiddleware, changeOrganizationPassword);
+
 
 
 // Admin List and search organizations
@@ -42,5 +54,12 @@ router.put('/status/:id', updateApprovalStatus);
 
 // User related routes
 // router.get('/users/:orgName', verifyToken, getUserByOrgName);
+
+
+
+// organization stats route for admin cards
+
+router.get("/organizationCount/total", totalOrganizations);
+
 
 export default router;

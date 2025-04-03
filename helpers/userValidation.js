@@ -4,7 +4,7 @@ export const registerUserSchema = Joi.object({
   name: Joi.string().min(3).required(),
   email: Joi.string().email().required(),
   password: Joi.string().min(6).required(),
-  mobile: Joi.string().pattern(/^[0-9]{10}$/).required(),
+  mobile: Joi.string().pattern(/^[9876]\d{9}$/).required(),
   gender: Joi.string().required(),
   userPhoto: Joi.string().label("userPhoto"),
   dob: Joi.date()
@@ -37,7 +37,7 @@ export const registerUserSchema = Joi.object({
 // Validation schema for user login
 export const loginUserSchema = Joi.object({
   email: Joi.string().email().label('Email'),
-  mobile: Joi.string().pattern(/^[0-9]{10}$/).label('Mobile'), // Assumes a 10-digit mobile number format
+  mobile: Joi.string().pattern(/^[9876]\d{9}$/).label('Mobile'), // Assumes a 10-digit mobile number format
   password: Joi.string().min(6).required().label('Password'),
 }).or('email', 'mobile'); // Require at least one: email or mobile
 
