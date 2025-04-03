@@ -14,7 +14,8 @@ import {
   searchOrganizations,
   getOrganizationById,
   updateOrganizationById,
-  totalOrganizations
+  totalOrganizations,
+  changeOrganizationPassword
 } from '../../controllers/organization/organizationController.js';
 import authMiddleware from '../../middlewares/organizationMiddleware.js';
 
@@ -34,6 +35,10 @@ router.post("/reset-password/:token", organizationResetPassword);
 
 router.get("/by-id", authMiddleware, getOrganizationById); // GET organization by ID
 router.put("/update-by-id", authMiddleware, updateOrganizationById);
+
+//change password
+router.put("/change-password", authMiddleware, changeOrganizationPassword);
+
 
 
 // Admin List and search organizations

@@ -4,7 +4,7 @@ import {
   getAllEvents,
   updateEvent,
   deleteEvent,
-  totalEvents
+  totalEvents,
   registerForEvent,
   verifyEventPayment,
   getMyRegisteredEvents
