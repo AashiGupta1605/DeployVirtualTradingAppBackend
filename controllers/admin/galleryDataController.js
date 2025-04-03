@@ -54,7 +54,7 @@ export const updateGalleryItembyPatch = async (req, res) => {
         return res.status(500).json({ success: false, message: "Server Error: ID required." });
 
         // Fetch the existing item
-        let galleryItem = await galleryData.findById(id);
+        let galleryItem = await galleryData.findOne({ _id: id, isDeleted: false });
         if (!galleryItem) {
             return res.status(409).json({ success: false, message: "Image not found in gallery..." });
         }
@@ -120,7 +120,7 @@ export const updateGalleryItem = async(req, res) => {
         if(!id)
         return res.status(500).json({ success: false, message: "Server Error: ID required." });
 
-        const existingGalleryItem = await galleryData.findById(id)
+        const existingGalleryItem = await galleryData.findOne({ _id: id, isDeleted: false });
 
         if (!existingGalleryItem) {
             return res.status(409).json({ success: false, message: "Image not found in Gallery" });
@@ -170,7 +170,7 @@ export const deleteGalleryItem = async(req, res) => {
             return res.status(500).json({ success: false, message: "Server Error: ID required." });
         } 
         else {
-            const existingGalleryItem = await galleryData.findById(id);
+            const existingGalleryItem = await galleryData.findOne({ _id: id, isDeleted: false });;
 
             if (!existingGalleryItem) {
                 return res.status(409).json({ success: false, message: "Image not found in Gallery." });
@@ -207,14 +207,16 @@ export const deleteGalleryItem = async(req, res) => {
 
 export const deleteAllGalleryItems = async(req, res) => {
     try{
-        const galleryItemsCount = await galleryData.countDocuments();
+        let filter = { isDeleted: false };
+
+        const galleryItemsCount = await galleryData.countDocuments(filter);
         if (galleryItemsCount === 0) {
             return res.status(409).json({ success: false, message: "Empty Gallery.....No Image found in Gallery to delete." });
         } 
         else {
             // Perform soft delete on all images
             const deletedImages = await galleryData.updateMany(
-                {},
+                filter,
                 {
                     isDeleted: true,
                     deletedDate: new Date()

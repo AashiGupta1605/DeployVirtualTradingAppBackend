@@ -3,7 +3,7 @@ import galleryCategory from "../../models/GalleryCategoryModal.js";
 export const addGalleryCategory = async(req, res) => {
     try{
         const {name} =req.body;
-        if(name){
+        if(name && name.length<=25){
             const data = await galleryCategory.findOne({name}); 
             if(data==null){
                 const category = new galleryCategory({name, createdDate: new Date()})
@@ -14,7 +14,7 @@ export const addGalleryCategory = async(req, res) => {
             res.status(409).json({success:false, message:`Category ${name} already exists...`})
         }
         else
-        res.status(409).json({success:false, message:"Enter Category Name..."});
+        res.status(409).json({success:false, message:"Enter Category Name Properly..."});
     }
     catch(error){
         console.error("Add Gallery Category Error: ", error)
@@ -33,6 +33,9 @@ export const updateGalleryCategory = async (req, res) => {
         if(!name)
         return res.status(409).json({ success: false, message: "Category Name is required for Update." });
         
+        if(name.length>25)
+        return res.status(409).json({ success: false, message: "Category Name must not be more than of 25 characters." });
+
         const existingID = await galleryCategory.findOne({ _id: id, isDeleted: false });
             
         if (!existingID) {
