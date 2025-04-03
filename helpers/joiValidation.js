@@ -75,6 +75,11 @@ export const organizationLoginValidationSchema = Joi.object({
 }).or('email', 'mobile'); // Require either email or mobile, but not both
 
 
+export const changePasswordSchema = Joi.object({
+  oldPassword: Joi.string().min(6).required(),
+  newPassword: Joi.string().min(6).required(),
+});
+
 export const organizationUserRegistrationValidationSchema = Joi.object({
   name: Joi.string().required().label('Name'),
   email: Joi.string().email().required().label('Email'),
