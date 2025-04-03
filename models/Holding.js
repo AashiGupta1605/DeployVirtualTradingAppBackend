@@ -12,6 +12,7 @@ const holdingSchema = new mongoose.Schema({
     ref: "SubscriptionPlan",
     required: true
   },
+  eventId: { type: mongoose.Schema.Types.ObjectId, ref: 'Event' },
   companySymbol: {
     type: String,
     required: true
