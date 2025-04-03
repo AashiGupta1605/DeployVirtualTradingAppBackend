@@ -5,6 +5,8 @@ import { organizationRegistrationValidationSchema, organizationLoginValidationSc
 import { hashPassword, comparePassword } from '../../helpers/hashHelper.js';
 import jwt from 'jsonwebtoken';
 import { sendOrganizationRegistrationEmail } from '../../helpers/emailService.js';
+import sendEmail from "../../utils/emailController.js"; 
+import bcrypt from 'bcryptjs';
 import mongoose from 'mongoose';
 // import cloudinary from '../../helpers/cloudinary.js';
 
@@ -160,11 +162,79 @@ export const organizationLogin = async (req, res) => {
   }
 };
 
+//Organization forgot password
+
+export const organizationForgotPassword = async (req, res) => {
+  try {
+     console.log("Forgot Password Request Received:", req.body);
+    const { email } = req.body;
+
+    const organization = await OrgRegistration.findOne({ email });
+    if (!organization) {
+      return res.status(404).json({ message: "Organization not found" });
+    }
+
+    // Generate Reset Token (Valid for 15 minutes)
+    const token = jwt.sign({ id: organization._id }, process.env.JWT_SECRET, { expiresIn: "15m" });
+
+    // Reset Link
+    const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${token}&role=organization`;
+    console.log("Generated Reset Token:", token);
+    console.log("Reset Link:", resetLink);
+
+    // Send Reset Email
+    const subject = "Password Reset Request";
+    const message = "Click the button below to reset your password. This link expires in 15 minutes.";
+    
+    await sendEmail(email, subject, message, "Reset Password", resetLink, false);
+
+    res.status(200).json({ message: "Password reset link sent to your email" });
+
+  } catch (error) {
+    console.error("Error in organizationForgotPassword:", error);
+    res.status(500).json({ message: "Error sending email", error: error.message });
+  }
+};
+
+// organization ResetPaasword 
+export const organizationResetPassword = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const { newPassword, confirmPassword } = req.body;
+
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ message: "Passwords do not match" });
+    }
+
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (error) {
+      if (error.name === "TokenExpiredError") {
+        return res.status(400).json({ message: "Reset link has expired. Please request a new one." });
+      }
+      return res.status(400).json({ message: "Invalid reset token" });
+    }
+
+    const organization = await OrgRegistration.findById(decoded.id);
+    if (!organization) {
+      return res.status(404).json({ message: "Organization not found" });
+    }
+
+    // Hash New Password
+    const salt = await bcrypt.genSalt(10);
+    organization.password = await bcrypt.hash(newPassword, salt);
+
+    await organization.save();
+    res.status(200).json({ message: "Password reset successfully" });
+
+  } catch (error) {
+    console.error("Error in organizationResetPassword:", error);
+    res.status(500).json({ message: "Error resetting password", error: error.message });
+  }
+};
 
 
-
-
-import bcrypt from 'bcryptjs';
 
 // // Get Organization by Name
 
@@ -511,3 +581,15 @@ export const searchOrganizations = async (req, res) => {
 
 
 
+// orgainzation stats for admin cards controllers
+
+export const totalOrganizations = async (req, res) => {
+
+  try {
+    const count = await OrgRegistration.countDocuments({ isDeleted: false });
+    res.status(200).json({ success: true, count });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ success: false, msg: "server error", error:error.msg, msg:"total organization count fetched succesffully"  });
+  }
+};

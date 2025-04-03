@@ -10,7 +10,7 @@ import galleryCategoryRoutes from '../admin/galleryRoutes/galleryCategoryRoutes.
 import galleryDataRoutes from '../admin/galleryRoutes/galleryDataRoutes.js'
 
 import eventRoutes from './eventRoutes/eventRoutes.js'; // Import the event routes
-
+import statsRoute from "./statsRoute/statsRoute.js";
 import { getETFData } from '../../scripts/scraper2.js';
 
 const router = express.Router();
@@ -36,5 +36,12 @@ router.use('/gallery', galleryDataRoutes)
 
 // Event Routes
 router.use('/events', eventRoutes); // Add the event routes
+
+
+// Stats Route
+
+router.use('/stats', statsRoute); // Add the event routes
+
+
 
 export default router;

@@ -66,7 +66,7 @@ const runAllScrapers = async () => {
     { 
       fn: scrapeAndStoreETFData, 
       name: 'ETF',
-      enabled: true // You can conditionally enable/disable scrapers
+      enabled: false // You can conditionally enable/disable scrapers
     },
     { 
       fn: fetchNifty50Data, 
@@ -76,7 +76,7 @@ const runAllScrapers = async () => {
     { 
       fn: fetchNifty500Data, 
       name: 'Nifty 500',
-      enabled: true 
+      enabled: false 
     }
   ];
 
