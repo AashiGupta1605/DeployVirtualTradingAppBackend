@@ -128,6 +128,23 @@ const orgRegistrationSchema = new mongoose.Schema({
   timestamps: true // This will add createdAt and updatedAt fields
 });
 
+// 🔹 Add method to change password securely in Organization model
+orgRegistrationSchema.methods.changePassword = async function (oldPassword, newPassword) {
+  const isMatch = await bcrypt.compare(oldPassword, this.password);
+  if (!isMatch) {
+    throw new Error("Old password is incorrect");
+  }
+
+  if (oldPassword === newPassword) {
+    throw new Error("New password must be different from the old password");
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(newPassword, salt);
+  await this.save();
+};
+
+
 // Add indexes for better query performance
 orgRegistrationSchema.index({ email: 1 }, { unique: true });
 orgRegistrationSchema.index({ approvalStatus: 1 });
