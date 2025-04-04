@@ -13,6 +13,8 @@ router.post('/trading/trade', tradeStock);
 router.get('/trading/history/:userId', getTransactionHistory);
 // IMPORTANT: Add subscriptionPlanId to the holdings route
 router.get('/trading/holdings/:userId/:subscriptionPlanId', getHoldings);
-router.get('/event-transactions/:userId/:eventId', getEventSpecificTransactions);
+// Change this route to match your controller
+// router.get('/:eventId/transactions/:userId', getEventSpecificTransactions);
+router.get('/:eventId/transactions/:userId', getEventSpecificTransactions);
 
 export default router;

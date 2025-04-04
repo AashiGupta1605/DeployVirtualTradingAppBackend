@@ -45,7 +45,7 @@ router.use('/', userTradingRoute);
 
 router.use('/payment', userPayment);
 
-router.use('/events', userEventRoutes);
+router.use('/', userEventRoutes);
 // payment route
 
 

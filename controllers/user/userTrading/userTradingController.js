@@ -439,7 +439,6 @@ export const getTransactionHistory = async (req, res) => {
   }
 };
 
-// New endpoint specifically for event transactions
 export const getEventSpecificTransactions = async (req, res) => {
   try {
     const { eventId, userId } = req.params;
@@ -451,6 +450,7 @@ export const getEventSpecificTransactions = async (req, res) => {
       });
     }
 
+    // Make sure this query ONLY returns transactions for this specific event
     const transactions = await Transaction.find({ 
       userId,
       eventId 
