@@ -5,7 +5,7 @@ import transporter from '../../config/emailColfig.js';
 import moment from "moment";
 import sendEmail from "../../utils/emailController.js";
   changePasswordSchema
-  import { registerUserSchema, loginUserSchema, changePasswordSchema  } from "../../helpers/userValidation.js"; // Import Joi schemas
+  import { registerUserSchema, loginUserSchema, changePasswordSchema, passwordValidationSchema } from "../../helpers/userValidation.js"; // Import Joi schemas
 import {
   updateUserValidation,
   deleteUserValidation,
@@ -119,7 +119,7 @@ export const loginUser = async (req, res) => {
       $or: [{ email }, { mobile }] 
     }).select("+password +isDeleted"); // Include isDeleted field
 
-    if (!user) return res.status(400).json({ message: "not a registered user" });
+    if (!user) return res.status(400).json({ message: "Not a registered user" });
 
     console.log(user);
     
@@ -289,8 +289,9 @@ export const resetPassword = async (req, res) => {
     const { token } = req.params;
     const { newPassword, confirmPassword } = req.body;
 
-    if (newPassword !== confirmPassword) {
-      return res.status(400).json({ message: "Passwords do not match" });
+    const { error } = passwordValidationSchema.validate({ newPassword, confirmPassword });
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
     }
 
     let decoded;
@@ -320,6 +321,19 @@ export const resetPassword = async (req, res) => {
   }
 };
 
+// ✅ Verify Reset Token Controller
+export const verifyResetToken = async (req, res) => {
+  const { token } = req.params;
+  try {
+    jwt.verify(token, process.env.JWT_SECRET); // Will throw if expired or invalid
+    res.status(200).json({ message: "Token is valid" });
+  } catch (error) {
+    if (error.name === "TokenExpiredError") {
+      return res.status(400).json({ message: "Reset link has expired. Please request a new one." });
+    }
+    return res.status(400).json({ message: "Invalid or expired reset token" });
+  }
+};
 
 
 export const getUserProfile = async (req, res) => {
