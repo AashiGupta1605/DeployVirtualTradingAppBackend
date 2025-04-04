@@ -1,7 +1,7 @@
 // ORGANIZATION CRUD OPERATION ==========================================================================
 
 import OrgRegistration from '../../models/OrgRegisterModal.js';
-import { organizationRegistrationValidationSchema, organizationLoginValidationSchema, getUserByOrgNameValidation, changePasswordSchema} from '../../helpers/joiValidation.js';
+import { organizationRegistrationValidationSchema, organizationLoginValidationSchema, getUserByOrgNameValidation, changePasswordSchema, passwordValidationSchema} from '../../helpers/joiValidation.js';
 import { hashPassword, comparePassword } from '../../helpers/hashHelper.js';
 import jwt from 'jsonwebtoken';
 import { sendOrganizationRegistrationEmail } from '../../helpers/emailService.js';
@@ -259,11 +259,12 @@ export const organizationResetPassword = async (req, res) => {
   try {
     const { token } = req.params;
     const { newPassword, confirmPassword } = req.body;
-
-    if (newPassword !== confirmPassword) {
-      return res.status(400).json({ message: "Passwords do not match" });
-    }
-
+     
+    const { error } = passwordValidationSchema.validate({ newPassword, confirmPassword });
+        if (error) {
+          return res.status(400).json({ message: error.details[0].message });
+        }
+    
     let decoded;
     try {
       decoded = jwt.verify(token, process.env.JWT_SECRET);
