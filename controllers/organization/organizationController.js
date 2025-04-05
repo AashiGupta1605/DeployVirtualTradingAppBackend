@@ -1,7 +1,7 @@
 // ORGANIZATION CRUD OPERATION ==========================================================================
 
 import OrgRegistration from '../../models/OrgRegisterModal.js';
-import { organizationRegistrationValidationSchema, organizationLoginValidationSchema, getUserByOrgNameValidation} from '../../helpers/joiValidation.js';
+import { organizationRegistrationValidationSchema, organizationLoginValidationSchema, getUserByOrgNameValidation, changePasswordSchema, passwordValidationSchema} from '../../helpers/joiValidation.js';
 import { hashPassword, comparePassword } from '../../helpers/hashHelper.js';
 import jwt from 'jsonwebtoken';
 import { sendOrganizationRegistrationEmail } from '../../helpers/emailService.js';
@@ -162,6 +162,64 @@ export const organizationLogin = async (req, res) => {
   }
 };
 
+
+//Organization Change Password
+export const changeOrganizationPassword = async (req, res) => {
+  try {
+    console.log("🔹 Received password change request for organization:", req.body);
+
+    // ✅ Validate input
+    const { error } = changePasswordSchema.validate(req.body, { abortEarly: false });
+    if (error) {
+      console.log(" Joi Validation Error:", error.details);
+      return res.status(400).json({
+        message: "Validation failed",
+        errors: error.details.map((err) => err.message),
+      });
+    }
+
+    const { oldPassword, newPassword } = req.body;
+    const orgId = req.organization._id; // Extract orgId from JWT
+
+    console.log(" Extracted Organization ID from JWT:", orgId);
+
+    const organization = await OrgRegistration.findById(orgId);
+    if (!organization) {
+      console.log(" Organization not found");
+      return res.status(404).json({ message: "Organization not found" });
+    }
+
+    console.log(" Organization found:", organization.email);
+
+    // 🔹 Check if old password is correct
+    const isMatch = await bcrypt.compare(oldPassword, organization.password);
+    if (!isMatch) {
+      console.log(" Old password is incorrect");
+      return res.status(401).json({ message: "Old password is incorrect" });
+    }
+
+    // 🔹 Prevent changing to the same password
+    if (oldPassword === newPassword) {
+      console.log("New password must be different");
+      return res.status(400).json({ message: "New password must be different from the old password" });
+    }
+
+    // 🔹 Hash and update the new password
+    console.log("🔹 Hashing new password...");
+    const salt = await bcrypt.genSalt(10);
+    organization.password = await bcrypt.hash(newPassword, salt);
+    await organization.save();
+
+    console.log("✅ Organization password updated successfully");
+    res.status(200).json({ message: "Password updated successfully" });
+  } catch (error) {
+    console.error(" Error in changeOrganizationPassword controller:", error);
+    res.status(500).json({ message: "Password change failed", error: error.message });
+  }
+};
+
+
+
 //Organization forgot password
 
 export const organizationForgotPassword = async (req, res) => {
@@ -201,11 +259,12 @@ export const organizationResetPassword = async (req, res) => {
   try {
     const { token } = req.params;
     const { newPassword, confirmPassword } = req.body;
-
-    if (newPassword !== confirmPassword) {
-      return res.status(400).json({ message: "Passwords do not match" });
-    }
-
+     
+    const { error } = passwordValidationSchema.validate({ newPassword, confirmPassword });
+        if (error) {
+          return res.status(400).json({ message: error.details[0].message });
+        }
+    
     let decoded;
     try {
       decoded = jwt.verify(token, process.env.JWT_SECRET);

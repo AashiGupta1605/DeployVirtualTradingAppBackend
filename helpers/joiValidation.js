@@ -59,7 +59,16 @@ export const organizationRegistrationValidationSchema = Joi.object({
   email: Joi.string().email().required().label('Email'),
   mobile: Joi.string().pattern(/^[9876]\d{9}$/).required().label('Mobile'),
   approvalStatus: Joi.string().valid("approved", "rejected", "pending").default("pending").label('Approval Status'),
-  password: Joi.string().min(8).required().label('Password'),
+  password: Joi.string()
+    .min(8)
+    .max(15) // Optional max length
+    .pattern(new RegExp("^(?=.*[A-Za-z])(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"))
+    .required()
+    .messages({
+      "string.min": "Password must be at least 8 characters long.",
+      "string.pattern.base": "Password must contain at least one letter and one special character.",
+      "any.required": "Password is required.",
+    }),
   confirmPassword: Joi.string().valid(Joi.ref('password')).required().label('Confirm Password'),
   photo: Joi.string().label("photo")
 });
@@ -71,8 +80,69 @@ export const organizationRegistrationValidationSchema = Joi.object({
 export const organizationLoginValidationSchema = Joi.object({
   email: Joi.string().email().label('Email'),
   mobile: Joi.string().label('Mobile'),
-  password: Joi.string().required().label('Password')
+  password: Joi.string()
+    .min(8)
+    .max(15) // Optional max length
+    .pattern(new RegExp("^(?=.*[A-Za-z])(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"))
+    .required()
+    .messages({
+      "string.min": "Password must be at least 8 characters long.",
+      "string.pattern.base": "Password must contain at least one letter and one special character.",
+      "any.required": "Password is required.",
+    })
 }).or('email', 'mobile'); // Require either email or mobile, but not both
+
+
+//change password validations
+export const changePasswordSchema = Joi.object({
+  oldPassword: Joi.string()
+    .min(8)
+    .max(15)
+    .pattern(/^(?=.*[A-Za-z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
+    .required()
+    .messages({
+      "string.min": "Password must be at least 8 characters",
+      "string.max": "Password cannot be more than 15 characters",
+      "string.pattern.base": "Password must contain at least one letter and one special character",
+      "any.required": "Password is required",
+    }),
+
+  newPassword: Joi.string()
+    .min(8)
+    .max(15)
+    .pattern(/^(?=.*[A-Za-z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
+    .required()
+    .messages({
+      "string.min": "Password must be at least 8 characters",
+      "string.max": "Password cannot be more than 15 characters",
+      "string.pattern.base": "Password must contain at least one letter and one special character",
+      "any.required": "Password is required",
+    }),
+});
+
+
+//Resetpassword validations
+export const passwordValidationSchema = Joi.object({
+  newPassword: Joi.string()
+    .min(8)
+    .max(15)
+    .pattern(/^(?=.*[A-Za-z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, "password")
+    .required()
+    .messages({
+      "string.min": "Password must be at least 8 characters",
+      "string.max": "Password cannot be more than 15 characters",
+      "string.pattern.base": "Password must contain at least one letter and one special character",
+      "any.required": "New password is required",
+    }),
+
+  confirmPassword: Joi.string()
+    .valid(Joi.ref("newPassword"))
+    .required()
+    .messages({
+      "any.only": "New password and confirm password must match",
+      "any.required": "Confirm password is required",
+    }),
+  });
 
 
 export const organizationUserRegistrationValidationSchema = Joi.object({

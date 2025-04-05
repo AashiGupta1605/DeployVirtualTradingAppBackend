@@ -18,7 +18,8 @@ import mongoose from 'mongoose';
 //       orderType = 'market',
 //       type, // 'buy' or 'sell'
 //       total,
-//       currentMarketPrice
+//       currentMarketPrice,
+//       eventId // Add eventId to the request body
 //     } = req.body;
 
 //     // Comprehensive validation
@@ -42,23 +43,20 @@ import mongoose from 'mongoose';
 //     // Find subscription
 //     const subscription = await SubscriptionPlan.findById(subscriptionPlanId);
 //     if (!subscription || subscription.status !== 'Active') {
-//       return res.status(400).json({
-//         success: false,
-//         message: 'Invalid or inactive subscription'
-//       });
+//       return res.status(400).json({ success: false, message: 'Invalid or inactive subscription' });
 //     }
 
-//     // Transaction logic
+//     let transaction;
+//     let emailSubject = "";
+//     let emailMessage = "";
+
+//     // **BUY LOGIC**
 //     if (type === 'buy') {
-//       // Check balance
 //       if (total > subscription.vertualAmount) {
-//         return res.status(400).json({
-//           success: false,
-//           message: 'Insufficient balance'
-//         });
+//         return res.status(400).json({ success: false, message: 'Insufficient balance' });
 //       }
 
-//       // Update subscription balance
+//       // Deduct balance
 //       subscription.vertualAmount -= total;
 //       await subscription.save({ session });
 
@@ -70,7 +68,6 @@ import mongoose from 'mongoose';
 //       });
 
 //       if (holding) {
-//         // Update existing holding
 //         const totalShares = holding.quantity + numberOfShares;
 //         const totalValue = (holding.quantity * holding.averageBuyPrice) + total;
 //         holding.quantity = totalShares;
@@ -120,17 +117,14 @@ import mongoose from 'mongoose';
 //       });
 
 //       if (!holding || holding.quantity < numberOfShares) {
-//         return res.status(400).json({
-//           success: false,
-//           message: 'Insufficient shares to sell'
-//         });
+//         return res.status(400).json({ success: false, message: 'Insufficient shares to sell' });
 //       }
 
-//       // Update subscription balance
+//       // Add balance
 //       subscription.vertualAmount += total;
 //       await subscription.save({ session });
 
-//       // Update holding
+//       // Update or delete holding
 //       holding.quantity -= numberOfShares;
 //       if (holding.quantity === 0) {
 //         await Holding.findByIdAndDelete(holding._id, { session });
@@ -151,30 +145,83 @@ import mongoose from 'mongoose';
 //         status: 'completed'
 //       }], { session });
 
-//       await session.commitTransaction();
-//       session.endSession();
+//     await session.commitTransaction();
+//     session.endSession();
 
-//       return res.status(200).json({
-//         success: true,
-//         transaction: transaction[0],
-//         holdings: await Holding.find({ userId, subscriptionPlanId }),
-//         balance: subscription.vertualAmount
-//       });
-//     }
+//     // Send Email Notification
+//     sendEmail(user.email, emailSubject, emailMessage);
+
+//     return res.status(200).json({
+//       success: true,
+//       transaction: transaction[0],
+//       holdings: await Holding.find({ userId, subscriptionPlanId }),
+//       balance: subscription.vertualAmount,
+//       message: `Trade ${type} successful. Confirmation email sent.`,
+//     });
 
 //   } catch (error) {
 //     await session.abortTransaction();
 //     session.endSession();
-
 //     console.error('Trade Stock Error:', error);
-//     return res.status(500).json({
+//     return res.status(500).json({ success: false, message: 'Internal server error', error: error.message });
+//   }
+// };
+// export const getHoldings = async (req, res) => {
+//   try {
+//     const { userId, subscriptionPlanId } = req.params;
+    
+//     // Validate inputs
+//     if (!userId || !subscriptionPlanId) {
+//       return res.status(400).json({
+//         success: false,
+//         message: 'User ID and Subscription Plan ID are required'
+//       });
+//     }
+
+//     const holdings = await Holding.find({ 
+//       userId, 
+//       subscriptionPlanId 
+//     });
+
+//     // If no holdings found, return an empty array instead of 404
+//     res.status(200).json({
+//       success: true,
+//       holdings: holdings || []
+//     });
+//   } catch (error) {
+//     console.error('Get Holdings Error:', error);
+//     res.status(500).json({
 //       success: false,
-//       message: 'Internal server error',
-//       error: error.message
+//       message: error.message
 //     });
 //   }
 // };
 
+// export const getTransactionHistory = async (req, res) => {
+//   try {
+//     const { userId } = req.params;
+    
+//     // Fetch transactions with populated subscription plan details
+//     const transactions = await Transaction.find({ userId })
+//       .sort({ createdAt: -1 })
+//       .lean();
+
+//     // Fetch current holdings
+//     const holdings = await Holding.find({ userId }).lean();
+
+//     res.status(200).json({
+//       transactions,
+//       holdings
+//     });
+//   } catch (error) {
+//     console.error('Get history error:', error);
+//     res.status(500).json({ 
+//       success: false,
+//       message: "Failed to fetch transaction history", 
+//       error: error.message 
+//     });
+//   }
+// };
 
 export const tradeStock = async (req, res) => {
   const session = await mongoose.startSession();
@@ -312,9 +359,10 @@ export const tradeStock = async (req, res) => {
   }
 };
 
+
 export const getHoldings = async (req, res) => {
   try {
-    const { userId, subscriptionPlanId } = req.params;
+    const { userId, subscriptionPlanId, eventId } = req.params;
     
     // Validate inputs
     if (!userId || !subscriptionPlanId) {
@@ -324,10 +372,18 @@ export const getHoldings = async (req, res) => {
       });
     }
 
-    const holdings = await Holding.find({ 
+    // Build query object
+    const query = { 
       userId, 
       subscriptionPlanId 
-    });
+    };
+
+    // Add eventId to query if provided
+    if (eventId && eventId !== 'null' && eventId !== 'undefined') {
+      query.eventId = eventId;
+    }
+
+    const holdings = await Holding.find(query);
 
     // If no holdings found, return an empty array instead of 404
     res.status(200).json({
@@ -345,17 +401,31 @@ export const getHoldings = async (req, res) => {
 
 export const getTransactionHistory = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const { userId, eventId } = req.params;
     
+    // Build query object
+    const query = { userId };
+
+    // Add eventId to query if provided
+    if (eventId && eventId !== 'null' && eventId !== 'undefined') {
+      query.eventId = eventId;
+    }
+
     // Fetch transactions with populated subscription plan details
-    const transactions = await Transaction.find({ userId })
+    const transactions = await Transaction.find(query)
       .sort({ createdAt: -1 })
       .lean();
 
-    // Fetch current holdings
-    const holdings = await Holding.find({ userId }).lean();
+    // Fetch current holdings with the same event filter
+    const holdingsQuery = { userId };
+    if (eventId && eventId !== 'null' && eventId !== 'undefined') {
+      holdingsQuery.eventId = eventId;
+    }
+    
+    const holdings = await Holding.find(holdingsQuery).lean();
 
     res.status(200).json({
+      success: true,
       transactions,
       holdings
     });
@@ -365,6 +435,42 @@ export const getTransactionHistory = async (req, res) => {
       success: false,
       message: "Failed to fetch transaction history", 
       error: error.message 
+    });
+  }
+};
+
+export const getEventSpecificTransactions = async (req, res) => {
+  try {
+    const { eventId, userId } = req.params;
+    
+    if (!eventId || !userId) {
+      return res.status(400).json({
+        success: false,
+        message: 'Event ID and User ID are required'
+      });
+    }
+
+    // Make sure this query ONLY returns transactions for this specific event
+    const transactions = await Transaction.find({ 
+      userId,
+      eventId 
+    }).sort({ createdAt: -1 });
+
+    const holdings = await Holding.find({
+      userId,
+      eventId
+    });
+
+    res.status(200).json({
+      success: true,
+      transactions,
+      holdings
+    });
+  } catch (error) {
+    console.error('Get Event Transactions Error:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message
     });
   }
 };
