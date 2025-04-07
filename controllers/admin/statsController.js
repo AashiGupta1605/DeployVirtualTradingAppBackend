@@ -230,7 +230,7 @@ import OrgRegister from '../../models/OrgRegisterModal.js';
 import Feedback from '../../models/FeedbackModel.js';
 import ContactUs from '../../models/ContactUsModal.js';
 import Event from '../../models/EventModal.js';
-import Complaint from '../../models/ComplaintModal.js';
+import Complaint from '../../models/ComplaintModel.js';
 import moment from 'moment';
 
 export const getUserStats = async (req, res) => {
