@@ -23,6 +23,7 @@ import subscriptionRoutes from './userSubscriptionPlanRoutes/userSubscriptionPla
 import userTradingRoute from "./userTradingRoute/userTradingRoute.js";
 import userPayment from "./userPayment/userPaymentRoute.js";
 import userEventRoutes from '../user/userPayment/userPaymentRoute.js';
+import complaintRoutes from './complaint/complaintRoutes.js';
 const router = express.Router();
 
 // Auth Routes
@@ -33,6 +34,9 @@ router.use('/', userRoutes);
 
 // Feedback Routes
 router.use('/feedback', feedbackRoutes);
+
+//Complaint Routes
+router.use('/complaint' , complaintRoutes);
 
 // Contact Routes
 router.use('/contact', contactRoutes);
