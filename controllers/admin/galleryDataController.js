@@ -1,45 +1,107 @@
 import galleryData from "../../models/EventsGalleryModal.js";
 import cloudinary from '../../helpers/cloudinary.js';
 
+// export const addGalleryItem = async (req, res) => {
+//     try {
+//         const { categoryName, title, desc, photo } = req.body;
+
+//         if (!categoryName || !photo) {
+//             return res.status(409).json({
+//                 success: false,
+//                 message: "Incomplete Data: Category Name and Photo are required fields.",
+//             });
+//         }
+
+//         if (title && (title.length < 8 || title.length > 80)) {
+//             return res.status(409).json({ success: false, message:"Title must be between 8 to 80 characters." });
+//         }
+
+//         if (desc && (desc.length < 15 || desc.length > 600)) {
+//             return res.status(409).json({ success: false, message:"Description must be between 15 to 600 characters." });
+//         }
+            
+//         const newGalleryItem = new galleryData({
+//             categoryName,
+//             title,
+//             desc,
+//             photo,
+//             createdDate: new Date(),
+//         });
+        
+//         await newGalleryItem.save();
+        
+//         return res.status(201).json({
+//             success: true,
+//             message: "Image in Gallery added successfully.",
+//             galleryItem: newGalleryItem,
+//         }); 
+//     } 
+//     catch (error) {
+//         console.error("Add Gallery Item Error:", error);
+//         return res.status(500).json({
+//             success: false,
+//             message: `Failed to add Image in gallery: ${error.message}. Please try again.`,
+//             error: error.message,
+//         });
+//     }
+// };
+
 export const addGalleryItem = async (req, res) => {
     try {
-        const { categoryName, title, desc, photo } = req.body;
+        const { categoryName, title, desc } = req.body;
+        const photo = req.file; // Now available via multer
 
         if (!categoryName || !photo) {
             return res.status(409).json({
                 success: false,
-                message: "Incomplete Data....Category Name and Photo are required fields.",
+                message: "Incomplete Data: Category Name and Photo are required fields.",
             });
         }
-        else{
-            if (title && (title.length < 8 || title.length > 80)) {
-                return res.status(409).json({ success: false, message:"Title must be between 8 to 80 characters" });
-            }
-            if (desc && (desc.length < 15 || desc.length > 600)) {
-                return res.status(409).json({ success: false, message:"Description must be between 15 to 600 characters" });
-            }
-            const newGalleryItem = new galleryData({
-                categoryName,
-                title,
-                desc,
-                photo,
-                createdDate: new Date(),
-            });
-        
-            await newGalleryItem.save();
-        
-            return res.status(201).json({
-                success: true,
-                message: "Image in Gallery added successfully.",
-                galleryItem: newGalleryItem,
-            }); 
+
+        if (title && (title.length < 8 || title.length > 80)) {
+            return res.status(409).json({ success: false, message:"Title must be between 8 to 80 characters." });
         }
+
+        if (desc && (desc.length < 15 || desc.length > 600)) {
+            return res.status(409).json({ success: false, message:"Description must be between 15 to 600 characters." });
+        }
+
+        if (!photo?.buffer) {
+            return res.status(409).json({ success: false, message: "Invalid image buffer." });
+        }
+
+        // Convert the buffer to a base64 string for Cloudinary
+        const photoBase64 = photo.buffer.toString('base64');
+        const photoUri = `data:${photo.mimetype};base64,${photoBase64}`;
+
+        const result = await cloudinary.uploader.upload(photoUri, {
+            folder: 'gallery',
+            resource_type: 'auto',
+            // chunk_size: 20 * 1024 * 1024 // 20MB chunks for large files
+        });
+
+            
+        const newGalleryItem = new galleryData({
+            categoryName,
+            title,
+            desc,
+            photo: result.secure_url,
+            createdDate: new Date(),
+        });
+        
+        await newGalleryItem.save();
+        
+        return res.status(201).json({
+            success: true,
+            message: "Image in Gallery added successfully.",
+            galleryItem: newGalleryItem,
+        }); 
     } 
     catch (error) {
         console.error("Add Gallery Item Error:", error);
         return res.status(500).json({
             success: false,
-            message: `Failed to add Image in gallery: ${error.message}`,
+            message: `Failed to add Image in gallery: ${error.message}. Please try again.`,
             error: error.message,
         });
     }
@@ -54,9 +116,9 @@ export const updateGalleryItembyPatch = async (req, res) => {
         return res.status(500).json({ success: false, message: "Server Error: ID required." });
 
         // Fetch the existing item
-        let galleryItem = await galleryData.findById(id);
+        let galleryItem = await galleryData.findOne({ _id: id, isDeleted: false });
         if (!galleryItem) {
-            return res.status(409).json({ success: false, message: "Image not found in gallery..." });
+            return res.status(409).json({ success: false, message: "Image not found in gallery." });
         }
 
         // Prepare an update object
@@ -65,7 +127,7 @@ export const updateGalleryItembyPatch = async (req, res) => {
         // Validate and update categoryName
         if (updates.categoryName !== undefined) {
             if (typeof updates.categoryName !== "string" || updates.categoryName.trim() === "") {
-                return res.status(409).json({ success: false, message: "Category name cannot be empty" });
+                return res.status(409).json({ success: false, message: "Category name cannot be empty." });
             }
             updateFields.categoryName = updates.categoryName.trim();
         }
@@ -73,7 +135,7 @@ export const updateGalleryItembyPatch = async (req, res) => {
         // Validate and update title
         if (updates.title !== undefined) {
             if (updates.title !== null && (typeof updates.title !== "string" || updates.title.length < 8 || updates.title.length > 80)) {
-                return res.status(409).json({ success: false, message: "Title must be between 8 to 80 characters" });
+                return res.status(409).json({ success: false, message: "Title must be between 8 to 80 characters." });
             }
             updateFields.title = updates.title.trim();
         }
@@ -81,7 +143,7 @@ export const updateGalleryItembyPatch = async (req, res) => {
         // Validate and update desc
         if (updates.desc !== undefined) {
             if (updates.desc !== null && (typeof updates.desc !== "string" || updates.desc.length < 15 || updates.desc.length > 600)) {
-                return res.status(409).json({ success: false, message: "Description must be between 15 to 600 characters" });
+                return res.status(409).json({ success: false, message: "Description must be between 15 to 600 characters." });
             }
             updateFields.desc = updates.desc ? updates.desc.trim() : null;
         }
@@ -89,7 +151,7 @@ export const updateGalleryItembyPatch = async (req, res) => {
         // Validate and update photo
         if (updates.photo !== undefined) {
             if (typeof updates.photo !== "string" || updates.photo.trim() === "") {
-                return res.status(409).json({ success: false, message: "Photo URL cannot be empty" });
+                return res.status(409).json({ success: false, message: "Photo URL cannot be empty." });
             }
             updateFields.photo = updates.photo.trim();
         }
@@ -101,14 +163,14 @@ export const updateGalleryItembyPatch = async (req, res) => {
         const updatedGalleryItem = await galleryData.findByIdAndUpdate(id, updateFields, { new: true });
         
         if (!updatedGalleryItem) {
-            return res.status(409).json({ success: false, message: "Gallery Image updation unsuccessful." });
+            return res.status(409).json({ success: false, message: "Gallery Image updation unsuccessful. Please try again." });
         }
         else{
-        res.status(201).json({ success:true, message: "Gallery Image updated successfully", updatedGalleryItem });
+        res.status(201).json({ success:true, message: "Gallery Image updated successfully.", updatedGalleryItem });
         }
     } 
     catch (error) {
-        res.status(500).json({ success: false, message: `Internal server error: ${error.message}`, error: error.message });
+        res.status(500).json({ success: false, message: `Internal server error: ${error.message}.`, error: error.message });
     }
 };
 
@@ -120,10 +182,10 @@ export const updateGalleryItem = async(req, res) => {
         if(!id)
         return res.status(500).json({ success: false, message: "Server Error: ID required." });
 
-        const existingGalleryItem = await galleryData.findById(id)
+        const existingGalleryItem = await galleryData.findOne({ _id: id, isDeleted: false });
 
         if (!existingGalleryItem) {
-            return res.status(409).json({ success: false, message: "Image not found in Gallery" });
+            return res.status(409).json({ success: false, message: "Image not found in Gallery." });
         } 
 
         if(!categoryName || categoryName.trim() === "")
@@ -134,13 +196,13 @@ export const updateGalleryItem = async(req, res) => {
 
         if (title !== undefined){
             if (title!== null && (title.length < 8 || title.length > 80)) {
-                return res.status(409).json({ success: false, message: "Title must be between 8 to 80 characters" });
+                return res.status(409).json({ success: false, message: "Title must be between 8 to 80 characters." });
             }
         }
 
         if (desc !== undefined) {
             if (desc !== null && (desc.length < 15 || desc.length > 600)) {
-                return res.status(400).json({ success: false, message: "Description must be between 15 to 600 characters" });
+                return res.status(400).json({ success: false, message: "Description must be between 15 to 600 characters." });
             }
         }
 
@@ -150,7 +212,7 @@ export const updateGalleryItem = async(req, res) => {
             {new: true}
         )
         if(!updatedGalleryItem){
-            return res.status(500).json({success: false, message:"Gallery Image update unsuccessful. "})
+            return res.status(500).json({success: false, message:"Gallery Image update unsuccessful. Please try again."})
         }
         else{
             res.status(201).json({success: true, message: "Gallery Image updated successfuly.",updatedGalleryItem})
@@ -158,7 +220,7 @@ export const updateGalleryItem = async(req, res) => {
     }
     catch(error){
         console.error("Update Gallery Item Error:", error);
-        res.status(500).json({ success: false, message: `Failed to update Gallery Image: ${error.message}`, error:error.message});
+        res.status(500).json({ success: false, message: `Failed to update Gallery Image: ${error.message}.`, error:error.message});
     }
 }
 
@@ -170,7 +232,7 @@ export const deleteGalleryItem = async(req, res) => {
             return res.status(500).json({ success: false, message: "Server Error: ID required." });
         } 
         else {
-            const existingGalleryItem = await galleryData.findById(id);
+            const existingGalleryItem = await galleryData.findOne({ _id: id, isDeleted: false });;
 
             if (!existingGalleryItem) {
                 return res.status(409).json({ success: false, message: "Image not found in Gallery." });
@@ -187,7 +249,7 @@ export const deleteGalleryItem = async(req, res) => {
                 );
 
                 if (!deletedGalleryItem) {
-                    return res.status(500).json({ success: false, message: "Failed to delete Image from Gallery." });
+                    return res.status(500).json({ success: false, message: "Failed to delete Image from Gallery. Please try again." });
                 } 
                 else {
                     return res.status(201).json({
@@ -201,20 +263,22 @@ export const deleteGalleryItem = async(req, res) => {
     }
     catch(error){
         console.error("Delete Gallery Item Error:", error);
-        return res.status(500).json({ success: false, message: `Failed to delete Image from gallery: ${error.message}`, error: error.message });
+        return res.status(500).json({ success: false, message: `Failed to delete Image from gallery: ${error.message}.`, error: error.message });
     }
 }
 
 export const deleteAllGalleryItems = async(req, res) => {
     try{
-        const galleryItemsCount = await galleryData.countDocuments();
+        let filter = { isDeleted: false };
+
+        const galleryItemsCount = await galleryData.countDocuments(filter);
         if (galleryItemsCount === 0) {
-            return res.status(409).json({ success: false, message: "Empty Gallery.....No Image found in Gallery to delete." });
+            return res.status(409).json({ success: false, message: "Empty Gallery: No Image found in Gallery to delete." });
         } 
         else {
             // Perform soft delete on all images
             const deletedImages = await galleryData.updateMany(
-                {},
+                filter,
                 {
                     isDeleted: true,
                     deletedDate: new Date()
@@ -235,7 +299,7 @@ export const deleteAllGalleryItems = async(req, res) => {
     }
     catch(error){
         console.error("Delete All Gallery Items Error:", error);
-        return res.status(500).json({ success: false, message: `Failed to delete Images from Gallery: ${error.message}`, error: error.message });
+        return res.status(500).json({ success: false, message: `Failed to delete Images from Gallery: ${error.message}.`, error: error.message });
     }
 }
 
@@ -255,12 +319,12 @@ export const displayGalleryItems = async(req, res) => {
         let ImageData=[]
 
         if (search && search.trim() !== "" && search !== "all") {
-            // First, try finding items where the title starts with the search query
+            // First, try finding items where the category name starts with the search query
             ImageData = await galleryData.find({
                 ...filter,
-                title: { $regex: new RegExp("^" + search, "i") }
+                categoryName: { $regex: new RegExp("^" + search, "i") }
             });
-    
+
             if (ImageData.length > 0) {
                 return res.status(201).json({
                     success: true,
@@ -292,7 +356,7 @@ export const displayGalleryItems = async(req, res) => {
         console.error("Error in getting gallery Items:", error);
         res.status(500).json({
             success: false,
-            message: `Failed to get Gallery Images: ${error.message}`,
+            message: `Failed to get Gallery Images: ${error.message}.`,
             error: error.message
         });
     }

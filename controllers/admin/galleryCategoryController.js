@@ -3,24 +3,27 @@ import galleryCategory from "../../models/GalleryCategoryModal.js";
 export const addGalleryCategory = async(req, res) => {
     try{
         const {name} =req.body;
-        if(name){
-            const data = await galleryCategory.findOne({name}); 
+        if(name && name.length<=25){
+            const data = await galleryCategory.findOne({ name: { $regex: new RegExp(`^${name}$`, 'i') }, isDeleted: false}); 
             if(data==null){
                 const category = new galleryCategory({name, createdDate: new Date()})
                 await category.save();
-                res.status(201).json({success:true, message:`New Category - ${name} added successfully...`, category});
+                res.status(201).json({success:true, message:`Category - "${name.split(" ").map((word) =>word.charAt(0).toUpperCase() +word.slice(1).toLowerCase()).join(" ")}" added successfully.`, category});
             }
             else
-            res.status(409).json({success:false, message:`Category ${name} already exists...`})
+            res.status(409).json({success:false, message:`Category - "${name.split(" ").map((word) =>word.charAt(0).toUpperCase() +word.slice(1).toLowerCase()).join(" ")}" already exists.`})
         }
         else
-        res.status(409).json({success:false, message:"Enter Category Name..."});
+        res.status(409).json({success:false, message:"Enter Category Name Properly..."});
     }
     catch(error){
         console.error("Add Gallery Category Error: ", error)
-        res.status(500).json({success:false, message:`Failed to add category...${error.message}`, error:error.message})
+        res.status(500).json({success:false, message:`Failed to add category: ${error.message}.`, error:error.message})
     }
 }
+
+// MongoDB's findByIdAndUpdate() only updates the specified fields and leaves the rest unchanged.
+// This means, even though PUT usually replaces the entire resource, MongoDB doesn’t enforce this behavior unless you explicitly provide all fields.
 
 export const updateGalleryCategory = async (req, res) => {
     try {
@@ -33,6 +36,9 @@ export const updateGalleryCategory = async (req, res) => {
         if(!name)
         return res.status(409).json({ success: false, message: "Category Name is required for Update." });
         
+        if(name.length>25)
+        return res.status(409).json({ success: false, message: "Category Name must not be more than of 25 characters." });
+
         const existingID = await galleryCategory.findOne({ _id: id, isDeleted: false });
             
         if (!existingID) {
@@ -42,7 +48,7 @@ export const updateGalleryCategory = async (req, res) => {
         const existingCategory = await galleryCategory.findOne({ name: { $regex: new RegExp(`^${name}$`, 'i') }, isDeleted: false, _id: { $ne: id } });
 
         if (existingCategory) {
-            return res.status(409).json({ success: false, message: `Category '${name}' already exists.` });
+            return res.status(409).json({ success: false, message: `Category - "${name.split(" ").map((word) =>word.charAt(0).toUpperCase() +word.slice(1).toLowerCase()).join(" ")}" already exists.` });
         }
         
         const updatedCategory = await galleryCategory.findByIdAndUpdate(
@@ -56,7 +62,7 @@ export const updateGalleryCategory = async (req, res) => {
         );
 
         if (!updatedCategory) {
-            return res.status(500).json({ success: false, message: "Category updation unsuccessful." });
+            return res.status(500).json({ success: false, message: "Category updation unsuccessful. Please try again." });
         }
         
         res.status(201).json({success: true, message: "Category updated successfully.", updatedCategory });
@@ -64,7 +70,7 @@ export const updateGalleryCategory = async (req, res) => {
     } 
     catch (error) {
         console.error("Update Gallery Category Error:", error);
-        res.status(500).json({ success: false, message: `Failed to update category: ${error.message}`, error:error.message});
+        res.status(500).json({ success: false, message: `Failed to update category: ${error.message}.`, error:error.message});
     }
 };
 
@@ -96,7 +102,7 @@ export const deleteGalleryCategory = async (req, res) => {
                 );
 
                 if (!deletedCategory) {
-                    return res.status(500).json({ success: false, message: "Failed to delete category." });
+                    return res.status(500).json({ success: false, message: "Failed to delete category. Please try again." });
                 } 
                 else {
                     return res.status(201).json({
@@ -110,7 +116,7 @@ export const deleteGalleryCategory = async (req, res) => {
     } 
     catch (error) {
         console.error("Delete Gallery Category Error:", error);
-        return res.status(500).json({ success: false, message: `Failed to delete category: ${error.message}`, error: error.message });
+        return res.status(500).json({ success: false, message: `Failed to delete category: ${error.message}.`, error: error.message });
     }
 };
 
@@ -135,7 +141,7 @@ export const deleteAllGalleryCategories = async (req, res) => {
             );
 
             if (deletedCategories.modifiedCount === 0) {
-                return res.status(500).json({ success: false, message: "Failed to delete categories." });
+                return res.status(500).json({ success: false, message: "Failed to delete categories. Please try again." });
             } 
             else {
                 return res.status(201).json({
@@ -148,7 +154,7 @@ export const deleteAllGalleryCategories = async (req, res) => {
     } 
     catch (error) {
         console.error("Delete All Gallery Categories Error:", error);
-        return res.status(500).json({ success: false, message: `Failed to delete categories: ${error.message}`, error: error.message });
+        return res.status(500).json({ success: false, message: `Failed to delete categories: ${error.message}.`, error: error.message });
     }
 };
 
@@ -197,7 +203,7 @@ export const displayGalleryCategories = async (req, res) => {
         console.error("Error in getting gallery category data:", error);
         return res.status(500).json({
             success: false,
-            message: `Failed to get gallery category data: ${error.message}`,
+            message: `Failed to get gallery category data: ${error.message}.`,
             error: error.message
         });
     }

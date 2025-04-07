@@ -185,7 +185,9 @@ export const totalEvents = async (req, res) => {
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ success: false, msg: "server error", error:error.msg, msg:"total event count fetched succesffully"  });
-  }}
+  }
+}
+
 // Event Registration Operations
 export const registerForEvent = async (req, res) => {
   try {
@@ -400,7 +402,8 @@ export const getMyRegisteredEvents = async (req, res) => {
       events
     });
 
-  } catch (error) {
+  } 
+  catch (error) {
     console.error('Error fetching user events:', error);
     res.status(500).json({
       success: false,
