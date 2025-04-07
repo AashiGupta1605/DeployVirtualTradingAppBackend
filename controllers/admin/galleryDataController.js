@@ -319,12 +319,12 @@ export const displayGalleryItems = async(req, res) => {
         let ImageData=[]
 
         if (search && search.trim() !== "" && search !== "all") {
-            // First, try finding items where the title starts with the search query
+            // First, try finding items where the category name starts with the search query
             ImageData = await galleryData.find({
                 ...filter,
-                title: { $regex: new RegExp("^" + search, "i") }
+                categoryName: { $regex: new RegExp("^" + search, "i") }
             });
-    
+
             if (ImageData.length > 0) {
                 return res.status(201).json({
                     success: true,

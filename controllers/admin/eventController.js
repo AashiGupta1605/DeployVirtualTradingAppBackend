@@ -185,13 +185,9 @@ export const totalEvents = async (req, res) => {
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ success: false, msg: "server error", error:error.msg, msg:"total event count fetched succesffully"  });
-<<<<<<< HEAD
   }
 }
 
-=======
-  }}
->>>>>>> 16fa596799d1e60fbf1fca82768fd58f75ee0501
 // Event Registration Operations
 export const registerForEvent = async (req, res) => {
   try {
