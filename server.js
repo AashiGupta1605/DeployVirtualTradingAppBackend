@@ -71,7 +71,7 @@ const runAllScrapers = async () => {
     { 
       fn: fetchNifty50Data, 
       name: 'Nifty 50',
-      enabled: true 
+      enabled: false 
     },
     { 
       fn: fetchNifty500Data, 
