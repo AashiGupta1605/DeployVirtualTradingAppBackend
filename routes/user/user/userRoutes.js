@@ -14,7 +14,14 @@ import {
   activeUsers,
   deactiveUsers,
   averageUserAge,
-  totalUsers
+  totalUsers,
+  organizationTotalUsers,
+  organizationMaleUsers,
+  organizationFemaleUsers,
+  organizationActiveUsers,
+  organizationDeactiveUsers,
+  organizationAverageUserAge,
+  totalOrganizations
 } from '../../../controllers/user/userController.js';
 import userMiddleware from '../../../middlewares/userMiddleware.js';
 
@@ -34,13 +41,26 @@ router.put("/users/:id", updateUser);
 router.delete("/users/:id", deleteUserById);// Changed from /users/:id to /admin/users/:id
 
 
-// users stats count
-router.get("/userCount/total", totalUsers);
-router.get("/userCount/male", maleUsers);
-router.get("/userCount/female", femaleUsers);
-router.get("/userCount/active", activeUsers);
-router.get("/userCount/deactive", deactiveUsers);
-router.get("/userCount/averageAge", averageUserAge);
+// admin users stats count
+// router.get("/userCount/total", totalUsers);
+// router.get("/userCount/male", maleUsers);
+// router.get("/userCount/female", femaleUsers);
+// router.get("/userCount/active", activeUsers);
+// router.get("/userCount/deactive", deactiveUsers);
+// router.get("/userCount/averageAge", averageUserAge);
+
+
+
+// // organization admin stats count 
+// router.get("/organizationCount/total", totalOrganizations);
+// router.get("/organizationCount/totalUsers", organizationTotalUsers);
+// router.get("/organizationCount/male", organizationMaleUsers);
+// router.get("/organizationCount/female", organizationFemaleUsers);
+// router.get("/organizationCount/active", organizationActiveUsers);
+// router.get("/organizationCount/deactive", organizationDeactiveUsers);
+// router.get("/organizationCount/averageAge", organizationAverageUserAge);
+
+
 
 // router.get("/userCount/", getUsers);
 

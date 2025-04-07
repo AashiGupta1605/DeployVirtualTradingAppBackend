@@ -5,7 +5,7 @@ const complaintSchema = new mongoose.Schema({
   userId: { type: String, required: true },
   type: { type: String },
   desc: { type: String },
-  status: { type: Boolean, default: true },
+  status: { type: Boolean, default: false },
   createdDate: { type: Date, default: Date.now },
   updatedDate: { type: Date, default: Date.now }
 });
