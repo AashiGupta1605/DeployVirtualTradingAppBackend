@@ -68,7 +68,12 @@ export const ORG_FEEDBACK_STATUS_SUCCESS = "Feedaback status updated successfull
 export const ORG_FEEDABACK_INVALID_STATUS_VALUE = "Invalid status value";
 
 
-
+// ORGANIZATION USERS Complaint MESSAGES
+export const ORG_COMPLAINT_NOT_FOUND = "Complaint not found.";
+export const ORG_COMPLAINT_DELETE_SUCCESS = "Complaint deleted successfully.";
+export const ORG_COMPLAINT_UPDATE_SUCCESS = "Complaint updated successfully.";
+export const ORG_COMPLAINT_FETCHED_SUCCESS = "Complaint(s) fetched successfully.";
+export const COMPLAINT_SUBMITTED_SUCCESS = "Complaint submitted successfully.";
 
 
 
