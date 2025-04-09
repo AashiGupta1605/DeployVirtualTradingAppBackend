@@ -77,7 +77,10 @@ import {
   getOrganizationStats,
   getEventStats,
   getFeedbackStats,
-  getQueryStats
+  getQueryStats,
+  getBasicComplaintStats,
+  getStockStats,
+  getGalleryStats
 } from '../../../controllers/admin/statsController.js';
 
 const router = express.Router();
@@ -88,5 +91,9 @@ router.get('/organizations', getOrganizationStats);
 router.get('/events', getEventStats);
 router.get('/feedback', getFeedbackStats);
 router.get('/queries', getQueryStats);
+router.get('/complaints', getBasicComplaintStats);
+router.get('/stocks', getStockStats);
+router.get('/gallery', getGalleryStats);
+
 
 export default router;
