@@ -2,9 +2,7 @@
 // import OrgRegister from '../../models/OrgRegisterModal.js';
 // import User from "../../models/UserModal.js";
 
-
 // // USER STATS FOR ADMIN CARDS DASHBOARD ---------------------------------------------------
-
 
 // export const totalUsers = async (req, res) => {
 
@@ -16,7 +14,6 @@
 //     res.status(500).json({ success: false, msg: "server error", error:error.msg, msg:"total user fetched succesffully"  });
 //   }
 // };
-
 
 // export const maleUsers = async (req, res) => {
 
@@ -45,7 +42,6 @@
 //     res.status(500).json({ success: false, msg: "server error", error:error.msg, msg:"error in fetching female users"  });
 //   }
 // };
-
 
 // export const activeUsers = async (req, res) => {
 //   try {
@@ -89,17 +85,7 @@
 //   }
 // };
 
-
-
-
-
-
-
-
-
-
 // // ORGANIZATION STATS FOR ADMIN CARDS DASHBOARD ---------------------------------------------------
-
 
 // export const totalOrganizations = async (req, res) => {
 
@@ -112,31 +98,28 @@
 //   }
 // };
 
-
 // export const organizationTotalUsers = async (req, res) => {
 //     try {
 //       // Count users that are not deleted and were added by organizations (not self-registered)
-//       const count = await User.countDocuments({ 
+//       const count = await User.countDocuments({
 //         isDeleted: false,
 //         addedby: { $ne: "self" } // $ne means "not equal"
 //       });
-      
-//       res.status(200).json({ 
-//         success: true, 
+
+//       res.status(200).json({
+//         success: true,
 //         count,
-//         msg: "Total organization-registered users count fetched successfully" 
+//         msg: "Total organization-registered users count fetched successfully"
 //       });
 //     } catch (error) {
 //       console.error(error.message);
-//       res.status(500).json({ 
-//         success: false, 
+//       res.status(500).json({
+//         success: false,
 //         msg: "Server error while fetching organization-registered users count",
-//         error: error.message 
+//         error: error.message
 //       });
 //     }
 //   };
-
-
 
 // export const organizationMaleUsers = async (req, res) => {
 
@@ -213,25 +196,21 @@
 //   }
 // };
 
-
-
-
-
-import { 
-  ORG_ACTIVE_USER_FETCHED_SUCCESS, 
+import {
+  ORG_ACTIVE_USER_FETCHED_SUCCESS,
   ORG_AVERAGE_AGE_USER_FETCHED_SUCCESS,
   ORG_DEACTIVE_USER_FETCHED_SUCCESS,
   ORG_FEMALE_USER_FETCHED_SUCCESS,
   ORG_MALE_USER_FETCHED_SUCCESS,
-  SERVER_ERROR 
-} from '../../helpers/messages.js';
-import User from '../../models/UserModal.js';
-import OrgRegister from '../../models/OrgRegisterModal.js';
-import Feedback from '../../models/FeedbackModel.js';
-import ContactUs from '../../models/ContactUsModal.js';
-import Event from '../../models/EventModal.js';
-import Complaint from '../../models/ComplaintModel.js';
-import moment from 'moment';
+  SERVER_ERROR,
+} from "../../helpers/messages.js";
+import User from "../../models/UserModal.js";
+import OrgRegister from "../../models/OrgRegisterModal.js";
+import Feedback from "../../models/FeedbackModel.js";
+import ContactUs from "../../models/ContactUsModal.js";
+import Event from "../../models/EventModal.js";
+import Complaint from "../../models/ComplaintModel.js";
+import moment from "moment";
 
 export const getUserStats = async (req, res) => {
   try {
@@ -241,18 +220,18 @@ export const getUserStats = async (req, res) => {
       femaleCount,
       activeCount,
       deactiveCount,
-      usersForAge
+      usersForAge,
     ] = await Promise.all([
       User.countDocuments({ isDeleted: false }),
       User.countDocuments({ gender: "Male", isDeleted: false }),
       User.countDocuments({ gender: "Female", isDeleted: false }),
       User.countDocuments({ status: true, isDeleted: false }),
       User.countDocuments({ status: false, isDeleted: false }),
-      User.find({ isDeleted: false }, 'dob')
+      User.find({ isDeleted: false }, "dob"),
     ]);
 
     const totalAge = usersForAge.reduce((sum, user) => {
-      return sum + moment().diff(user.dob, 'years');
+      return sum + moment().diff(user.dob, "years");
     }, 0);
     const averageAge = (totalAge / usersForAge.length).toFixed(2);
 
@@ -264,22 +243,19 @@ export const getUserStats = async (req, res) => {
         female: femaleCount,
         active: activeCount,
         deactive: deactiveCount,
-        averageAge: isNaN(averageAge) ? 0 : averageAge
+        averageAge: isNaN(averageAge) ? 0 : averageAge,
       },
-      message: "User stats fetched successfully"
+      message: "User stats fetched successfully",
     });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ 
-      success: false, 
+    res.status(500).json({
+      success: false,
       message: SERVER_ERROR,
-      error: error.message 
+      error: error.message,
     });
   }
 };
-
-
-
 
 export const getOrganizationStats = async (req, res) => {
   try {
@@ -293,22 +269,47 @@ export const getOrganizationStats = async (req, res) => {
       activeOrgs,
       pendingOrgs,
       rejectedOrgs,
-      usersForAge
+      usersForAge,
     ] = await Promise.all([
       OrgRegister.countDocuments({ isDeleted: false }),
       User.countDocuments({ isDeleted: false, addedby: { $ne: "self" } }),
-      User.countDocuments({ gender: "Male", isDeleted: false, addedby: { $ne: "self" } }),
-      User.countDocuments({ gender: "Female", isDeleted: false, addedby: { $ne: "self" } }),
-      User.countDocuments({ status: true, isDeleted: false, addedby: { $ne: "self" } }),
-      User.countDocuments({ status: false, isDeleted: false, addedby: { $ne: "self" } }),
-      OrgRegister.countDocuments({ isDeleted: false, approvalStatus:"approved" }),
-      OrgRegister.countDocuments({ isDeleted: false, approvalStatus:"pending" }),
-      OrgRegister.countDocuments({ isDeleted: false, approvalStatus:"rejected" }),
-      User.find({ isDeleted: false, addedby: { $ne: "self" } }, 'dob')
+      User.countDocuments({
+        gender: "Male",
+        isDeleted: false,
+        addedby: { $ne: "self" },
+      }),
+      User.countDocuments({
+        gender: "Female",
+        isDeleted: false,
+        addedby: { $ne: "self" },
+      }),
+      User.countDocuments({
+        status: true,
+        isDeleted: false,
+        addedby: { $ne: "self" },
+      }),
+      User.countDocuments({
+        status: false,
+        isDeleted: false,
+        addedby: { $ne: "self" },
+      }),
+      OrgRegister.countDocuments({
+        isDeleted: false,
+        approvalStatus: "approved",
+      }),
+      OrgRegister.countDocuments({
+        isDeleted: false,
+        approvalStatus: "pending",
+      }),
+      OrgRegister.countDocuments({
+        isDeleted: false,
+        approvalStatus: "rejected",
+      }),
+      User.find({ isDeleted: false, addedby: { $ne: "self" } }, "dob"),
     ]);
 
     const totalAge = usersForAge.reduce((sum, user) => {
-      return sum + moment().diff(user.dob, 'years');
+      return sum + moment().diff(user.dob, "years");
     }, 0);
     const averageAge = (totalAge / (usersForAge.length || 1)).toFixed(2);
 
@@ -321,40 +322,32 @@ export const getOrganizationStats = async (req, res) => {
         femaleUsers: femaleUsers,
         activeUsers: activeUsers,
         deactiveUsers: deactiveUsers,
-        activeOrgs:activeOrgs,
-        pendingOrgs:pendingOrgs,
-        rejectedOrgs:rejectedOrgs,
-        averageAge: isNaN(averageAge) ? 0 : averageAge
+        activeOrgs: activeOrgs,
+        pendingOrgs: pendingOrgs,
+        rejectedOrgs: rejectedOrgs,
+        averageAge: isNaN(averageAge) ? 0 : averageAge,
       },
-      message: "Organization stats fetched successfully"
+      message: "Organization stats fetched successfully",
     });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ 
-      success: false, 
+    res.status(500).json({
+      success: false,
       message: SERVER_ERROR,
-      error: error.message 
+      error: error.message,
     });
   }
 };
 
-
-
-
-
 export const getEventStats = async (req, res) => {
   try {
-    const [
-      totalEvents,
-      upcomingEvents,
-      completedEvents,
-      ongoingEvents
-    ] = await Promise.all([
-      Event.countDocuments({ isDeleted: false }),
-      Event.countDocuments({ isDeleted: false, type: "upcoming" }),
-      Event.countDocuments({ isDeleted: false, type: "completed" }),
-      Event.countDocuments({ isDeleted: false, type: "ongoing" })
-    ]);
+    const [totalEvents, upcomingEvents, completedEvents, ongoingEvents] =
+      await Promise.all([
+        Event.countDocuments({ isDeleted: false }),
+        Event.countDocuments({ isDeleted: false, type: "upcoming" }),
+        Event.countDocuments({ isDeleted: false, type: "completed" }),
+        Event.countDocuments({ isDeleted: false, type: "ongoing" }),
+      ]);
 
     res.status(200).json({
       success: true,
@@ -362,22 +355,19 @@ export const getEventStats = async (req, res) => {
         total: totalEvents,
         upcoming: upcomingEvents,
         completed: completedEvents,
-        ongoing: ongoingEvents
+        ongoing: ongoingEvents,
       },
-      message: "Event stats fetched successfully"
+      message: "Event stats fetched successfully",
     });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ 
-      success: false, 
+    res.status(500).json({
+      success: false,
       message: SERVER_ERROR,
-      error: error.message 
+      error: error.message,
     });
   }
 };
-
-
-
 
 export const getFeedbackStats = async (req, res) => {
   try {
@@ -386,34 +376,34 @@ export const getFeedbackStats = async (req, res) => {
       ratingResult,
       recommendedCount,
       typeCounts,
-      mostPopularCategory
+      mostPopularCategory,
     ] = await Promise.all([
       Feedback.countDocuments({ isDeleted: false }),
       Feedback.aggregate([
         { $match: { isDeleted: false } },
-        { $group: { _id: null, averageRating: { $avg: "$rating" } } }
+        { $group: { _id: null, averageRating: { $avg: "$rating" } } },
       ]),
       Feedback.countDocuments({ isDeleted: false, recommend: true }),
       Feedback.aggregate([
         { $match: { isDeleted: false } },
-        { $group: { _id: "$feedbackType", count: { $sum: 1 } } }
+        { $group: { _id: "$feedbackType", count: { $sum: 1 } } },
       ]),
       Feedback.aggregate([
         { $match: { isDeleted: false } },
-        { 
-          $group: { 
-            _id: "$feedbackType", 
-            total: { $sum: 1 } 
-          }
+        {
+          $group: {
+            _id: "$feedbackType",
+            total: { $sum: 1 },
+          },
         },
         { $sort: { total: -1 } },
-        { $limit: 1 }
-      ])
+        { $limit: 1 },
+      ]),
     ]);
 
     const averageRating = ratingResult[0]?.averageRating || 0;
-    const recommendationRate = totalFeedbacks > 0 ? 
-      (recommendedCount / totalFeedbacks) * 100 : 0;
+    const recommendationRate =
+      totalFeedbacks > 0 ? (recommendedCount / totalFeedbacks) * 100 : 0;
 
     res.status(200).json({
       success: true,
@@ -422,103 +412,266 @@ export const getFeedbackStats = async (req, res) => {
         averageRating: averageRating.toFixed(2),
         recommendationRate: recommendationRate.toFixed(2),
         byType: typeCounts,
-        mostPopularCategory: mostPopularCategory[0] || { _id: "No data", total: 0 }
+        mostPopularCategory: mostPopularCategory[0] || {
+          _id: "No data",
+          total: 0,
+        },
       },
-      message: "Feedback stats fetched successfully"
+      message: "Feedback stats fetched successfully",
     });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ 
-      success: false, 
+    res.status(500).json({
+      success: false,
       message: SERVER_ERROR,
-      error: error.message 
+      error: error.message,
+    });
+  }
+};
+
+export const getQueryStats = async (req, res) => {
+  try {
+    // Get all metrics in parallel
+    const [
+      totalQueries,
+      recentQueries,
+      queriesByType,
+      queriesWithResponse,
+      popularTimes,
+      deviceBreakdown,
+    ] = await Promise.all([
+      // Total queries
+      ContactUs.countDocuments({ isDeleted: false }),
+
+      // Recent queries (last 7 days)
+      ContactUs.aggregate([
+        {
+          $match: {
+            isDeleted: false,
+            createDate: {
+              $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+            },
+          },
+        },
+        {
+          $group: {
+            _id: { $dateToString: { format: "%Y-%m-%d", date: "$createDate" } },
+            count: { $sum: 1 },
+          },
+        },
+        { $sort: { _id: 1 } },
+      ]),
+
+      // Queries by type
+      ContactUs.aggregate([
+        { $match: { isDeleted: false } },
+        { $group: { _id: "$type", count: { $sum: 1 } } },
+        { $sort: { count: -1 } },
+        { $limit: 5 }, // Top 5 types only
+      ]),
+
+      // Queries with admin response (if you implement this feature)
+      ContactUs.countDocuments({ isDeleted: false, responded: true }),
+
+      // Most common inquiry times (hour of day)
+      ContactUs.aggregate([
+        { $match: { isDeleted: false } },
+        {
+          $group: {
+            _id: { $hour: "$createDate" },
+            count: { $sum: 1 },
+          },
+        },
+        { $sort: { count: -1 } },
+        { $limit: 3 }, // Top 3 hours
+      ]),
+
+      // Device breakdown (if you collect user-agent data)
+      // This would require adding a deviceType field to your model
+      ContactUs.aggregate([
+        { $match: { isDeleted: false, deviceType: { $exists: true } } },
+        { $group: { _id: "$deviceType", count: { $sum: 1 } } },
+        { $sort: { count: -1 } },
+      ]),
+    ]);
+
+    // Process recent queries data for charting
+    const last7Days = Array(7)
+      .fill(0)
+      .map((_, i) => {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        return date.toISOString().split("T")[0];
+      })
+      .reverse();
+
+    const recentQueriesData = last7Days.map((date) => {
+      const found = recentQueries.find((item) => item._id === date);
+      return {
+        date,
+        count: found ? found.count : 0,
+      };
+    });
+
+    res.status(200).json({
+      success: true,
+      stats: {
+        // Basic counts
+        totalQueries,
+        queriesWithResponse, // If you track responses
+
+        // Trend analysis
+        recentQueries: recentQueriesData,
+        queryTrend:
+          recentQueriesData.reduce((sum, day) => sum + day.count, 0) / 7,
+
+        // Category analysis
+        topQueryTypes: queriesByType,
+        mostCommonType: queriesByType[0]?._id || "N/A",
+
+        // Timing analysis
+        peakHours: popularTimes.map((hour) => ({
+          hour: hour._id,
+          count: hour.count,
+        })),
+
+        // Device breakdown (if available)
+        deviceBreakdown:
+          deviceBreakdown.length > 0 ? deviceBreakdown : undefined,
+      },
+      message: "Query stats fetched successfully",
+    });
+  } catch (error) {
+    console.error("Error fetching query stats:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Server error while fetching query statistics",
+      error: error.message,
+    });
+  }
+};
+
+export const getBasicComplaintStats = async (req, res) => {
+  try {
+    // Get all basic stats in parallel for better performance
+    const [total, pendingComplaint, resolvedComplaint] = await Promise.all([
+      Complaint.countDocuments({ isDeleted: false }),
+      Complaint.countDocuments({ status: "pending", isDeleted: false }),
+      Complaint.countDocuments({ status: "resolved", isDeleted: false }),
+    ]);
+
+    // Get recent complaints (last 30 days)
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const recentComplaint = await Complaint.countDocuments({
+      createdDate: { $gte: thirtyDaysAgo },
+      isDeleted: false,
+    });
+
+    res.status(200).json({
+      success: true,
+      stats: {
+        total,
+        pendingComplaint,
+        resolvedComplaint,
+        recentComplaint,
+      },
+      message: "fetched complaint detailed successfully",
+    });
+  } catch (error) {
+    console.error("Error fetching basic complaint stats:", error);
+    res.status(500).json({
+      message: "Failed to fetch basic complaint statistics",
+      error: error.message,
+    });
+  }
+};
+
+import NiftyData from "../../models/NiftyDataModal.js";
+import Nifty500Data from "../../models/Nifty500DataModal.js";
+import NiftyETFData from "../../models/StockModal.js";
+
+export const getStockStats = async (req, res) => {
+  try {
+    // Get latest records from each collection
+    const [latestNifty50, latestNifty500, latestETF] = await Promise.all([
+      NiftyData.findOne().sort({ fetchTime: -1 }).lean(),
+      Nifty500Data.findOne().sort({ fetchTime: -1 }).lean(),
+      NiftyETFData.findOne().sort({ fetchTime: -1 }).lean(),
+    ]);
+
+    // Calculate counts
+    const totalNifty50 = latestNifty50?.stocks?.length || 0;
+    const totalNifty500 = latestNifty500?.stocks?.length || 0;
+    const totalETF = latestETF?.stocks?.length || 0;
+    const totalStocks = totalNifty50 + totalNifty500 + totalETF;
+
+    // Get most recent fetch times
+    const lastUpdated = {
+      nifty50: latestNifty50?.fetchTime,
+      nifty500: latestNifty500?.fetchTime,
+      etf: latestETF?.fetchTime,
+    };
+
+    // Prepare response
+
+    res.status(200).json({
+      success: true,
+      stats: {
+        all: totalStocks,
+        nifty50: totalNifty50,
+        nifty500: totalNifty500,
+        etf: totalETF,
+      },
+      message:"fetched stock data successfully"
+    });
+  } catch (error) {
+    console.error("Error fetching stock stats:", error);
+    res.status(500).json({
+      message: "Failed to fetch stock statistics",
+      error: error.message,
     });
   }
 };
 
 
 
+import galleryData from '../../models/EventsGalleryModal.js';
 
-
-
-// export const getQueryStats = async (req, res) => {
-//   try {
-//     const totalQueries = await Complaint.countDocuments({ isDeleted: false });
-
-//     res.status(200).json({
-//       success: true,
-//       stats: {
-//         total: totalQueries
-//       },
-//       message: "Query stats fetched successfully"
-//     });
-//   } catch (error) {
-//     console.error(error.message);
-//     res.status(500).json({ 
-//       success: false, 
-//       message: SERVER_ERROR,
-//       error: error.message 
-//     });
-//   }
-// };
-
-export const getQueryStats = async (req, res) => {
+export const getGalleryStats = async (req, res) => {
   try {
-    // Get all metrics in parallel for better performance
-    const [
-      totalQueries,
-      pendingQueries,
-      completedQueries,
-      resolvedQueriesWithDates
-    ] = await Promise.all([
-      // Total queries (non-deleted)
-      ContactUs.countDocuments({ isDeleted: false }),
-      // Pending queries (status: false)
-      ContactUs.countDocuments({ isDeleted: false, status: false }),
-      
-      // Completed queries (status: true)
-      ContactUs.countDocuments({ isDeleted: false, status: true }),
-      
-      // Get resolved queries with dates for calculating resolution time
-      ContactUs.find({ 
-        isDeleted: false, 
-        status: true,
-        createdDate: { $exists: true },
-        updatedDate: { $exists: true }
-      }, 'createdDate updatedDate')
+    // Get all counts in parallel for better performance
+    const [total, active, deleted, byCategory,  totalCategories, totalPhotos] = await Promise.all([
+      galleryData.countDocuments({}),
+      galleryData.countDocuments({ isDeleted: false }),
+      galleryData.countDocuments({ isDeleted: true }),
+      galleryData.aggregate([
+        { $match: { isDeleted: false } },
+        { $group: { _id: "$categoryName", count: { $sum: 1 } } }
+      ]),
+      galleryData.distinct("categoryName").then(categories => categories.length),
+      galleryData.distinct("photo").then(categories => categories.length),
     ]);
-
-    // Calculate average resolution time in days
-    let averageResolutionDays = 0;
-    if (resolvedQueriesWithDates.length > 0) {
-      const totalResolutionTime = resolvedQueriesWithDates.reduce((sum, query) => {
-        const resolutionTime = query.updatedDate - query.createdDate;
-        return sum + resolutionTime;
-      }, 0);
-      
-      averageResolutionDays = (totalResolutionTime / resolvedQueriesWithDates.length) / (1000 * 60 * 60 * 24);
-      averageResolutionDays = parseFloat(averageResolutionDays.toFixed(2)); // Round to 2 decimal places
-    }
 
     res.status(200).json({
       success: true,
       stats: {
-        total: totalQueries,
-        pending: pendingQueries,
-        completed: completedQueries,
-        averageResolutionDays: averageResolutionDays,
-        resolutionRate: totalQueries > 0 
-          ? parseFloat(((completedQueries / totalQueries) * 100).toFixed(2))
-          : 0
+        total,          // Total gallery items (including deleted)
+        active,         // Currently active items
+        deleted,        // Soft-deleted items
+        byCategory ,
+        totalCategories ,
+        totalPhotos      // Count of active items by category
       },
-      message: "Query stats fetched successfully"
+      message: "Gallery statistics fetched successfully"
     });
   } catch (error) {
-    console.error("Error fetching query stats:", error.message);
-    res.status(500).json({ 
-      success: false, 
-      message: "Server error while fetching query statistics",
-      error: error.message 
+    console.error("Error fetching gallery stats:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch gallery statistics",
+      error: error.message
     });
   }
 };
