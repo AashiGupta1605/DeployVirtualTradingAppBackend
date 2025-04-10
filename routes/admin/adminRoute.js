@@ -13,7 +13,11 @@ import eventRoutes from './eventRoutes/eventRoutes.js'; // Import the event rout
 import statsRoute from "./statsRoute/statsRoute.js";
 import { getETFData } from '../../scripts/scraper2.js';
 
+// import fileUpload from 'express-fileupload';
+
 const router = express.Router();
+
+// router.use(fileUpload())
 
 // Nifty Data Routes
 router.use('/nifty', niftyDataRoutes);
