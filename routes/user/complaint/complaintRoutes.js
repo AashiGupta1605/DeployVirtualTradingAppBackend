@@ -9,7 +9,11 @@ import {
   getComplaintByIdAdmin,
   updateComplaintStatus,
   softDeleteComplaint,
-  getComplaintStats
+  getComplaintStats,
+  registerOrganizationComplaint,
+  displayOrganizationComplaints,
+  updateOrganizationComplaint,
+  deleteOrganizationComplaint,
 } from "../../../controllers/user/complaintController.js";
 import userMiddleware from "../../../middlewares/userMiddleware.js";
 
@@ -21,6 +25,11 @@ router.get('/admin/stats', getComplaintStats);
 router.get('/admin/:id', getComplaintByIdAdmin);
 router.patch('/admin/:id/status', updateComplaintStatus);
 router.delete('/admin/:id', softDeleteComplaint);
+
+router.post("/register", registerOrganizationComplaint);
+router.get("/:orgName/complaint", displayOrganizationComplaints);
+router.put("/update/:complaintId", updateOrganizationComplaint);
+router.delete("/delete/:complaintId", deleteOrganizationComplaint);
 
 router.post("/",userMiddleware, createComplaint);
 router.get("/", userMiddleware, getAllComplaints);

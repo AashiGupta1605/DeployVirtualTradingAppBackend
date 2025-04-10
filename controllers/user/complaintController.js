@@ -1,5 +1,7 @@
 import Complaint from "../../models/ComplaintModel.js";
 import User from "../../models/UserModal.js";
+import { ORG_COMPLAINT_NOT_FOUND ,ORG_COMPLAINT_DELETE_SUCCESS,ORG_COMPLAINT_UPDATE_SUCCESS,ORG_COMPLAINT_FETCHED_SUCCESS, COMPLAINT_SUBMITTED_SUCCESS, ORG_ID_REQUIRED, SERVER_ERROR } from "../../helpers/messages.js";
+import { buildDateQuery, buildSearchQuery } from "../../helpers/dataHandler.js";
 
 // Create Complaint
 export const createComplaint = async (req, res) => {
@@ -228,6 +230,171 @@ export const getComplaintStats = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Failed to fetch complaint stats",
+      error: error.message,
+    });
+  }
+};
+
+//Organization controllers
+
+export const registerOrganizationComplaint = async (req, res) => {
+  const {
+    orgName,
+    category,
+    complaintMessage,
+    organizationId,
+  } = req.body;
+
+  try {
+    // Validate that organizationId is provided
+    if (!organizationId) {
+      return res.status(400).json({ success: false, message: ORG_ID_REQUIRED });
+    }
+
+    const newComplaint = new Complaint({
+      category,
+      complaintMessage,
+      complaintType: "organization",
+      organizationId,
+      addedby: orgName, // if you're using this like in Feedback
+    });
+
+    await newComplaint.save();
+
+    res.status(201).json({
+      success: true,
+      message: COMPLAINT_SUBMITTED_SUCCESS,
+      complaint: newComplaint,
+    });
+  } catch (error) {
+    console.error("Error submitting complaint:", error);
+    res.status(500).json({
+      success: false,
+      message: SERVER_ERROR,
+      error: error.message,
+    });
+  }
+};
+
+
+export const displayOrganizationComplaints = async (req, res) => {
+  const orgName = req.params.orgName;
+  const { page = 1, limit = 10, search = "", startDate, endDate } = req.query;
+
+  try {
+    const searchQuery = buildSearchQuery(search);
+    const dateQuery = buildDateQuery(startDate, endDate);
+
+    const complaints = await Complaint.find({
+      complaintType: "organization",
+      isDeleted: false,
+      ...dateQuery,
+      ...searchQuery,
+    })
+      .populate({
+        path: "organizationId",
+        match: { name: orgName }, // Match based on orgName
+        select: "name email mobile",
+      })
+      .skip((page - 1) * limit)
+      .limit(Number(limit))
+      .sort({ createdDate: -1 });
+
+    // Filter out complaints with no matched organization (in case match fails)
+    const filteredComplaints = complaints.filter(c => c.organizationId);
+
+    const totalComplaints = await Complaint.countDocuments({
+      complaintType: "organization",
+      isDeleted: false,
+      ...dateQuery,
+      ...searchQuery,
+    }).populate({
+      path: "organizationId",
+      match: { name: orgName },
+    });
+
+    res.status(200).json({
+      complaints: filteredComplaints,
+      totalPages: Math.ceil(filteredComplaints.length / limit),
+      currentPage: Number(page),
+      msg: ORG_COMPLAINT_FETCHED_SUCCESS,
+    });
+  } catch (error) {
+    console.error("Error fetching organization complaints:", error);
+    res.status(500).json({
+      success: false,
+      msg: SERVER_ERROR,
+      error: error.message,
+    });
+  }
+};
+
+
+export const updateOrganizationComplaint = async (req, res) => {
+  const { complaintId } = req.params;
+  const { category, complaintMessage, status, isSatisfied } = req.body;
+
+  try {
+    const updatedComplaint = await Complaint.findByIdAndUpdate(
+      complaintId,
+      {
+        category,
+        complaintMessage,
+        status,
+        isSatisfied,
+        updatedDate: Date.now(),
+      },
+      { new: true }
+    );
+
+    if (!updatedComplaint) {
+      return res
+        .status(404)
+        .json({ success: false, message: ORG_COMPLAINT_NOT_FOUND });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: ORG_COMPLAINT_UPDATE_SUCCESS,
+      complaint: updatedComplaint,
+    });
+  } catch (error) {
+    console.error("Error updating complaint:", error);
+    res.status(500).json({
+      success: false,
+      message: SERVER_ERROR,
+      error: error.message,
+    });
+  }
+};
+
+
+export const deleteOrganizationComplaint = async (req, res) => {
+  const { complaintId } = req.params;
+
+  try {
+    const deletedComplaint = await Complaint.findByIdAndUpdate(
+      complaintId,
+      { isDeleted: true, updatedDate: Date.now() },
+      { new: true }
+    );
+
+    if (!deletedComplaint) {
+      return res
+        .status(404)
+        .json({ success: false, message: ORG_COMPLAINT_NOT_FOUND });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: ORG_COMPLAINT_DELETE_SUCCESS,
+      complaint: deletedComplaint,
+    });
+  } catch (error) {
+    console.error("Error deleting complaint:", error);
+    res.status(500).json({
+      success: false,
+      message: SERVER_ERROR,
       error: error.message,
     });
   }

@@ -13,7 +13,7 @@ export const registerUserSchema = Joi.object({
     "string.pattern.base": "Password must contain at least one letter and one special character.",
     "any.required": "Password is required.",
   }),
-  confirmPassword: Joi.string().valid(Joi.ref('password')).required().label('Confirm Password'),
+  // confirmPassword: Joi.string().valid(Joi.ref('password')).required().label('Confirm Password'),
   mobile: Joi.string().pattern(/^[9876]\d{9}$/).required(),
   gender: Joi.string().required(),
   userPhoto: Joi.string().label("userPhoto"),

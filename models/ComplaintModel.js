@@ -5,8 +5,11 @@ const ComplaintSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true,
   },
+  organizationId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "OrgRegister", // Reference to the Organization model (optional)
+    },
   category: {
     type: String,
     enum: [
@@ -24,13 +27,19 @@ const ComplaintSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["pending", "in_progress", "resolved"],
+    enum: ["pending", "solved"],
     default: "pending",
   },
   isSatisfied: {
     type: String,
     enum: ["satisfied", "not_satisfied"],
     default: null, // Only set after resolution
+  },
+  complaintType: {
+    type: String,
+    enum: ["organization", "user"],
+    // default: "user"
+    // required: true,
   },
   createdDate: {
     type: Date,
