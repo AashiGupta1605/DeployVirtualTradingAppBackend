@@ -369,6 +369,66 @@ export const getEventStats = async (req, res) => {
   }
 };
 
+// export const getFeedbackStats = async (req, res) => {
+//   try {
+//     const [
+//       totalFeedbacks,
+//       ratingResult,
+//       recommendedCount,
+//       typeCounts,
+//       mostPopularCategory,
+//     ] = await Promise.all([
+//       Feedback.countDocuments({ isDeleted: false }),
+//       Feedback.aggregate([
+//         { $match: { isDeleted: false } },
+//         { $group: { _id: null, averageRating: { $avg: "$rating" } } },
+//       ]),
+//       Feedback.countDocuments({ isDeleted: false, recommend: true }),
+//       Feedback.aggregate([
+//         { $match: { isDeleted: false } },
+//         { $group: { _id: "$feedbackType", count: { $sum: 1 } } },
+//       ]),
+//       Feedback.aggregate([
+//         { $match: { isDeleted: false } },
+//         {
+//           $group: {
+//             _id: "$feedbackType",
+//             total: { $sum: 1 },
+//           },
+//         },
+//         { $sort: { total: -1 } },
+//         { $limit: 1 },
+//       ]),
+//     ]);
+
+//     const averageRating = ratingResult[0]?.averageRating || 0;
+//     const recommendationRate =
+//       totalFeedbacks > 0 ? (recommendedCount / totalFeedbacks) * 100 : 0;
+
+//     res.status(200).json({
+//       success: true,
+//       stats: {
+//         total: totalFeedbacks,
+//         averageRating: averageRating.toFixed(2),
+//         recommendationRate: recommendationRate.toFixed(2),
+//         byType: typeCounts,
+//         mostPopularCategory: mostPopularCategory[0] || {
+//           _id: "No data",
+//           total: 0,
+//         },
+//       },
+//       message: "Feedback stats fetched successfully",
+//     });
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(500).json({
+//       success: false,
+//       message: SERVER_ERROR,
+//       error: error.message,
+//     });
+//   }
+// };
+
 export const getFeedbackStats = async (req, res) => {
   try {
     const [
@@ -377,45 +437,197 @@ export const getFeedbackStats = async (req, res) => {
       recommendedCount,
       typeCounts,
       mostPopularCategory,
+      categoryStats,
+      ratingDistribution,
+      statusCounts,
+      recentFeedbacks,
+      feedbackByType,
+      monthlyTrends
     ] = await Promise.all([
+      // Basic counts
       Feedback.countDocuments({ isDeleted: false }),
+      
+      // Average rating
       Feedback.aggregate([
         { $match: { isDeleted: false } },
         { $group: { _id: null, averageRating: { $avg: "$rating" } } },
       ]),
+      
+      // Recommendation count
       Feedback.countDocuments({ isDeleted: false, recommend: true }),
+      
+      // Feedback type counts
       Feedback.aggregate([
         { $match: { isDeleted: false } },
         { $group: { _id: "$feedbackType", count: { $sum: 1 } } },
       ]),
+      
+      // Most popular category
       Feedback.aggregate([
         { $match: { isDeleted: false } },
-        {
-          $group: {
-            _id: "$feedbackType",
-            total: { $sum: 1 },
-          },
-        },
+        { $group: { _id: "$feedbackCategory", total: { $sum: 1 } } },
         { $sort: { total: -1 } },
         { $limit: 1 },
       ]),
+      
+      // Detailed category statistics
+      Feedback.aggregate([
+        { $match: { isDeleted: false } },
+        { 
+          $group: { 
+            _id: "$feedbackCategory",
+            count: { $sum: 1 },
+            avgRating: { $avg: "$rating" },
+            recommendRate: { 
+              $avg: { 
+                $cond: [{ $eq: ["$recommend", true] }, 1, 0] 
+              } 
+            },
+            positiveCount: {
+              $sum: {
+                $cond: [{ $gte: ["$rating", 4] }, 1, 0]
+              }
+            },
+            negativeCount: {
+              $sum: {
+                $cond: [{ $lte: ["$rating", 2] }, 1, 0]
+              }
+            }
+          } 
+        },
+        { $sort: { count: -1 } }
+      ]),
+      
+      // Rating distribution (1-5 stars)
+      Feedback.aggregate([
+        { $match: { isDeleted: false } },
+        { $group: { _id: "$rating", count: { $sum: 1 } } },
+        { $sort: { _id: 1 } }
+      ]),
+      
+      // Status counts
+      Feedback.aggregate([
+        { $match: { isDeleted: false } },
+        { $group: { _id: "$status", count: { $sum: 1 } } }
+      ]),
+      
+      // Recent feedbacks (last 5)
+      Feedback.find({ isDeleted: false })
+        .sort({ createdDate: -1 })
+        .limit(5)
+        .select('feedbackCategory rating recommend feedbackMessage createdDate'),
+      
+      // Feedback by type (organization/user) with details
+      Feedback.aggregate([
+        { $match: { isDeleted: false } },
+        { 
+          $group: { 
+            _id: "$feedbackType",
+            count: { $sum: 1 },
+            avgRating: { $avg: "$rating" },
+            recommendCount: { 
+              $sum: { 
+                $cond: [{ $eq: ["$recommend", true] }, 1, 0] 
+              } 
+            }
+          } 
+        }
+      ]),
+      
+      // Monthly trends (last 6 months)
+      Feedback.aggregate([
+        { 
+          $match: { 
+            isDeleted: false,
+            createdDate: { 
+              $gte: new Date(new Date().setMonth(new Date().getMonth() - 6)) 
+            } 
+          } 
+        },
+        { 
+          $group: { 
+            _id: { 
+              month: { $month: "$createdDate" },
+              year: { $year: "$createdDate" }
+            },
+            count: { $sum: 1 },
+            avgRating: { $avg: "$rating" }
+          } 
+        },
+        { $sort: { "_id.year": 1, "_id.month": 1 } }
+      ])
     ]);
 
     const averageRating = ratingResult[0]?.averageRating || 0;
-    const recommendationRate =
-      totalFeedbacks > 0 ? (recommendedCount / totalFeedbacks) * 100 : 0;
+    const recommendationRate = totalFeedbacks > 0 
+      ? (recommendedCount / totalFeedbacks) * 100 
+      : 0;
+
+    // Format rating distribution
+    const formattedRatingDistribution = Array(5).fill(0);
+    ratingDistribution.forEach(item => {
+      formattedRatingDistribution[item._id - 1] = item.count;
+    });
+
+    // Format monthly trends
+    const formattedMonthlyTrends = monthlyTrends.map(item => ({
+      month: `${item._id.month}/${item._id.year}`,
+      count: item.count,
+      avgRating: item.avgRating.toFixed(2)
+    }));
 
     res.status(200).json({
       success: true,
       stats: {
+        // Basic stats
         total: totalFeedbacks,
         averageRating: averageRating.toFixed(2),
         recommendationRate: recommendationRate.toFixed(2),
+        
+        // Categorization
         byType: typeCounts,
-        mostPopularCategory: mostPopularCategory[0] || {
-          _id: "No data",
-          total: 0,
-        },
+        mostPopularCategory: mostPopularCategory[0] || { _id: "No data", total: 0 },
+        
+        // Detailed category analytics
+        categoryStats: categoryStats.map(cat => ({
+          category: cat._id,
+          count: cat.count,
+          avgRating: cat.avgRating.toFixed(2),
+          recommendRate: (cat.recommendRate * 100).toFixed(2) + '%',
+          positiveCount: cat.positiveCount,
+          negativeCount: cat.negativeCount,
+          positivePercentage: ((cat.positiveCount / cat.count) * 100).toFixed(2) + '%',
+          negativePercentage: ((cat.negativeCount / cat.count) * 100).toFixed(2) + '%'
+        })),
+        
+        // Rating distribution
+        ratingDistribution: formattedRatingDistribution,
+        
+        // Status counts
+        statusCounts,
+        
+        // Recent feedbacks
+        recentFeedbacks,
+        
+        // Feedback type analytics
+        feedbackByType: feedbackByType.map(type => ({
+          type: type._id,
+          count: type.count,
+          avgRating: type.avgRating.toFixed(2),
+          recommendCount: type.recommendCount,
+          recommendPercentage: ((type.recommendCount / type.count) * 100).toFixed(2) + '%'
+        })),
+        
+        // Trends
+        monthlyTrends: formattedMonthlyTrends,
+        
+        // Summary metrics
+        summary: {
+          totalPositive: categoryStats.reduce((sum, cat) => sum + cat.positiveCount, 0),
+          totalNegative: categoryStats.reduce((sum, cat) => sum + cat.negativeCount, 0),
+          totalOrganizational: feedbackByType.find(t => t._id === 'organization')?.count || 0,
+          totalUser: feedbackByType.find(t => t._id === 'user')?.count || 0
+        }
       },
       message: "Feedback stats fetched successfully",
     });
@@ -423,7 +635,7 @@ export const getFeedbackStats = async (req, res) => {
     console.error(error.message);
     res.status(500).json({
       success: false,
-      message: SERVER_ERROR,
+      message: "Server Error",
       error: error.message,
     });
   }

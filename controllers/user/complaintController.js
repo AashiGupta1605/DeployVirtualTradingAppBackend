@@ -90,12 +90,34 @@ export const deleteComplaint = async (req, res) => {
 // Get all complaints for admin
 
 //admin controllers
-export const getAllComplaintsAdmin = async (req, res) => {
+// Get all complaints (users + organizations)
+// export const getAllComplaintsAdmin = async (req, res) => {
+//   try {
+//     const complaints = await Complaint.find({ isDeleted: { $ne: true } })
+//       .populate("userId", "name email mobile")
+//       .populate("organizationId", "name email mobile")
+//       .sort({ complaintDate: -1 });
+
+//     res.status(200).json({
+//       success: true,
+//       data: complaints,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message || "Failed to fetch complaints",
+//     });
+//   }
+// };
+
+export const getAllUserComplaintsAdmin = async (req, res) => {
   try {
-    const complaints = await Complaint.find({ isDeleted: { $ne: true } })
+    const complaints = await Complaint.find({
+      isDeleted: { $ne: true },
+      userId: { $ne: null }, // Only user complaints
+    })
       .populate("userId", "name email mobile")
       .sort({ complaintDate: -1 });
-    //  console.log('Fetched complaints:', complaints);
 
     res.status(200).json({
       success: true,
@@ -104,16 +126,42 @@ export const getAllComplaintsAdmin = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: error.message || "Failed to fetch complaints",
+      message: "Failed to fetch user complaints",
+      error: error.message,
     });
   }
 };
+
+
+export const getAllOrganizationComplaintsAdmin = async (req, res) => {
+  try {
+    const complaints = await Complaint.find({
+      isDeleted: { $ne: true },
+      organizationId: { $ne: null }, // Only organization complaints
+    })
+      .populate("organizationId", "name email mobile")
+      .sort({ complaintDate: -1 });
+
+    res.status(200).json({
+      success: true,
+      data: complaints,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch organization complaints",
+      error: error.message,
+    });
+  }
+};
+
 
 // Get complaint by ID
 export const getComplaintByIdAdmin = async (req, res) => {
   try {
     const complaint = await Complaint.findById(req.params.id)
-      .populate("userId", "name email");
+      .populate("userId", "name email")
+      .populate("organizationId", "name email");
 
     if (!complaint) {
       return res.status(404).json({
@@ -150,7 +198,9 @@ export const updateComplaintStatus = async (req, res) => {
         },
       },
       { new: true }
-    ).populate("userId", "name email");
+    )
+      .populate("userId", "name email")
+      .populate("organizationId", "name email");
 
     if (!updatedComplaint) {
       return res.status(404).json({
@@ -208,7 +258,7 @@ export const softDeleteComplaint = async (req, res) => {
   }
 };
 
-// Complaint statistics (optional)
+// Complaint statistics
 export const getComplaintStats = async (req, res) => {
   try {
     const complaints = await Complaint.find({ isDeleted: false });
@@ -234,6 +284,7 @@ export const getComplaintStats = async (req, res) => {
     });
   }
 };
+
 
 //Organization controllers
 

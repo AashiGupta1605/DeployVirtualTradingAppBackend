@@ -5,7 +5,8 @@ import {
   getComplaintByUserId,
   updateComplaint,
   deleteComplaint,
-  getAllComplaintsAdmin,
+  getAllUserComplaintsAdmin,
+  getAllOrganizationComplaintsAdmin,
   getComplaintByIdAdmin,
   updateComplaintStatus,
   softDeleteComplaint,
@@ -20,7 +21,8 @@ import userMiddleware from "../../../middlewares/userMiddleware.js";
 const router = express.Router();
 
 // Admin complaint routes (no middleware)
-router.get('/admin', getAllComplaintsAdmin);
+router.get('/admin', getAllUserComplaintsAdmin);
+router.get("/admin/organization-complaints", getAllOrganizationComplaintsAdmin);
 router.get('/admin/stats', getComplaintStats);
 router.get('/admin/:id', getComplaintByIdAdmin);
 router.patch('/admin/:id/status', updateComplaintStatus);
