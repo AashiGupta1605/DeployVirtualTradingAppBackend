@@ -1,11 +1,12 @@
 import User from "../../models/UserModal.js";
+import OtpVerification from "../../models/OtpVerification.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import transporter from '../../config/emailColfig.js'; 
 import moment from "moment";
 import sendEmail from "../../utils/emailController.js";
-  changePasswordSchema
-  import { registerUserSchema, loginUserSchema, changePasswordSchema, passwordValidationSchema } from "../../helpers/userValidation.js"; // Import Joi schemas
+import sendOtp from "../../utils/sendOtp.js";
+import { registerUserSchema, loginUserSchema, changePasswordSchema, passwordValidationSchema } from "../../helpers/userValidation.js"; // Import Joi schemas
 import {
   updateUserValidation,
   deleteUserValidation,
@@ -45,10 +46,45 @@ import {
 //     res.status(500).json({ message: "Registration failed", error: error.message });
 //   }
 // };
+// export const registerUser = async (req, res) => {
+//   const { name, email, password, confirmPassword, mobile, gender, dob, orgtype } = req.body;
+
+//   // Validate input (Exclude confirmPassword from validation)
+//   const { error } = registerUserSchema.validate({ name, email, password, mobile, gender, dob });
+//   if (error) return res.status(400).json({ message: error.details[0].message });
+
+//   try {
+//     const existingUser = await User.findOne({ email });
+//     if (existingUser) return res.status(400).json({ message: "User already exists" });
+         
+//     const hashedPassword = await bcrypt.hash(password, 10);
+    
+//     const newUserData = {
+//       name,
+//       email,
+//       password: hashedPassword,
+//       mobile,
+//       gender,
+//       dob,
+//     };
+    
+//     const newUser = await User.create(newUserData);
+//     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+//     // ✅ **Send Welcome Email**
+//     const subject = "Welcome to PGR Virtual Trading App!";
+//     const message = `Hello ${name}, <br> Welcome to PGR Virtual Trading App! Start your trading journey today.`;
+//     await sendEmail(email, subject, message);
+
+//     res.status(201).json({ message: "User registered successfully", token, user: newUser });
+//   } catch (error) {
+//     res.status(500).json({ message: "Registration failed", error: error.message });
+//   }
+
+// };
 export const registerUser = async (req, res) => {
   const { name, email, password, confirmPassword, mobile, gender, dob, orgtype } = req.body;
 
-  // Validate input (Exclude confirmPassword from validation)
   const { error } = registerUserSchema.validate({ name, email, password, mobile, gender, dob });
   if (error) return res.status(400).json({ message: error.details[0].message });
 
@@ -70,7 +106,10 @@ export const registerUser = async (req, res) => {
     const newUser = await User.create(newUserData);
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-    // ✅ **Send Welcome Email**
+    // ✅ Send OTP Email
+    //await sendOtp(email);
+
+    // ✅ Send Welcome Email
     const subject = "Welcome to PGR Virtual Trading App!";
     const message = `Hello ${name}, <br> Welcome to PGR Virtual Trading App! Start your trading journey today.`;
     await sendEmail(email, subject, message);
@@ -81,6 +120,18 @@ export const registerUser = async (req, res) => {
   }
 };
 
+
+export const sendOtpToEmail = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    await sendOtp(email);
+    res.status(200).json({ message: "OTP sent successfully" });
+  } catch (error) {
+    console.error("OTP Send Error:", error);
+    res.status(500).json({ message: "Failed to send OTP", error: error.message });
+  }
+};
 
 // User login
 // export const loginUser = async (req, res) => {
@@ -111,7 +162,7 @@ export const loginUser = async (req, res) => {
   // Joi validation
   const { error } = loginUserSchema.validate(req.body);
   if (error) return res.status(400).json({ message: error.details[0].message });
-
+  
   try {
     console.log("Login request received for:", { email, mobile });
     // Find user by email or mobile
@@ -120,16 +171,16 @@ export const loginUser = async (req, res) => {
     }).select("+password +isDeleted"); // Include isDeleted field
 
     if (!user) return res.status(400).json({ message: "Not a registered user" });
-
+    
     console.log(user);
     
     // Check if user is deleted
     if (user.isDeleted) return res.status(403).json({ message: "Your account has been deactivated. Please contact support." });
-
+    
     // Check password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: "Invalid email/mobile or password" });
-
+    
     // Generate token
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
@@ -138,6 +189,46 @@ export const loginUser = async (req, res) => {
     res.status(500).json({ message: "Login failed", error: error.message });
   }
 };
+
+
+export const verifyOtp = async (req, res) => {
+  const { email, enteredOtp } = req.body;
+
+  try {
+    const record = await OtpVerification.findOne({ email });
+
+    if (!record) {
+      return res.status(400).json({ message: "OTP expired or not found" });
+    }
+
+    // Check if OTP is expired (e.g., 10 minutes expiry)
+    const otpExpiryTime = 10 * 60 * 1000; // 10 minutes in milliseconds
+    const currentTime = new Date().getTime();
+
+    if (currentTime - record.createdAt.getTime() > otpExpiryTime) {
+      // OTP expired, delete the record
+      await OtpVerification.deleteOne({ email });
+      return res.status(400).json({ message: "OTP expired" });
+    }
+
+    if (record.otp !== enteredOtp) {
+      return res.status(400).json({ message: "Invalid OTP" });
+    }
+
+    // Update OTP status to approved
+    record.status = "approved";
+    await record.save();
+
+    // Optionally, update User status to approved
+    await User.updateOne({ email }, { status: "approved" });
+
+    res.status(200).json({ message: "OTP verified successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "OTP verification failed", error: error.message });
+  }
+};
+
+
 
 
 // export const changePassword = async (req, res) => {
@@ -172,10 +263,10 @@ export const loginUser = async (req, res) => {
 export const changePassword = async (req, res) => {
   try {
     console.log("🔹 Received password change request:", req.body);
-
+     
     // ✅ Validate input without userId
     const { error } = changePasswordSchema.validate(req.body, { abortEarly: false });
-
+    
     if (error) {
       console.log(" Joi Validation Error:", error.details);
       return res.status(400).json({
@@ -183,45 +274,46 @@ export const changePassword = async (req, res) => {
         errors: error.details.map((err) => err.message),
       });
     }
-
+    
     const { oldPassword, newPassword } = req.body;
     const userId = req.user.id; // Extract userId from JWT
-
+    
     console.log(" Extracted User ID from JWT:", userId);
-
+    
     const user = await User.findById(userId);
     if (!user) {
       console.log(" User not found");
       return res.status(404).json({ message: "User not found" });
     }
-
+     
     console.log(" User found:", user.email);
-
+     
     // 🔹 Check if old password is correct
     const isMatch = await bcrypt.compare(oldPassword, user.password);
     if (!isMatch) {
       console.log(" Old password is incorrect");
       return res.status(401).json({ message: "Old password is incorrect" });
     }
-
+    
     // 🔹 Prevent changing to the same password
     if (oldPassword === newPassword) {
       console.log("New password must be different");
       return res.status(400).json({ message: "New password must be different from the old password" });
     }
-
+    
     // 🔹 Hash and update the new password
     console.log("🔹 Hashing new password...");
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(newPassword, salt);
     await user.save();
-
+    
     console.log("✅ Password updated successfully");
     res.status(200).json({ message: "Password updated successfully" });
   } catch (error) {
     console.error(" Error in changePassword controller:", error);
     res.status(500).json({ message: "Password change failed", error: error.message });
   }
+
 };
 
 
@@ -230,26 +322,26 @@ export const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
     const user = await User.findOne({ email });
-
+    
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-
+    
      //Generate Reset Token (expires in 15 minutes)
      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "15m" });
      const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${token}&role=user`;
- 
+     
      console.log("Generated Reset Token:", token);
      console.log("Reset Link:", resetLink);
- 
+     
      //Send Reset Email
      const subject = "Password Reset Request";
      const message = "Click the button below to reset your password. This link expires in 15 minutes.";
      
      await sendEmail(email, subject, message, "Reset Password", resetLink, false);
- 
+     
      res.status(200).json({ message: "Password reset link sent to your email" });
-   } catch (error) {
+    } catch (error) {
      console.error("Error in forgotPassword:", error);
      res.status(500).json({ message: "Error sending email", error: error.message });
    }

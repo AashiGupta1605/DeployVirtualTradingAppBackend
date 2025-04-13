@@ -7,7 +7,11 @@ const userSchema = new mongoose.Schema({
   mobile: { type: String,  unique: true },
   gender: { type: String },
   dob: { type: Date },
-  status: { type: Boolean, default: true },
+  status: {
+    type: String,
+    enum: ['approved', 'not approved'],
+    default: 'not approved'
+  },
   addedby: { type: String, default:"self" },
   orgtype: { type: String },
   isDeleted: { type: Boolean, default: false },
