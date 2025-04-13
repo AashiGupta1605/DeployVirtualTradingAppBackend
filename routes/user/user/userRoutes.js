@@ -35,6 +35,7 @@ router.delete('/delete', userMiddleware, deleteUser);
 // Change Password Route
 router.put('/change-password', userMiddleware, changePassword);
 
+
 // Admin User Management Routes
 router.get("/display-users", getUsers);
 router.put("/users/:id", updateUser);
