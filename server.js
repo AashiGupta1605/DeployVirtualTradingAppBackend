@@ -13,6 +13,7 @@ import adminRoute from "./routes/admin/adminRoute.js";
 import organizationRoute from "./routes/organization/index.js";
 import guestUserRoute from "./routes/guestUser/guestUserRoute.js";
 import { errorHandler } from './middlewares/errorHandler.js';
+import fileUpload from 'express-fileupload';
 
 dotenv.config();
 
@@ -26,6 +27,8 @@ app.use("/img", express.static(path.join(__dirname, "utils/img")));
 app.use(cors({ origin: "*", credentials: true }));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
+app.use(fileUpload())
 
 // Routes
 app.use("/v1/api/user", userRoute);
