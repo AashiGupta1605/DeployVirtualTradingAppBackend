@@ -7,7 +7,12 @@ import {
   totalEvents,
   registerForEvent,
   verifyEventPayment,
-  getMyRegisteredEvents
+  getMyRegisteredEvents,
+  getCertificateByRegistration,
+  validateCertificate,
+  updateRegistrationStatusAdmin,
+  getAllEventRegistrations,
+  getUserEventsAdmin
 } from '../../../controllers/admin/eventController.js';
 import { protect } from '../../../middlewares/userMiddleware.js';
 
@@ -31,6 +36,27 @@ router.route('/:id')
   router.post('/verify-event', verifyEventPayment);
 
   router.get('/my-events', protect, getMyRegisteredEvents);
+
+
+
+
+  // CERTIFICATES ROUTES
+
+
+// Add these routes
+router.get('/certificates/validate', validateCertificate);
+router.get('/certificates/:registrationId',getCertificateByRegistration);
   
+
+
+
+
+// admin participation user route
+
+// Admin event registration routes
+router.get('/event-registrations', getAllEventRegistrations);
+router.put('/event-registrations/:registrationId/status', updateRegistrationStatusAdmin);
+router.get('/users/:userId/events', getUserEventsAdmin);
+
 
 export default router;
