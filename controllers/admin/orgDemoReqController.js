@@ -1,9 +1,10 @@
 import DemoReqByOrganizationModal from '../../models/DemoReqByOrganizationModal.js';
 import DemoReqByUserModal from '../../models/DemoReqByUserModal.js';
+import { sendDemoBookedEmail } from '../../helpers/bookDemoSuccessMailSend.js';
 
 export const addOrgDemoRequest = async (req, res) => {
     try {
-        const {name, website, email, mobile, contactPerson, aboutHelp, preferredDay, preferredTimeSlot } = req.body;
+        const {name, website, email, mobile, contactPerson, aboutHelp, preferredDate, preferredTimeSlot } = req.body;
 
         if (!name || name.trim().length === 0) {
             return res.status(400).json({ success: false, message: 'Name is required.' });
@@ -20,21 +21,24 @@ export const addOrgDemoRequest = async (req, res) => {
         if (!aboutHelp || aboutHelp.trim().length === 0) {
             return res.status(400).json({ success: false, message: "Tell about, how can we Assist you the best?" });
         }
-        if (!preferredDay || preferredDay.trim().length === 0) {
-            return res.status(400).json({ success: false, message: 'Preferred day is required.' });
+        if (!preferredDate) {
+            return res.status(400).json({ success: false, message: 'Preferred date is required.' });
         }
         // if (!preferredTimeSlot || preferredTimeSlot.trim().length === 0) {
         //     return res.status(400).json({ success: false, message: 'Preferred time slot is required.' });
         // }
 
-        if (name && name.trim().length > 25) {
+        if (name && name.trim().length > 45) {
             return res.status(400).json({ success: false, message: 'Name is too large.' });
         }
         if (mobile && mobile.trim().length!=10) {
             return res.status(400).json({ success: false, message: 'Invalid Mobile Number.' });
         }
-        if (aboutHelp && aboutHelp.trim().length > 100) {
+        if (aboutHelp && aboutHelp.trim().length > 160) {
             return res.status(400).json({ success: false, message: 'Maximum length of Query can be 100.' });
+        }
+        if (contactPerson && contactPerson.trim().length > 25) {
+            return res.status(400).json({ success: false, message: 'Contact Person name is too large..' });
         }
 
         // const emailExists = await DemoReqByOrganizationModal.findOne({ email: email.trim() });
@@ -87,8 +91,7 @@ export const addOrgDemoRequest = async (req, res) => {
             mobile: mobile.trim(),
             contactPerson: contactPerson.trim(),
             aboutHelp: aboutHelp.trim(),
-            // preferredDate,
-            preferredDay: preferredDay.trim(),
+            preferredDate,
             preferredTimeSlot: preferredTimeSlot.trim(),
             demoRequestDate: new Date()
         });
@@ -96,6 +99,9 @@ export const addOrgDemoRequest = async (req, res) => {
         const savedRequest = await newRequest.save();
 
         if (savedRequest) {
+            
+            await sendDemoBookedEmail(email,name,preferredTimeSlot,preferredDate)
+
             return res.status(201).json({
                 success: true,
                 message: "Your Demo Request Booked Successfully.",
