@@ -82,6 +82,43 @@ import {
 //   }
 
 // };
+// export const registerUser = async (req, res) => {
+//   const { name, email, password, confirmPassword, mobile, gender, dob, orgtype } = req.body;
+
+//   const { error } = registerUserSchema.validate({ name, email, password, mobile, gender, dob });
+//   if (error) return res.status(400).json({ message: error.details[0].message });
+
+//   try {
+//     const existingUser = await User.findOne({ email });
+//     if (existingUser) return res.status(400).json({ message: "User already exists" });
+
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     const newUserData = {
+//       name,
+//       email,
+//       password: hashedPassword,
+//       mobile,
+//       gender,
+//       dob,
+//     };
+
+//     const newUser = await User.create(newUserData);
+//     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+//     // ✅ Send OTP Email
+//     //await sendOtp(email);
+
+//     // ✅ Send Welcome Email
+//     const subject = "Welcome to PGR Virtual Trading App!";
+//     const message = `Hello ${name}, <br> Welcome to PGR Virtual Trading App! Start your trading journey today.`;
+//     await sendEmail(email, subject, message);
+
+//     res.status(201).json({ message: "User registered successfully", token, user: newUser });
+//   } catch (error) {
+//     res.status(500).json({ message: "Registration failed", error: error.message });
+//   }
+// };
 export const registerUser = async (req, res) => {
   const { name, email, password, confirmPassword, mobile, gender, dob, orgtype } = req.body;
 
@@ -90,7 +127,20 @@ export const registerUser = async (req, res) => {
 
   try {
     const existingUser = await User.findOne({ email });
-    if (existingUser) return res.status(400).json({ message: "User already exists" });
+
+    // 👇 If user exists but is not verified
+    if (existingUser) {
+      if (existingUser.status === "not approved") {
+        return res.status(400).json({
+          message: "User already registered but not verified. Please verify OTP.",
+          status: "not_verified",
+        });
+      }
+
+      // 👇 Fully registered and approved user
+      return res.status(400).json({ message: "User already exists",
+        status: "already_verified", });
+    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -101,13 +151,14 @@ export const registerUser = async (req, res) => {
       mobile,
       gender,
       dob,
+      status: "not approved", // 👈 Ensure new users are marked not approved by default
     };
 
     const newUser = await User.create(newUserData);
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
     // ✅ Send OTP Email
-    //await sendOtp(email);
+    await sendOtp(email);
 
     // ✅ Send Welcome Email
     const subject = "Welcome to PGR Virtual Trading App!";
