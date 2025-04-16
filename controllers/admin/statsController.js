@@ -369,65 +369,7 @@ export const getEventStats = async (req, res) => {
   }
 };
 
-// export const getFeedbackStats = async (req, res) => {
-//   try {
-//     const [
-//       totalFeedbacks,
-//       ratingResult,
-//       recommendedCount,
-//       typeCounts,
-//       mostPopularCategory,
-//     ] = await Promise.all([
-//       Feedback.countDocuments({ isDeleted: false }),
-//       Feedback.aggregate([
-//         { $match: { isDeleted: false } },
-//         { $group: { _id: null, averageRating: { $avg: "$rating" } } },
-//       ]),
-//       Feedback.countDocuments({ isDeleted: false, recommend: true }),
-//       Feedback.aggregate([
-//         { $match: { isDeleted: false } },
-//         { $group: { _id: "$feedbackType", count: { $sum: 1 } } },
-//       ]),
-//       Feedback.aggregate([
-//         { $match: { isDeleted: false } },
-//         {
-//           $group: {
-//             _id: "$feedbackType",
-//             total: { $sum: 1 },
-//           },
-//         },
-//         { $sort: { total: -1 } },
-//         { $limit: 1 },
-//       ]),
-//     ]);
 
-//     const averageRating = ratingResult[0]?.averageRating || 0;
-//     const recommendationRate =
-//       totalFeedbacks > 0 ? (recommendedCount / totalFeedbacks) * 100 : 0;
-
-//     res.status(200).json({
-//       success: true,
-//       stats: {
-//         total: totalFeedbacks,
-//         averageRating: averageRating.toFixed(2),
-//         recommendationRate: recommendationRate.toFixed(2),
-//         byType: typeCounts,
-//         mostPopularCategory: mostPopularCategory[0] || {
-//           _id: "No data",
-//           total: 0,
-//         },
-//       },
-//       message: "Feedback stats fetched successfully",
-//     });
-//   } catch (error) {
-//     console.error(error.message);
-//     res.status(500).json({
-//       success: false,
-//       message: SERVER_ERROR,
-//       error: error.message,
-//     });
-//   }
-// };
 
 export const getFeedbackStats = async (req, res) => {
   try {
@@ -800,6 +742,7 @@ export const getBasicComplaintStats = async (req, res) => {
   }
 };
 
+
 import NiftyData from "../../models/NiftyDataModal.js";
 import Nifty500Data from "../../models/Nifty500DataModal.js";
 import NiftyETFData from "../../models/StockModal.js";
@@ -887,3 +830,13 @@ export const getGalleryStats = async (req, res) => {
     });
   }
 };
+
+
+
+
+
+
+
+
+
+

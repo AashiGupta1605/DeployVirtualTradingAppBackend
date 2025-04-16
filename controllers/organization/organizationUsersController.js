@@ -310,3 +310,90 @@ export const organizationAverageUserAge = async (req, res) => {
   }
 };
 
+
+
+
+
+
+
+
+// one controller for all user related detail ---
+
+export const organizationDashboardStats = async (req, res) => {
+  const orgName = req.params.orgName;
+
+  try {
+    // Calculate date for "new users last week" filter
+    const oneWeekAgo = moment().subtract(7, 'days').toDate();
+
+    // Execute all queries in parallel
+    const [
+      totalUsers,
+      newUsersLastWeek,
+      maleUsers,
+      femaleUsers,
+      activeUsers,
+      deactiveUsers,
+      usersForAgeCalculation
+    ] = await Promise.all([
+      UserModal.countDocuments({ isDeleted: false, addedby: orgName }),
+      UserModal.countDocuments({
+        createdAt: { $gte: oneWeekAgo },
+        isDeleted: false,
+        addedby: orgName
+      }),
+      UserModal.countDocuments({
+        gender: "Male",
+        isDeleted: false,
+        addedby: orgName
+      }),
+      UserModal.countDocuments({
+        gender: "Female",
+        isDeleted: false,
+        addedby: orgName
+      }),
+      UserModal.countDocuments({
+        status: true,
+        isDeleted: false,
+        addedby: orgName
+      }),
+      UserModal.countDocuments({
+        status: false,
+        isDeleted: false,
+        addedby: orgName
+      }),
+      UserModal.find({ isDeleted: false, addedby: orgName }, 'dob')
+    ]);
+
+    // Calculate average age
+    const totalAge = usersForAgeCalculation.reduce((sum, user) => {
+      return sum + moment().diff(user.dob, 'years');
+    }, 0);
+    const averageAge = (totalAge / (usersForAgeCalculation.length || 1)).toFixed(2);
+
+    // Get total organizations (if needed)
+    const totalOrganizations = await OrgRegister.countDocuments({ isDeleted: false });
+
+    res.status(200).json({
+      success: true,
+      stats: {
+        totalUsers,
+        newUsersLastWeek,
+        maleUsers,
+        femaleUsers,
+        activeUsers,
+        deactiveUsers,
+        averageAge,
+        totalOrganizations
+      },
+      message: "Organization dashboard stats fetched successfully"
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+      error: error.message
+    });
+  }
+};
