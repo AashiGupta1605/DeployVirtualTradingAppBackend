@@ -1,17 +1,15 @@
 import mongoose from "mongoose";
 
 const organizationDemoSchema = new mongoose.Schema({
-    name: { type: String, required: true, trim:true, maxlength:25 },
+    name: { type: String, required: true, trim:true, maxlength:45 },
     website: { type: String, required: true, trim:true},
     // email: { type: String, required: true, unique: true, trim:true },
     // mobile: { type: String,  unique: true, required: true, trim:true, maxlength:10, maxlength:10 },
     email: { type: String, required: true, trim:true },
     mobile: { type: String, required: true, trim:true, maxlength:10, maxlength:10 },
-    contactPerson: {type: String, trim:true},
-    aboutHelp: {type: String, required: true, trim:true, maxlength:100},
-    // preferredDate: {type: Date},
-    preferredDay: {type: String, required: true, trim: true},
-    // preferredTimeSlot: {type: String, required: true, trim: true},
+    contactPerson: {type: String, trim:true, maxlength:25},
+    aboutHelp: {type: String, required: true, trim:true, maxlength:160},
+    preferredDate: {type: Date, required: true},
     preferredTimeSlot: {type: String, trim: true},
     
     demoRequestDate: { type: Date, default: null },

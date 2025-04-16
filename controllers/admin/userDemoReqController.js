@@ -1,9 +1,10 @@
 import DemoReqByUserModal from '../../models/DemoReqByUserModal.js';
 import DemoReqByOrganizationModal from '../../models/DemoReqByOrganizationModal.js'; 
+import { sendDemoBookedEmail } from '../../helpers/bookDemoSuccessMailSend.js';
 
 export const addUserDemoRequest = async (req, res) => {
     try {
-        const {name, email, mobile, gender, dob, aboutHelp, partOfOrganization = false, organizationName = '', preferredDay, preferredTimeSlot } = req.body;
+        const {name, email, mobile, gender, dob, aboutHelp, preferredDate, preferredTimeSlot } = req.body;
 
         if (!name || name.trim().length === 0) {
             return res.status(400).json({ success: false, message: 'Name is required.' });
@@ -23,7 +24,7 @@ export const addUserDemoRequest = async (req, res) => {
         if (!aboutHelp || aboutHelp.trim().length === 0) {
             return res.status(400).json({ success: false, message: "Tell about, how can we Assist you the best?" });
         }
-        if (!preferredDay || preferredDay.trim().length === 0) {
+        if (!preferredDate) {
             return res.status(400).json({ success: false, message: 'Preferred day is required.' });
         }
         // if (!preferredTimeSlot || preferredTimeSlot.trim().length === 0) {
@@ -36,7 +37,7 @@ export const addUserDemoRequest = async (req, res) => {
         if (mobile && mobile.trim().length!=10) {
             return res.status(400).json({ success: false, message: 'Invalid Mobile Number.' });
         }
-        if (aboutHelp && aboutHelp.trim().length > 100) {
+        if (aboutHelp && aboutHelp.trim().length > 160) {
             return res.status(400).json({ success: false, message: 'Maximum length of Query can be 100.' });
         }
 
@@ -81,10 +82,9 @@ export const addUserDemoRequest = async (req, res) => {
             gender: gender.trim(),
             dob,
             aboutHelp: aboutHelp.trim(),
-            partOfOrganization,
-            organizationName: organizationName?.trim() || '',
-            // preferredDate,
-            preferredDay: preferredDay.trim(),
+            // partOfOrganization,
+            // organizationName: organizationName?.trim() || '',
+            preferredDate,
             preferredTimeSlot: preferredTimeSlot.trim(),
             demoRequestDate: new Date()
         });
@@ -92,6 +92,9 @@ export const addUserDemoRequest = async (req, res) => {
         const savedRequest = await newRequest.save();
 
         if (savedRequest) {
+            
+            await sendDemoBookedEmail(email,name,preferredTimeSlot,preferredDate)
+
             return res.status(201).json({
                 success: true,
                 message: "Your Demo Request Booked Successfully.",
@@ -126,6 +129,8 @@ export const addUserDemoRequest = async (req, res) => {
 
 export const displayUserDemoRequest = async (req, res) => {
     try{
+        // const {timeSlot, status, gender, field, search} = req.params;
+
         const sevenDaysAgo = new Date();
         sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
