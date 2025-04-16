@@ -12,6 +12,7 @@ import {
   organizationActiveUsers,
   organizationDeactiveUsers,
   organizationAverageUserAge,
+  organizationDashboardStats,
 } from '../../controllers/organization/organizationUsersController.js';
 import authMiddleware from '../../middlewares/organizationMiddleware.js';
 
@@ -33,5 +34,11 @@ router.get('/:orgName/users/count/female', organizationFemaleUsers);
 router.get('/:orgName/users/count/active', organizationActiveUsers);
 router.get('/:orgName/users/count/deactive', organizationDeactiveUsers);
 router.get('/:orgName/users/count/average-age', organizationAverageUserAge);
+
+
+
+// one route for organization user detail
+
+router.get('/:orgName/dashboard', organizationDashboardStats);
 
 export default router;

@@ -24,6 +24,8 @@ import userTradingRoute from "./userTradingRoute/userTradingRoute.js";
 import userPayment from "./userPayment/userPaymentRoute.js";
 import userEventRoutes from '../user/userPayment/userPaymentRoute.js';
 import complaintRoutes from './complaint/complaintRoutes.js';
+import statsRoute from "./stats/statsRoute.js"
+
 const router = express.Router();
 
 // Auth Routes
@@ -51,6 +53,12 @@ router.use('/payment', userPayment);
 
 router.use('/', userEventRoutes);
 // payment route
+
+
+// user stats route 
+
+router.use('/stats', statsRoute);
+
 
 
 
