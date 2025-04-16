@@ -189,6 +189,199 @@ export const totalEvents = async (req, res) => {
 }
 
 // Event Registration Operations
+// real one
+
+// export const registerForEvent = async (req, res) => {
+//   try {
+//     const { eventId, userId } = req.body;
+
+//     if (!eventId || !userId) {
+//       return res.status(400).json({ 
+//         success: false, 
+//         message: 'Event ID and User ID are required' 
+//       });
+//     }
+
+//     const event = await Event.findById(eventId);
+//     if (!event) return res.status(404).json({ success: false, message: 'Event not found' });
+
+//     const user = await User.findById(userId);
+//     if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+
+//     const existingRegistration = await EventRegistration.findOne({ 
+//       userId, 
+//       eventId,
+//       status: 'Registered' 
+//     });
+
+//     if (existingRegistration) {
+//       return res.status(400).json({ 
+//         success: false, 
+//         message: 'Already registered for this event' 
+//       });
+//     }
+
+//     // Handle free events
+//     if (event.entryFee <= 0) {
+//       const registration = new EventRegistration({
+//         userId,
+//         eventId,
+//         status: 'Registered',
+//         entryFee: 0
+//       });
+
+//       await registration.save();
+//       await Event.findByIdAndUpdate(eventId, { $inc: { participants: 1 } });
+
+//       return res.status(201).json({
+//         success: true,
+//         message: 'Successfully registered for free event',
+//         registration
+//       });
+//     }
+
+//     // Paid events
+//     const razorpayOrder = await razorpay.orders.create({
+//       amount: Math.round(event.entryFee * 100),
+//       currency: 'INR',
+//       receipt: `event_reg_${eventId}_${userId}_${Date.now()}`,
+//       notes: {
+//         eventId: eventId.toString(),
+//         userId: userId.toString(),
+//         eventTitle: event.title
+//       }
+//     });
+
+//     const registration = new EventRegistration({
+//       userId,
+//       eventId,
+//       status: 'Pending',
+//       entryFee: event.entryFee,
+//       paymentOrderId: razorpayOrder.id
+//     });
+
+//     await registration.save();
+
+//     res.status(200).json({
+//       success: true,
+//       order: razorpayOrder,
+//       registrationId: registration._id,
+//       message: 'Payment required for event registration'
+//     });
+
+//   } catch (error) {
+//     console.error('Event Registration Error:', error);
+//     res.status(500).json({ 
+//       success: false, 
+//       message: 'Failed to register for event',
+//       error: error.message 
+//     });
+//   }
+// };
+
+// export const verifyEventPayment = async (req, res) => {
+//   try {
+//     const {
+//       razorpay_payment_id,
+//       razorpay_order_id,
+//       razorpay_signature,
+//       paymentId,
+//       registrationId,
+//       userId,
+//       eventId
+//     } = req.body;
+
+//     // Verify payment signature
+//     const generatedSignature = crypto
+//       .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+//       .update(`${razorpay_order_id}|${razorpay_payment_id}`)
+//       .digest('hex');
+
+//     if (generatedSignature !== razorpay_signature) {
+//       await Payment.findByIdAndUpdate(paymentId, {
+//         status: 'Failed',
+//         paymentDetails: { verificationError: 'Signature mismatch' }
+//       });
+
+//       await EventRegistration.findByIdAndUpdate(registrationId, {
+//         status: 'Cancelled'
+//       });
+
+//       return res.status(400).json({
+//         success: false,
+//         message: 'Payment verification failed: Invalid signature'
+//       });
+//     }
+
+//     // Update payment record
+//     const payment = await Payment.findByIdAndUpdate(
+//       paymentId,
+//       {
+//         razorpayPaymentId: razorpay_payment_id,
+//         razorpaySignature: razorpay_signature,
+//         status: 'Paid',
+//         updatedAt: new Date()
+//       },
+//       { new: true }
+//     );
+
+//     // Update registration
+//     const registration = await EventRegistration.findByIdAndUpdate(
+//       registrationId,
+//       {
+//         status: 'Registered',
+//         paymentId: payment._id,
+//         paymentStatus: 'Completed'
+//       },
+//       { new: true }
+//     );
+
+//     // Update event participants
+//     await Event.findByIdAndUpdate(eventId, { $inc: { participants: 1 } });
+
+//     // Send confirmation email
+//     const user = await User.findById(userId);
+//     const event = await Event.findById(eventId);
+
+//     if (user && event) {
+//       const emailSubject = `Registration Confirmation - ${event.title}`;
+//       const emailMessage = `
+//         <p>Thank you for registering for <strong>${event.title}</strong>!</p>
+//         <p><strong>Event Details:</strong></p>
+//         <ul>
+//           <li>Event: ${event.title}</li>
+//           <li>Date: ${new Date(event.startDate).toLocaleDateString()} - ${new Date(event.endDate).toLocaleDateString()}</li>
+//           <li>Entry Fee: ₹${event.entryFee}</li>
+//           <li>Payment ID: ${razorpay_payment_id}</li>
+//         </ul>
+//         <p>You can now access the event from your dashboard.</p>
+//       `;
+
+//       await sendEmail(user.email, emailSubject, emailMessage);
+//     }
+
+//     res.json({
+//       success: true,
+//       message: 'Payment verified and event registration completed',
+//       payment,
+//       registration
+//     });
+
+//   } catch (error) {
+//     console.error('Payment verification error:', error);
+//     res.status(500).json({
+//       success: false,
+//       message: 'Payment verification failed',
+//       error: error.message
+//     });
+//   }
+// };
+
+
+// deepseek one 
+
+// ... (previous imports remain the same)
+
 export const registerForEvent = async (req, res) => {
   try {
     const { eventId, userId } = req.body;
@@ -215,7 +408,8 @@ export const registerForEvent = async (req, res) => {
     if (existingRegistration) {
       return res.status(400).json({ 
         success: false, 
-        message: 'Already registered for this event' 
+        message: 'Already registered for this event',
+        certificateId: existingRegistration.certificateId // Return existing certificate ID if already registered
       });
     }
 
@@ -234,7 +428,8 @@ export const registerForEvent = async (req, res) => {
       return res.status(201).json({
         success: true,
         message: 'Successfully registered for free event',
-        registration
+        registration,
+        certificateId: registration.certificateId // Include the certificate ID in response
       });
     }
 
@@ -264,6 +459,7 @@ export const registerForEvent = async (req, res) => {
       success: true,
       order: razorpayOrder,
       registrationId: registration._id,
+      certificateId: registration.certificateId, // Include the certificate ID in response
       message: 'Payment required for event registration'
     });
 
@@ -337,7 +533,7 @@ export const verifyEventPayment = async (req, res) => {
     // Update event participants
     await Event.findByIdAndUpdate(eventId, { $inc: { participants: 1 } });
 
-    // Send confirmation email
+    // Send confirmation email with certificate ID
     const user = await User.findById(userId);
     const event = await Event.findById(eventId);
 
@@ -351,8 +547,10 @@ export const verifyEventPayment = async (req, res) => {
           <li>Date: ${new Date(event.startDate).toLocaleDateString()} - ${new Date(event.endDate).toLocaleDateString()}</li>
           <li>Entry Fee: ₹${event.entryFee}</li>
           <li>Payment ID: ${razorpay_payment_id}</li>
+          <li>Certificate ID: ${registration.certificateId}</li>
         </ul>
         <p>You can now access the event from your dashboard.</p>
+        <p>Your certificate ID for this event is: <strong>${registration.certificateId}</strong></p>
       `;
 
       await sendEmail(user.email, emailSubject, emailMessage);
@@ -362,7 +560,8 @@ export const verifyEventPayment = async (req, res) => {
       success: true,
       message: 'Payment verified and event registration completed',
       payment,
-      registration
+      registration,
+      certificateId: registration.certificateId // Include certificate ID in response
     });
 
   } catch (error) {
@@ -375,6 +574,56 @@ export const verifyEventPayment = async (req, res) => {
   }
 };
 
+// Add this new controller to get certificate by registration ID
+export const getCertificateByRegistration = async (req, res) => {
+  try {
+    const { registrationId } = req.params;
+
+    const registration = await EventRegistration.findById(registrationId)
+      .populate('userId', 'name email')
+      .populate('eventId', 'title description startDate endDate');
+
+    if (!registration) {
+      return res.status(404).json({
+        success: false,
+        message: 'Registration not found'
+      });
+    }
+
+    if (registration.status !== 'Registered') {
+      return res.status(400).json({
+        success: false,
+        message: 'Certificate is only available for completed registrations'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      certificate: {
+        id: registration.certificateId,
+        userName: registration.userId.name,
+        eventName: registration.eventId.title,
+        eventDescription: registration.eventId.description,
+        registrationDate: registration.createdAt,
+        eventDates: {
+          start: registration.eventId.startDate,
+          end: registration.eventId.endDate
+        }
+      }
+    });
+
+  } catch (error) {
+    console.error('Error fetching certificate:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch certificate',
+      error: error.message
+    });
+  }
+};
+
+
+// real one
 export const getMyRegisteredEvents = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -408,6 +657,181 @@ export const getMyRegisteredEvents = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Failed to fetch user events',
+      error: error.message
+    });
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+// new added by me
+
+export const validateCertificate = async (req, res) => {
+  try {
+    const { certificateId, userName } = req.query;
+
+    if (!certificateId || !userName) {
+      return res.status(400).json({
+        success: false,
+        message: 'Certificate ID and user name are required'
+      });
+    }
+
+    const registration = await EventRegistration.findOne({ 
+      certificateId,
+      status: 'Registered'
+    })
+    .populate('userId', 'name')
+    .populate('eventId', 'title description startDate endDate');
+
+    if (!registration) {
+      return res.status(404).json({
+        success: false,
+        message: 'Certificate not found'
+      });
+    }
+
+    // Verify user name matches
+    const user = await User.findById(registration.userId);
+    if (!user.name.toLowerCase().includes(userName.toLowerCase())) {
+      return res.status(400).json({
+        success: false,
+        message: 'User name does not match certificate records'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      certificate: {
+        id: registration.certificateId,
+        userName: user.name,
+        eventName: registration.eventId.title,
+        eventDescription: registration.eventId.description,
+        registrationDate: registration.createdAt,
+        eventDates: {
+          start: registration.eventId.startDate,
+          end: registration.eventId.endDate
+        }
+      }
+    });
+
+  } catch (error) {
+    console.error('Certificate validation error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to validate certificate',
+      error: error.message
+    });
+  }
+};
+
+
+
+
+
+// add controllers for shoewing registered events uses in admin side
+
+// Get all event registrations (admin)
+export const getAllEventRegistrations = async (req, res) => {
+  try {
+    const registrations = await EventRegistration.find()
+      .populate('userId', 'name email')
+      .populate('eventId', 'title description startDate endDate entryFee')
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      count: registrations.length,
+      registrations
+    });
+  } catch (error) {
+    console.error('Error fetching event registrations:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch event registrations',
+      error: error.message
+    });
+  }
+};
+
+// Get all events for a specific user (admin)
+export const getUserEventsAdmin = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const registrations = await EventRegistration.find({ userId })
+      .populate('eventId', 'title description startDate endDate entryFee participants icon')
+      .sort({ createdAt: -1 });
+
+    const events = registrations.map(reg => ({
+      ...reg.eventId._doc,
+      status: reg.status,
+      registrationDate: reg.createdAt
+    }));
+
+    res.status(200).json({
+      success: true,
+      count: events.length,
+      events
+    });
+  } catch (error) {
+    console.error('Error fetching user events:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch user events',
+      error: error.message
+    });
+  }
+};
+
+// Update registration status (admin)
+export const updateRegistrationStatusAdmin = async (req, res) => {
+  try {
+    const { registrationId } = req.params;
+    const { status } = req.body;
+
+    if (!['Registered', 'Pending', 'Cancelled', 'Completed'].includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid status value'
+      });
+    }
+
+    const registration = await EventRegistration.findByIdAndUpdate(
+      registrationId,
+      { status },
+      { new: true }
+    ).populate('userId', 'name email')
+     .populate('eventId', 'title');
+
+    if (!registration) {
+      return res.status(404).json({
+        success: false,
+        message: 'Registration not found'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Registration status updated',
+      registration
+    });
+
+  } catch (error) {
+    console.error('Error updating registration status:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update registration status',
       error: error.message
     });
   }
