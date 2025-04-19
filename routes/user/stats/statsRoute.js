@@ -18,7 +18,14 @@ router.get('/:userId/feedback', getFeedbackStats);
 router.get('/:userId/complaints', getComplaintStats);
 router.get('/:userId/queries', getQueryStats);
 router.get('/:userId/subscription', getSubscriptionStats);
-// router.get('/:userId/stocks', getStockStats);
+
+// router.get('/users', getUserStats);
+// router.get('/events', getEventStats);
+// router.get('/feedback', getFeedbackStats);
+// router.get('/complaints', getComplaintStats);
+// router.get('/queries', getQueryStats);
+// router.get('/subscription', getSubscriptionStats);
+// // router.get('/:userId/stocks', getStockStats);
 
 
 export default router;
