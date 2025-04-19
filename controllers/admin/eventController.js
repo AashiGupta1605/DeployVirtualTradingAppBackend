@@ -624,6 +624,7 @@ export const getCertificateByRegistration = async (req, res) => {
 
 
 // real one
+
 export const getMyRegisteredEvents = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -675,62 +676,138 @@ export const getMyRegisteredEvents = async (req, res) => {
 
 
 // new added by me
+// real
+// export const validateCertificate = async (req, res) => {
+//   try {
+//     const { certificateId, userName } = req.query;
+
+//     if (!certificateId || !userName) {
+//       return res.status(400).json({
+//         success: false,
+//         message: 'Certificate ID and user name are required'
+//       });
+//     }
+
+//     const registration = await EventRegistration.findOne({ 
+//       certificateId,
+//       status: 'Registered'
+//     })
+//     .populate('userId', 'name')
+//     .populate('eventId', 'title description startDate endDate');
+
+//     if (!registration) {
+//       return res.status(404).json({
+//         success: false,
+//         message: 'Certificate not found'
+//       });
+//     }
+
+//     // Verify user name matches
+//     const user = await User.findById(registration.userId);
+//     if (!user.name.toLowerCase().includes(userName.toLowerCase())) {
+//       return res.status(400).json({
+//         success: false,
+//         message: 'User name does not match certificate records'
+//       });
+//     }
+
+//     res.status(200).json({
+//       success: true,
+//       certificate: {
+//         id: registration.certificateId,
+//         userName: user.name,
+//         eventName: registration.eventId.title,
+//         eventDescription: registration.eventId.description,
+//         registrationDate: registration.createdAt,
+//         eventDates: {
+//           start: registration.eventId.startDate,
+//           end: registration.eventId.endDate
+//         }
+//       }
+//     });
+
+//   } catch (error) {
+//     console.error('Certificate validation error:', error);
+//     res.status(500).json({
+//       success: false,
+//       message: 'Failed to validate certificate',
+//       error: error.message
+//     });
+//   }
+// };
 
 export const validateCertificate = async (req, res) => {
   try {
     const { certificateId, userName } = req.query;
 
+    // Validate input
     if (!certificateId || !userName) {
       return res.status(400).json({
         success: false,
-        message: 'Certificate ID and user name are required'
+        message: 'Certificate ID and user name are required.',
       });
     }
 
-    const registration = await EventRegistration.findOne({ 
+    // Find the registration and populate related fields
+    const registration = await EventRegistration.findOne({
       certificateId,
-      status: 'Registered'
+      status: 'Registered', // Adjust the status as per your application's logic
     })
-    .populate('userId', 'name')
-    .populate('eventId', 'title description startDate endDate');
+      .populate('userId', 'name') // Populate user details
+      .populate('eventId', 'title description startDate endDate'); // Populate event details
 
     if (!registration) {
       return res.status(404).json({
         success: false,
-        message: 'Certificate not found'
+        message: 'No registration found for the provided certificate ID.',
       });
     }
 
-    // Verify user name matches
-    const user = await User.findById(registration.userId);
-    if (!user.name.toLowerCase().includes(userName.toLowerCase())) {
+    // Extract user and event details
+    const { userId, eventId } = registration;
+    const user = userId; // Populated user details
+    const event = eventId; // Populated event details
+
+    // Verify the user name matches exactly
+    if (user.name.toLowerCase() !== userName.toLowerCase()) {
       return res.status(400).json({
         success: false,
-        message: 'User name does not match certificate records'
+        message: 'User name does not match certificate records.',
       });
     }
 
+    // Check if the event is complete
+    const today = new Date();
+    const eventEndDate = new Date(event.endDate);
+
+    if (eventEndDate > today) {
+      return res.status(400).json({
+        success: false,
+        message: 'The event is not complete yet. Please validate the certificate after the event end date.',
+      });
+    }
+
+    // Return the certificate details
     res.status(200).json({
       success: true,
       certificate: {
         id: registration.certificateId,
         userName: user.name,
-        eventName: registration.eventId.title,
-        eventDescription: registration.eventId.description,
+        eventName: event.title,
+        eventDescription: event.description,
         registrationDate: registration.createdAt,
         eventDates: {
-          start: registration.eventId.startDate,
-          end: registration.eventId.endDate
-        }
-      }
+          start: event.startDate,
+          end: event.endDate,
+        },
+      },
     });
-
   } catch (error) {
     console.error('Certificate validation error:', error);
     res.status(500).json({
       success: false,
-      message: 'Failed to validate certificate',
-      error: error.message
+      message: 'Failed to validate certificate.',
+      error: error.message,
     });
   }
 };
@@ -742,10 +819,11 @@ export const validateCertificate = async (req, res) => {
 // add controllers for shoewing registered events uses in admin side
 
 // Get all event registrations (admin)
+
 export const getAllEventRegistrations = async (req, res) => {
   try {
     const registrations = await EventRegistration.find()
-      .populate('userId', 'name email')
+      .populate('userId', 'name email gender mobile ')
       .populate('eventId', 'title description startDate endDate entryFee')
       .sort({ createdAt: -1 });
 
@@ -765,6 +843,39 @@ export const getAllEventRegistrations = async (req, res) => {
 };
 
 // Get all events for a specific user (admin)
+// export const getUserEventsAdmin = async (req, res) => {
+//   try {
+//     const { userId } = req.params;
+
+//     const registrations = await EventRegistration.find({ userId })
+//       .populate('eventId', 'title description startDate endDate entryFee participants icon')
+//       .sort({ createdAt: -1 });
+
+//     const events = registrations.map(reg => ({
+//       ...reg.eventId._doc,
+//       status: reg.status,
+//       registrationDate: reg.createdAt
+//     }));
+
+//     res.status(200).json({
+//       success: true,
+//       count: events.length,
+//       events
+//     });
+//   } catch (error) {
+//     console.error('Error fetching user events:', error);
+//     res.status(500).json({
+//       success: false,
+//       message: 'Failed to fetch user events',
+//       error: error.message
+//     });
+//   }
+// };
+
+
+// status udapte rs
+
+// In the controller, update getUserEventsAdmin:
 export const getUserEventsAdmin = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -776,7 +887,11 @@ export const getUserEventsAdmin = async (req, res) => {
     const events = registrations.map(reg => ({
       ...reg.eventId._doc,
       status: reg.status,
-      registrationDate: reg.createdAt
+      registrationDate: reg.createdAt,
+      paymentStatus: reg.paymentStatus,
+      paymentId: reg.paymentId,
+      certificateId: reg.certificateId,
+      _id: reg._id // include registration ID for status updates
     }));
 
     res.status(200).json({
@@ -836,3 +951,12 @@ export const updateRegistrationStatusAdmin = async (req, res) => {
     });
   }
 };
+
+
+
+
+
+
+
+
+

@@ -59,4 +59,17 @@ router.put('/event-registrations/:registrationId/status', updateRegistrationStat
 router.get('/users/:userId/events', getUserEventsAdmin);
 
 
+
+
+
+
+// certifcate route
+
+
+
+// Certificate routes
+// router.get('/my-certificates', getMyCertificates);
+// router.get('/certificates/:registrationId/download', downloadCertificate);
+// router.get('/certificates/:registrationId/preview', previewCertificate);
+
 export default router;
