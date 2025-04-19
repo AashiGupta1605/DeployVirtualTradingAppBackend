@@ -8,7 +8,7 @@ router.post('/addDemobyUser', addUserDemoRequest)
 router.post('/addDemobyOrganization', addOrgDemoRequest)
 
 router.get('/getDemobyUser/:timeSlot/:status/:gender/:field/:search', displayUserDemoRequest)
-router.get('/getDemobyOrganization', displayOrgDemoRequest)
+router.get('/getDemobyOrganization/:timeSlot/:status/:field/:search', displayOrgDemoRequest)
 
 router.put('/updateDemobyUser/:id', updateUserDemoRequestStatus)
 router.put('/updateDemobyOrganization/:id', updateOrgDemoRequestStatus)

@@ -1,6 +1,6 @@
 import DemoReqByOrganizationModal from '../../models/DemoReqByOrganizationModal.js';
 import DemoReqByUserModal from '../../models/DemoReqByUserModal.js';
-import { sendDemoBookedEmail } from '../../helpers/bookDemoSuccessMailSend.js';
+import { sendDemoBookedEmail, demoCompletedSuccessfulyEmail } from '../../helpers/bookDemoSuccessMailSend.js';
 
 export const addOrgDemoRequest = async (req, res) => {
     try {
@@ -41,15 +41,6 @@ export const addOrgDemoRequest = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Contact Person name is too large..' });
         }
 
-        // const emailExists = await DemoReqByOrganizationModal.findOne({ email: email.trim() });
-        // if (emailExists) {
-        //     return res.status(409).json({ success: false, message: 'Demo Request by this Email already exists.' });
-        // }
-        // const mobileExists = await DemoReqByOrganizationModal.findOne({ mobile: mobile.trim() });
-        // if (mobileExists) {
-        //     return res.status(409).json({ success: false, message: 'Demo Request by this Contact Number already exists.' });
-        // }
-
         const today = new Date();
         const getDayDifference = (startDate, endDate) => {
             const diffInMs = endDate - startDate;
@@ -71,6 +62,21 @@ export const addOrgDemoRequest = async (req, res) => {
             }
         }
 
+        const emailExistsInOrgOfCompletedDemo = await DemoReqByOrganizationModal.findOne({ email: email.trim(), isResolved:true });
+        const emailExistsInUserOfCompletedDemo = await DemoReqByUserModal.findOne({ email: email.trim(), isResolved:true });
+        if (emailExistsInUserOfCompletedDemo) {
+            if (emailExistsInUserOfCompletedDemo.resolvedCount===3) {
+                return res.status(409).json({ success: false, message: `Limit Reached!!! You have successfully completed the maximum of 3 Product Demos. 
+                                                Thank you for your interest!!` });
+            }
+        }
+        if (emailExistsInOrgOfCompletedDemo) {
+            if(emailExistsInOrgOfCompletedDemo.resolvedCount===3){
+                return res.status(409).json({ success: false, message: `Limit Reached!!! You have successfully completed the maximum of 3 Product Demos. 
+                                                Thank you for your interest!!` });
+            }
+        }
+
         const mobileExistsInOrg = await DemoReqByOrganizationModal.findOne({ mobile: mobile.trim(), isResolved:false });
         const mobileExistsInUser = await DemoReqByUserModal.findOne({ mobile: mobile.trim(), isResolved:false });
         if (mobileExistsInUser) {
@@ -82,6 +88,21 @@ export const addOrgDemoRequest = async (req, res) => {
             const daysDiff = getDayDifference(new Date(mobileExistsInOrg.demoRequestDate), today);
             if(daysDiff<7)
             return res.status(409).json({ success: false, message: `Demo Booked As an Organization by this Mobile Number already exists. Re-Request Demo after ${7-daysDiff} days.` });
+        }
+
+        const mobileExistsInOrgOfCompletedDemo = await DemoReqByOrganizationModal.findOne({ mobile: mobile.trim(), isResolved:true });
+        const mobileExistsInUserOfCompletedDemo = await DemoReqByUserModal.findOne({ mobile: mobile.trim(), isResolved:true });
+        if (mobileExistsInUserOfCompletedDemo) {
+            if (mobileExistsInUserOfCompletedDemo.resolvedCount===3) {
+                return res.status(409).json({ success: false, message: `Limit Reached!!! You have successfully completed the maximum of 3 Product Demos. 
+                                                Thank you for your interest!!` });
+            }
+        }
+        if (mobileExistsInOrgOfCompletedDemo) {
+            if(mobileExistsInOrgOfCompletedDemo.resolvedCount===3){
+                return res.status(409).json({ success: false, message: `Limit Reached!!! You have successfully completed the maximum of 3 Product Demos. 
+                                                Thank you for your interest!!` });
+            }
         }
 
         const newRequest = new DemoReqByOrganizationModal({
@@ -134,44 +155,44 @@ export const addOrgDemoRequest = async (req, res) => {
     }
 };
 
-export const displayOrgDemoRequest = async (req, res) => {
-    try{
-        const sevenDaysAgo = new Date();
-        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+// export const displayOrgDemoRequest = async (req, res) => {
+//     try{
+//         const sevenDaysAgo = new Date();
+//         sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-        const allOrgDemoRequests = await DemoReqByOrganizationModal.find({
-            $or: [
-                { isResolved: false },
-                { 
-                    isResolved: true, 
-                    demoResolveDate: { $gte: sevenDaysAgo } 
-                }
-            ]
-        }).sort({ demoRequestDate: -1 }); // latest first
+//         const allOrgDemoRequests = await DemoReqByOrganizationModal.find({
+//             $or: [
+//                 { isResolved: false },
+//                 { 
+//                     isResolved: true, 
+//                     demoResolveDate: { $gte: sevenDaysAgo } 
+//                 }
+//             ]
+//         }).sort({ demoRequestDate: -1 }); // latest first
 
-        if (!allOrgDemoRequests || allOrgDemoRequests.length === 0) {
-            return res.status(400).json({
-                success: false,
-                message: "No Demo Requests Booked by Organization found."
-            });
-        }
+//         if (!allOrgDemoRequests || allOrgDemoRequests.length === 0) {
+//             return res.status(400).json({
+//                 success: false,
+//                 message: "No Demo Requests Booked by Organization found."
+//             });
+//         }
 
-        return res.status(201).json({
-            success: true,
-            message: "Demo Requests by Organizations retrieved successfully.",
-            totalRequests: allOrgDemoRequests.length,
-            data: allOrgDemoRequests
-        });
-    }
-    catch (error) {
-        console.error("Error in getting Demos booked by Organization data:", error);
-        return res.status(500).json({
-            success: false,
-            message: `Failed to get Demos booked by Organization: ${error.message}.`,
-            error: error.message
-        });
-    }
-}
+//         return res.status(201).json({
+//             success: true,
+//             message: "Demo Requests by Organizations retrieved successfully.",
+//             totalRequests: allOrgDemoRequests.length,
+//             data: allOrgDemoRequests
+//         });
+//     }
+//     catch (error) {
+//         console.error("Error in getting Demos booked by Organization data:", error);
+//         return res.status(500).json({
+//             success: false,
+//             message: `Failed to get Demos booked by Organization: ${error.message}.`,
+//             error: error.message
+//         });
+//     }
+// }
 
 // export const updateOrgDemoRequestStatus = async (req, res) => {
 //     try {
@@ -216,6 +237,60 @@ export const displayOrgDemoRequest = async (req, res) => {
 //     }
 // };
 
+export const displayOrgDemoRequest = async (req, res) => {
+    try{
+        let { timeSlot, status, field, search } = req.params;
+
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+        const query = {
+            $or: [
+                { isResolved: false },
+                { isCancelled: false},
+                { 
+                    isResolved: true, 
+                    demoResolveDate: { $gte: sevenDaysAgo } 
+                }
+            ]
+        }
+
+        if (field && field.trim()!=="" && field !== "all" && search && search.trim() !== "" && search !== "all") {
+            if(field=='demoRequestDate' || field=='demoResolveDate' || field=='preferredDate'){
+                const inputDate = new Date(search);
+                // Start and end of the searched date
+                const startOfDay = new Date(inputDate.setHours(0, 0, 0, 0));
+                const endOfDay = new Date(inputDate.setHours(23, 59, 59, 999));
+
+                query[field] = { $gte: startOfDay, $lte: endOfDay };
+            }
+            else{
+                query[field] = { $regex: new RegExp("^" + search, "i") }
+            }
+        }
+
+        if (timeSlot && timeSlot !== "all") query.preferredTimeSlot = timeSlot;
+        if (status && status !== "all") query.isResolved = status === 'true';
+
+        const allOrgDemoRequests = await DemoReqByOrganizationModal?.find(query).sort({ demoRequestDate: -1 });
+
+        return res.status(201).json({
+            success: true,
+            message: "Demo Requests by Organizations retrieved successfully.",
+            totalRequests: allOrgDemoRequests.length,
+            data: allOrgDemoRequests
+        });
+    }
+    catch (error) {
+        console.error("Error in getting Demos booked by Organization data:", error);
+        return res.status(500).json({
+            success: false,
+            message: `Failed to get Demos booked by Organization: ${error.message}.`,
+            error: error.message
+        });
+    }
+}
+
 export const updateOrgDemoRequestStatus = async (req, res) => {
     try {
         const { id } = req.params;
@@ -232,20 +307,36 @@ export const updateOrgDemoRequestStatus = async (req, res) => {
         if(existingDemoRequest.isResolved)
             return res.status(400).json({success: false, message: "This Demo Request is Already Resolved"})
 
+        const resolvedCount = await DemoReqByOrganizationModal.countDocuments({
+            $and: [
+                { isResolved: true },
+                {
+                    $or: [
+                        { email: existingDemoRequest.email },
+                        { mobile: existingDemoRequest.mobile }
+                    ]
+                }
+            ]
+        });
+
         const updatedDemoRequest = await DemoReqByOrganizationModal.findByIdAndUpdate(
             id,
             {
                 isResolved: true,
+                resolvedCount: resolvedCount+1,
                 demoResolveDate: new Date(),
             },
             { new: true }
         );
 
-        return res.status(201).json({
-            success: true,
-            message: `Demo Request is Resolved.`,
-            data: updatedDemoRequest
-        });
+        if(updatedDemoRequest){
+            await demoCompletedSuccessfulyEmail(existingDemoRequest.email,existingDemoRequest.name,existingDemoRequest.preferredDate)
+            return res.status(201).json({
+                success: true,
+                message: `Demo Request is Resolved.`,
+                data: updatedDemoRequest
+            });
+        }
 
     } 
     catch (error) {

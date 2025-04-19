@@ -62,6 +62,21 @@ export const addUserDemoRequest = async (req, res) => {
             }
         }
 
+        const emailExistsInOrgOfCompletedDemo = await DemoReqByOrganizationModal.findOne({ email: email.trim(), isResolved:true });
+        const emailExistsInUserOfCompletedDemo = await DemoReqByUserModal.findOne({ email: email.trim(), isResolved:true });
+        if (emailExistsInUserOfCompletedDemo) {
+            if (emailExistsInUserOfCompletedDemo.resolvedCount===3) {
+                return res.status(409).json({ success: false, message: `Limit Reached!!! You have successfully completed the maximum of 3 Product Demos. 
+                                                Thank you for your interest!!` });
+            }
+        }
+        if (emailExistsInOrgOfCompletedDemo) {
+            if(emailExistsInOrgOfCompletedDemo.resolvedCount===3){
+                return res.status(409).json({ success: false, message: `Limit Reached!!! You have successfully completed the maximum of 3 Product Demos. 
+                                                Thank you for your interest!!` });
+            }
+        }
+
         const mobileExistsInOrg = await DemoReqByOrganizationModal.findOne({ mobile: mobile.trim(), isResolved:false });
         const mobileExistsInUser = await DemoReqByUserModal.findOne({ mobile: mobile.trim(), isResolved:false });
         if (mobileExistsInUser) {
@@ -73,6 +88,21 @@ export const addUserDemoRequest = async (req, res) => {
             const daysDiff = getDayDifference(new Date(mobileExistsInOrg.demoRequestDate), today);
             if(daysDiff<7)
             return res.status(409).json({ success: false, message: `Demo Booked As an Organization by this Mobile Number already exists. Re-Request Demo after ${7-daysDiff} days.` });
+        }
+
+        const mobileExistsInOrgOfCompletedDemo = await DemoReqByOrganizationModal.findOne({ mobile: mobile.trim(), isResolved:true });
+        const mobileExistsInUserOfCompletedDemo = await DemoReqByUserModal.findOne({ mobile: mobile.trim(), isResolved:true });
+        if (mobileExistsInUserOfCompletedDemo) {
+            if (mobileExistsInUserOfCompletedDemo.resolvedCount===3) {
+                return res.status(409).json({ success: false, message: `Limit Reached!!! You have successfully completed the maximum of 3 Product Demos. 
+                                                Thank you for your interest!!` });
+            }
+        }
+        if (mobileExistsInOrgOfCompletedDemo) {
+            if(mobileExistsInOrgOfCompletedDemo.resolvedCount===3){
+                return res.status(409).json({ success: false, message: `Limit Reached!!! You have successfully completed the maximum of 3 Product Demos. 
+                                                Thank you for your interest!!` });
+            }
         }
 
         const newRequest = new DemoReqByUserModal({
@@ -224,6 +254,7 @@ export const displayUserDemoRequest = async (req, res) => {
         const query = {
             $or: [
                 { isResolved: false },
+                { isCancelled: false},
                 {
                     isResolved: true,
                     demoResolveDate: { $gte: sevenDaysAgo }
@@ -232,7 +263,17 @@ export const displayUserDemoRequest = async (req, res) => {
         };
 
         if (field && field.trim()!=="" && field !== "all" && search && search.trim() !== "" && search !== "all") {
-            query[field] = { $regex: new RegExp("^" + search, "i") };
+            if(field=='demoRequestDate' || field=='demoResolveDate' || field=='preferredDate'){
+                const inputDate = new Date(search);
+                // Start and end of the searched date
+                const startOfDay = new Date(inputDate.setHours(0, 0, 0, 0));
+                const endOfDay = new Date(inputDate.setHours(23, 59, 59, 999));
+
+                query[field] = { $gte: startOfDay, $lte: endOfDay };
+            }
+            else{
+                query[field] = { $regex: new RegExp("^" + search, "i") }
+            }
         }
 
         if (timeSlot && timeSlot !== "all") query.preferredTimeSlot = timeSlot;
@@ -284,10 +325,23 @@ export const updateUserDemoRequestStatus = async (req, res) => {
         if(existingDemoRequest.isResolved)
             return res.status(400).json({success: false, message: "This Demo Request is Already Resolved"})
 
+        const resolvedCount = await DemoReqByUserModal.countDocuments({
+            $and: [
+                { isResolved: true },
+                {
+                    $or: [
+                        { email: existingDemoRequest.email },
+                        { mobile: existingDemoRequest.mobile }
+                    ]
+                }
+            ]
+        });
+
         const updatedDemoRequest = await DemoReqByUserModal.findByIdAndUpdate(
             id,
             {
                 isResolved: true,
+                resolvedCount: resolvedCount+1,
                 demoResolveDate: new Date(),
             },
             { new: true }

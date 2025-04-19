@@ -153,11 +153,19 @@ const DemoBookedRemainderEmailTask = async () => {
     }
 };
 
-// cron.schedule("30 20 * * *", async () => { await DemoBookedRemainderEmailTask();});
-cron.schedule("0 20 * * *", () => {
-    DemoBookedRemainderEmailTask()
-        .then(() => console.log("DemoBookedRemainderEmailTask executed successfully."))
-        .catch(err => console.error("Error in scheduled task:", err));
+// cron.schedule("0 20 * * *", async () => { await DemoBookedRemainderEmailTask();});
+// cron.schedule("0 20 * * *", () => {
+//     DemoBookedRemainderEmailTask()
+//         .then(() => console.log("DemoBookedRemainderEmailTask executed successfully."))
+//         .catch(err => console.error("Error in scheduled task:", err));
+// });
+cron.schedule('0 20 * * *', async () => {
+    try {
+        await DemoBookedRemainderEmailTask();
+        console.log("DemoBookedRemainderEmailTask executed successfully.");
+    } catch (err) {
+        console.error("Error in scheduled DemoBookedRemainderEmailTask:", err);
+    }
 });
 
 const DemoNotSuccessEmailTask = async () => {
@@ -184,9 +192,33 @@ const DemoNotSuccessEmailTask = async () => {
             isResolved:false
         });
 
+        // await DemoReqByOrganizationModal.updateMany(
+        //     { preferredDate: { $gte: today, $lt: tomorrow }, isResolved: false },
+        //     { $set: { preferredDate: tomorrow } }
+        // );
+        
+        // await DemoReqByUserModal.updateMany(
+        //     { preferredDate: { $gte: today, $lt: tomorrow }, isResolved: false },
+        //     { $set: { preferredDate: tomorrow } }
+        // );
+        
+        // // Then fetch the updated documents for sending emails:
+        // const updatedOrgDemos = await DemoReqByOrganizationModal.find({
+        //     preferredDate: tomorrow,
+        //     isResolved: false
+        // });
+        // const updatedUserDemos = await DemoReqByUserModal.find({
+        //     preferredDate: tomorrow,
+        //     isResolved: false
+        // });        
+
         const allDemoRequests = [...orgDemos, ...userDemos]
 
         for (const data of allDemoRequests){
+
+            data.preferredDate=tomorrow
+            await data.save();
+
             const mailOptions = {
                 from: `"PGR - Virtual Trading App" <${process.env.EMAIL_USER}>`,
                 to: data.email,
@@ -269,7 +301,7 @@ const DemoNotSuccessEmailTask = async () => {
                         <p>Your product demo has been rescheduled for tomorrow. If that doesn't work for you, feel free to reschedule it at a time that suits you the best.</p>
                         <!--<p>Your product demo has been rescheduled for tomorrow. If this timing is not convenient, you're welcome to reschedule it at your preferred time.</p>-->
                         <p style="font-weight: semibold;">Click below to easily reschedule at your convenience.</p>
-                        <p style="font-weight: bold;">Here are your previous booking details:</p>
+                        <p style="font-weight: bold;">Here are your booking details:</p>
                         <ul>
                         <li><strong>Preferred Date:</strong> ${data.preferredDate}</li>
                         <li><strong>Preferred Time Slot:</strong> ${data.preferredTimeSlot || "No Time Slot Chosen"}</li>
@@ -300,4 +332,11 @@ const DemoNotSuccessEmailTask = async () => {
     }
 };
 
-cron.schedule("0 20 * * *", async () => {await DemoNotSuccessEmailTask();});
+cron.schedule('0 20 * * *', async () => {
+    try {
+        await DemoNotSuccessEmailTask();
+        console.log("DemoNotSuccessEmailTask executed successfully.");
+    } catch (err) {
+        console.error("Error in scheduled DemoNotSuccessEmailTask:", err);
+    }
+});

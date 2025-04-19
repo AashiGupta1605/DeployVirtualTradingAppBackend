@@ -16,6 +16,7 @@ import { errorHandler } from './middlewares/errorHandler.js';
 import fileUpload from 'express-fileupload';
 
 import './helpers/chronJobMailServiceSchedule.js'
+import './helpers/chronJobSchedulingAllWorks.js'
 
 dotenv.config();
 
