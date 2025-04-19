@@ -24,7 +24,7 @@ export const getUserStats = async (req, res) => {
       registrationDate: user.createdDate
     };
 
-    res.json({ stats });
+    res.json({ stats, success:true });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -38,10 +38,10 @@ export const getEventStats = async (req, res) => {
 
     
     const [total, upcoming, ongoing, completed] = await Promise.all([
-      Event.countDocuments({ organizer: userId, isDeleted: false }),
-      Event.countDocuments({ organizer: userId, type: 'upcoming', isDeleted: false }),
-      Event.countDocuments({ organizer: userId, type: 'ongoing', isDeleted: false }),
-      Event.countDocuments({ organizer: userId, type: 'completed', isDeleted: false })
+      Event.countDocuments({ organizer:userId, isDeleted: false }),
+      Event.countDocuments({ organizer:userId, type: 'upcoming', isDeleted: false }),
+      Event.countDocuments({ organizer:userId, type: 'ongoing', isDeleted: false }),
+      Event.countDocuments({ organizer:userId, type: 'completed', isDeleted: false })
     ]);
 
     res.json({ stats: { total, upcoming, ongoing, completed } });
@@ -55,6 +55,7 @@ export const getFeedbackStats = async (req, res) => {
   try {
     const userId = req.params.userId;
     console.log(userId);
+    
     
     
     const feedbacks = await Feedback.find({ userId, isDeleted: false });
@@ -73,7 +74,7 @@ export const getFeedbackStats = async (req, res) => {
       negative: feedbacks.filter(fb => fb.rating <= 2).length
     };
 
-    res.json({ stats });
+    res.json({ stats, success:true });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -101,7 +102,7 @@ export const getComplaintStats = async (req, res) => {
       resolutionRate: total > 0 ? (solved / total * 100) : 0
     };
 
-    res.json({ stats });
+    res.json({ stats, success:true });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -172,7 +173,7 @@ export const getSubscriptionStats = async (req, res) => {
       paymentStatus: subscription.paymentStatus
     };
 
-    res.json({ stats });
+    res.json({ stats, success:true });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
