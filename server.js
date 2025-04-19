@@ -15,6 +15,8 @@ import guestUserRoute from "./routes/guestUser/guestUserRoute.js";
 import { errorHandler } from './middlewares/errorHandler.js';
 import fileUpload from 'express-fileupload';
 
+import './helpers/chronJobMailServiceSchedule.js'
+
 dotenv.config();
 
 const app = express();

@@ -7,7 +7,7 @@ const router = express.Router();
 router.post('/addDemobyUser', addUserDemoRequest)
 router.post('/addDemobyOrganization', addOrgDemoRequest)
 
-router.get('/getDemobyUser', displayUserDemoRequest)
+router.get('/getDemobyUser/:timeSlot/:status/:gender/:field/:search', displayUserDemoRequest)
 router.get('/getDemobyOrganization', displayOrgDemoRequest)
 
 router.put('/updateDemobyUser/:id', updateUserDemoRequestStatus)
