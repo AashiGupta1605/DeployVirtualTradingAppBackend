@@ -6,6 +6,13 @@ const EventSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  organizationId: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'OrgRegister'
+  },
+  addedBy:{
+    type:String
+  },
   type: {
     type: String,
     enum: ['ongoing', 'upcoming', 'completed'],

@@ -85,7 +85,7 @@ import {
 
 const router = express.Router();
 
-// Individual stats endpoints
+// Individual stats endpoints - admin stats routes
 router.get('/users', getUserStats);
 router.get('/organizations', getOrganizationStats);
 router.get('/events', getEventStats);
