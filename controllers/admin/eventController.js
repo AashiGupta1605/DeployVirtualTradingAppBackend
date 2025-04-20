@@ -623,7 +623,7 @@ export const getCertificateByRegistration = async (req, res) => {
 };
 
 
-// real one
+// real one 
 
 export const getMyRegisteredEvents = async (req, res) => {
   try {
@@ -631,7 +631,8 @@ export const getMyRegisteredEvents = async (req, res) => {
 
     const registrations = await EventRegistration.find({ 
       userId,
-      status: 'Registered'
+      // status: 'Registered'
+      status: { $in: ['Registered', 'Completed'] }
     }).populate({
       path: 'eventId',
       match: { isDeleted: false }
@@ -675,91 +676,121 @@ export const getMyRegisteredEvents = async (req, res) => {
 
 
 
-// new added by me
-// real
+// real one working 
+
 // export const validateCertificate = async (req, res) => {
 //   try {
 //     const { certificateId, userName } = req.query;
 
+//     // Validate input
 //     if (!certificateId || !userName) {
 //       return res.status(400).json({
 //         success: false,
-//         message: 'Certificate ID and user name are required'
+//         message: 'Certificate ID and user name are required.',
 //       });
 //     }
 
-//     const registration = await EventRegistration.findOne({ 
+//     // Find the registration and populate related fields
+//     const registration = await EventRegistration.findOne({
 //       certificateId,
-//       status: 'Registered'
+//       status: 'Completed', // Adjust the status as per your application's logic
 //     })
-//     .populate('userId', 'name')
-//     .populate('eventId', 'title description startDate endDate');
+//       .populate('userId', 'name') // Populate user details
+//       .populate('eventId', 'title description startDate endDate'); // Populate event details
 
 //     if (!registration) {
 //       return res.status(404).json({
 //         success: false,
-//         message: 'Certificate not found'
+//         message: 'No registration found for the provided certificate ID.',
 //       });
 //     }
 
-//     // Verify user name matches
-//     const user = await User.findById(registration.userId);
-//     if (!user.name.toLowerCase().includes(userName.toLowerCase())) {
+//     // Extract user and event details
+//     const { userId, eventId } = registration;
+//     const user = userId; // Populated user details
+//     const event = eventId; // Populated event details
+
+//     // Verify the user name matches exactly
+//     if (user.name.toLowerCase() !== userName.toLowerCase()) {
 //       return res.status(400).json({
 //         success: false,
-//         message: 'User name does not match certificate records'
+//         message: 'User name does not match certificate records.',
 //       });
 //     }
 
+//     // Check if the event is complete
+//     const today = new Date();
+//     const eventEndDate = new Date(event.endDate);
+
+//     if (eventEndDate > today) {
+//       return res.status(400).json({
+//         success: false,
+//         message: 'The event is not complete yet. Please validate the certificate after the event end date.',
+//       });
+//     }
+
+//     // Return the certificate details
 //     res.status(200).json({
 //       success: true,
 //       certificate: {
 //         id: registration.certificateId,
 //         userName: user.name,
-//         eventName: registration.eventId.title,
-//         eventDescription: registration.eventId.description,
+//         eventName: event.title,
+//         eventDescription: event.description,
 //         registrationDate: registration.createdAt,
 //         eventDates: {
-//           start: registration.eventId.startDate,
-//           end: registration.eventId.endDate
-//         }
-//       }
+//           start: event.startDate,
+//           end: event.endDate,
+//         },
+//       },
 //     });
-
 //   } catch (error) {
 //     console.error('Certificate validation error:', error);
 //     res.status(500).json({
 //       success: false,
-//       message: 'Failed to validate certificate',
-//       error: error.message
+//       message: 'Failed to validate certificate.',
+//       error: error.message,
 //     });
 //   }
 // };
 
+
+
 export const validateCertificate = async (req, res) => {
   try {
+    // Expecting certificateId to be the numeric string, userName as before
     const { certificateId, userName } = req.query;
 
     // Validate input
     if (!certificateId || !userName) {
       return res.status(400).json({
         success: false,
-        message: 'Certificate ID and user name are required.',
+        message: "Certificate ID (numeric part) and user name are required.",
       });
     }
 
-    // Find the registration and populate related fields
+     // --- Added Validation: Check if certificateId contains only digits ---
+     if (!/^\d+$/.test(certificateId)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Certificate ID must be numeric.',
+        });
+      }
+     // --- End Added Validation ---
+
+
+    // Find the registration using the numeric certificateId stored in the DB
     const registration = await EventRegistration.findOne({
-      certificateId,
-      status: 'Registered', // Adjust the status as per your application's logic
+      certificateId: certificateId, // Find by the numeric string directly
+      status: 'Completed', // Consider if 'Registered' or other statuses are valid for validation
     })
-      .populate('userId', 'name') // Populate user details
-      .populate('eventId', 'title description startDate endDate'); // Populate event details
+      .populate("userId", "name") // Populate user details
+      .populate("eventId", "title description startDate endDate"); // Populate event details
 
     if (!registration) {
       return res.status(404).json({
         success: false,
-        message: 'No registration found for the provided certificate ID.',
+        message: "No registration found for the provided certificate ID.",
       });
     }
 
@@ -768,30 +799,31 @@ export const validateCertificate = async (req, res) => {
     const user = userId; // Populated user details
     const event = eventId; // Populated event details
 
-    // Verify the user name matches exactly
+    // Verify the user name matches exactly (case-insensitive)
     if (user.name.toLowerCase() !== userName.toLowerCase()) {
       return res.status(400).json({
         success: false,
-        message: 'User name does not match certificate records.',
+        message: "User name does not match certificate records.",
       });
     }
 
-    // Check if the event is complete
+    // Optional: Check if event is complete - keep if needed
     const today = new Date();
     const eventEndDate = new Date(event.endDate);
-
     if (eventEndDate > today) {
       return res.status(400).json({
         success: false,
-        message: 'The event is not complete yet. Please validate the certificate after the event end date.',
+        message: 'The event is not complete yet. Validation available after the event.',
       });
     }
 
-    // Return the certificate details
+    // Return the certificate details (note: registration.certificateId is now numeric)
     res.status(200).json({
       success: true,
       certificate: {
-        id: registration.certificateId,
+        // Prepend "CERT-" here for display consistency if needed,
+        // but the raw ID is the numeric string
+        id: registration.certificateId, // Send the raw numeric ID
         userName: user.name,
         eventName: event.title,
         eventDescription: event.description,
@@ -803,17 +835,14 @@ export const validateCertificate = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error('Certificate validation error:', error);
+    console.error("Certificate validation error:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to validate certificate.',
+      message: "Failed to validate certificate.",
       error: error.message,
     });
   }
 };
-
-
-
 
 
 // add controllers for shoewing registered events uses in admin side
