@@ -183,7 +183,7 @@ export const displayGalleryCategories = async (req, res) => {
                 });
             }
 
-            // If no exact match found, modify filter to search anywhere in the name
+            // If noo exact match found, modify filter to search anywhere in the name
             categoryData = await galleryCategory.find({
                 ...filter,
                 name: { $regex: new RegExp(search, "i") }
