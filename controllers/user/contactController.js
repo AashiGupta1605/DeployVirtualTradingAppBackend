@@ -1,8 +1,16 @@
 import ContactUs from "../../models/ContactUsModal.js";
+import { contactSchema } from "../../helpers/userValidation.js";
 
 // Create a new contact entry
 export const createContact = async (req, res) => {
   try {
+    // Validate request body
+    const { error } = contactSchema.validate(req.body);
+
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
+
     const { name, email, mobile, type, desc } = req.body;
 
     const newContact = new ContactUs({
