@@ -16,6 +16,7 @@ const organizationDemoSchema = new mongoose.Schema({
     isResolved: { type: Boolean, default: false },
     demoResolveDate: { type: Date, default: null },
     resolvedCount: {type: Number, default:0},
+    isCancelled: {type: Boolean, default:false},
 })
 
 const DemoReqByOrganizationModal = mongoose.model('Organization_Demo_Request', organizationDemoSchema);
