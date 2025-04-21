@@ -1,6 +1,6 @@
 import DemoReqByUserModal from '../../models/DemoReqByUserModal.js';
 import DemoReqByOrganizationModal from '../../models/DemoReqByOrganizationModal.js'; 
-import { sendDemoBookedEmail } from '../../helpers/bookDemoSuccessMailSend.js';
+import { sendDemoBookedEmail, demoCompletedSuccessfulyEmail } from '../../helpers/bookDemoSuccessMailSend.js';
 
 export const addUserDemoRequest = async (req, res) => {
     try {
@@ -62,6 +62,21 @@ export const addUserDemoRequest = async (req, res) => {
             }
         }
 
+        const emailExistsInOrgOfCompletedDemo = await DemoReqByOrganizationModal.findOne({ email: email.trim(), isResolved:true });
+        const emailExistsInUserOfCompletedDemo = await DemoReqByUserModal.findOne({ email: email.trim(), isResolved:true });
+        if (emailExistsInUserOfCompletedDemo) {
+            if (emailExistsInUserOfCompletedDemo.resolvedCount===3) {
+                return res.status(409).json({ success: false, message: `Limit Reached!!! You have successfully completed the maximum of 3 Product Demos. 
+                                                Thank you for your interest!!` });
+            }
+        }
+        if (emailExistsInOrgOfCompletedDemo) {
+            if(emailExistsInOrgOfCompletedDemo.resolvedCount===3){
+                return res.status(409).json({ success: false, message: `Limit Reached!!! You have successfully completed the maximum of 3 Product Demos. 
+                                                Thank you for your interest!!` });
+            }
+        }
+
         const mobileExistsInOrg = await DemoReqByOrganizationModal.findOne({ mobile: mobile.trim(), isResolved:false });
         const mobileExistsInUser = await DemoReqByUserModal.findOne({ mobile: mobile.trim(), isResolved:false });
         if (mobileExistsInUser) {
@@ -73,6 +88,21 @@ export const addUserDemoRequest = async (req, res) => {
             const daysDiff = getDayDifference(new Date(mobileExistsInOrg.demoRequestDate), today);
             if(daysDiff<7)
             return res.status(409).json({ success: false, message: `Demo Booked As an Organization by this Mobile Number already exists. Re-Request Demo after ${7-daysDiff} days.` });
+        }
+
+        const mobileExistsInOrgOfCompletedDemo = await DemoReqByOrganizationModal.findOne({ mobile: mobile.trim(), isResolved:true });
+        const mobileExistsInUserOfCompletedDemo = await DemoReqByUserModal.findOne({ mobile: mobile.trim(), isResolved:true });
+        if (mobileExistsInUserOfCompletedDemo) {
+            if (mobileExistsInUserOfCompletedDemo.resolvedCount===3) {
+                return res.status(409).json({ success: false, message: `Limit Reached!!! You have successfully completed the maximum of 3 Product Demos. 
+                                                Thank you for your interest!!` });
+            }
+        }
+        if (mobileExistsInOrgOfCompletedDemo) {
+            if(mobileExistsInOrgOfCompletedDemo.resolvedCount===3){
+                return res.status(409).json({ success: false, message: `Limit Reached!!! You have successfully completed the maximum of 3 Product Demos. 
+                                                Thank you for your interest!!` });
+            }
         }
 
         const newRequest = new DemoReqByUserModal({
@@ -127,46 +157,47 @@ export const addUserDemoRequest = async (req, res) => {
     }
 };
 
-export const displayUserDemoRequest = async (req, res) => {
-    try{
-        // const {timeSlot, status, gender, field, search} = req.params;
+// export const displayUserDemoRequest = async (req, res) => {
+//     try{
+//         // const {timeSlot, status, gender, field, search} = req.params;
 
-        const sevenDaysAgo = new Date();
-        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+//         const sevenDaysAgo = new Date();
+//         sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-        const allUserDemoRequests = await DemoReqByUserModal.find({
-            $or: [
-                { isResolved: false },
-                { 
-                    isResolved: true, 
-                    demoResolveDate: { $gte: sevenDaysAgo } 
-                }
-            ]
-        }).sort({ demoRequestDate: -1 }); // latest first
+//         const allUserDemoRequests = await DemoReqByUserModal.find({
+//             $or: [
+//                 { isResolved: false },
+//                 { 
+//                     isResolved: true, 
+//                     demoResolveDate: { $gte: sevenDaysAgo } 
+//                 }
+//             ]
+//         }).sort({ demoRequestDate: -1 }); // latest first
 
-        if (!allUserDemoRequests || allUserDemoRequests.length === 0) {
-            return res.status(400).json({
-                success: false,
-                message: "No Demo Requests Booked by User found."
-            });
-        }
+//         if (!allUserDemoRequests || allUserDemoRequests.length === 0) {
+//             return res.status(400).json({
+//                 success: false,
+//                 message: "No Demo Requests Booked by User found."
+//             });
+//         }
 
-        return res.status(201).json({
-            success: true,
-            message: "Demo Requests by Users retrieved successfully.",
-            totalRequests: allUserDemoRequests.length,
-            data: allUserDemoRequests
-        });
-    }
-    catch (error) {
-        console.error("Error in getting Demos booked by User data:", error);
-        return res.status(500).json({
-            success: false,
-            message: `Failed to get Demos booked by User: ${error.message}.`,
-            error: error.message
-        });
-    }
-}
+//         return res.status(201).json({
+//             success: true,
+//             message: "Demo Requests by Users retrieved successfully.",
+//             totalRequests: allUserDemoRequests.length,
+//             data: allUserDemoRequests
+//         });
+//     }
+//     catch (error) {
+//         console.error("Error in getting Demos booked by User data:", error);
+//         return res.status(500).json({
+//             success: false,
+//             message: `Failed to get Demos booked by User: ${error.message}.`,
+//             error: error.message
+//         });
+//     }
+// }
+
 
 // export const updateUserDemoRequestStatus = async (req, res) => {
 //     try {
@@ -211,6 +242,73 @@ export const displayUserDemoRequest = async (req, res) => {
 //     }
 // };
 
+
+export const displayUserDemoRequest = async (req, res) => {
+    try {
+        let { timeSlot, status, gender, field, search } = req.params;
+
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+        // Base query: unresolved or resolved in last 7 days
+        const query = {
+            $or: [
+                { isResolved: false },
+                { isCancelled: false},
+                {
+                    isResolved: true,
+                    demoResolveDate: { $gte: sevenDaysAgo }
+                }
+            ]
+        };
+
+        if (field && field.trim()!=="" && field !== "all" && search && search.trim() !== "" && search !== "all") {
+            if(field=='demoRequestDate' || field=='demoResolveDate' || field=='preferredDate'){
+                const inputDate = new Date(search);
+                // Start and end of the searched date
+                const startOfDay = new Date(inputDate.setHours(0, 0, 0, 0));
+                const endOfDay = new Date(inputDate.setHours(23, 59, 59, 999));
+
+                query[field] = { $gte: startOfDay, $lte: endOfDay };
+            }
+            else{
+                query[field] = { $regex: new RegExp("^" + search, "i") }
+            }
+        }
+
+        if (timeSlot && timeSlot !== "all") query.preferredTimeSlot = timeSlot;
+        if (gender && gender !== "all") query.gender = gender;
+        if (status && status !== "all") query.isResolved = status === 'true';
+
+        const allUserDemoRequests = await DemoReqByUserModal?.find(query).sort({ demoRequestDate: -1 });
+
+        // if (!allUserDemoRequests || allUserDemoRequests.length === 0) {
+        //     return res.status(400).json({
+        //         success: false,
+        //         message: "No matching demo requests found."
+        //     });
+        // }
+        //NOTE: No need of above to check are records available or not, bcoz here we are only displaying so no need of this, as this will give error 
+        // but, in the case of display this is not any type of error, it's just needed when we r doing something like update or delete. 
+
+        return res.status(201).json({
+            success: true,
+            message: "Demo Requests of Users retrieved successfully.",
+            totalRequests: allUserDemoRequests.length,
+            data: allUserDemoRequests
+        });
+
+    } 
+    catch (error) {
+        console.error("Error in getting Demos booked by User data:", error);
+        return res.status(500).json({
+            success: false,
+            message: `Failed to get Demos booked by User: ${error.message}`,
+            error: error.message
+        });
+    }
+};
+
 export const updateUserDemoRequestStatus = async (req, res) => {
     try {
         const { id } = req.params;
@@ -227,20 +325,36 @@ export const updateUserDemoRequestStatus = async (req, res) => {
         if(existingDemoRequest.isResolved)
             return res.status(400).json({success: false, message: "This Demo Request is Already Resolved"})
 
+        const resolvedCount = await DemoReqByUserModal.countDocuments({
+            $and: [
+                { isResolved: true },
+                {
+                    $or: [
+                        { email: existingDemoRequest.email },
+                        { mobile: existingDemoRequest.mobile }
+                    ]
+                }
+            ]
+        });
+
         const updatedDemoRequest = await DemoReqByUserModal.findByIdAndUpdate(
             id,
             {
                 isResolved: true,
+                resolvedCount: resolvedCount+1,
                 demoResolveDate: new Date(),
             },
             { new: true }
         );
 
-        return res.status(201).json({
-            success: true,
-            message: `Demo Request is Resolved.`,
-            data: updatedDemoRequest
-        });
+        if(updatedDemoRequest){
+            await demoCompletedSuccessfulyEmail(existingDemoRequest.email,existingDemoRequest.name,existingDemoRequest.preferredDate)
+            return res.status(201).json({
+                success: true,
+                message: `Demo Request is Resolved.`,
+                data: updatedDemoRequest
+            });
+        }
 
     } 
     catch (error) {
