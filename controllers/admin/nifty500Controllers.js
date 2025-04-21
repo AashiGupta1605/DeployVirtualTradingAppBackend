@@ -225,20 +225,81 @@ export const getLatestBySymbol = async (req, res) => {
   }
 };
 
+// In controllers/admin/niftyDataControllers.js
+
 export const getHistoricalDataBySymbol = async (req, res) => {
   try {
     const { symbol } = req.params;
-    const limit = parseInt(req.query.limit) || 30;
     
-    const data = await Nifty500Data.findHistoricalDataBySymbol(symbol, limit);
-    
-    if (!data.length) {
-      return res.status(404).json({ message: 'Symbol not found' });
+    console.log(`Fetching all historical data for symbol: ${symbol}`);
+
+    // Modified aggregation pipeline without time range filtering
+    const historicalData = await NiftyData.aggregate([
+      // Unwind the stocks array
+      { $unwind: '$stocks' },
+      
+      // Match documents with the specified symbol
+      { $match: { 'stocks.symbol': symbol } },
+      
+      // Sort by fetchTime in descending order (newest first)
+      { $sort: { fetchTime: -1 } },
+      
+      // Project and format the required fields
+      {
+        $project: {
+          _id: 0,
+          date: '$fetchTime',
+          lastUpdateTime: '$stocks.lastUpdateTime',
+          open: { $toDouble: '$stocks.open' },
+          high: { $toDouble: '$stocks.dayHigh' },
+          low: { $toDouble: '$stocks.dayLow' },
+          close: { $toDouble: '$stocks.lastPrice' },
+          volume: { $toDouble: '$stocks.totalTradedVolume' },
+          value: { $toDouble: '$stocks.totalTradedValue' },
+          pChange: { $toDouble: '$stocks.pChange' }
+        }
+      }
+    ]);
+
+    if (!historicalData.length) {
+      console.log('No historical data found for symbol:', symbol);
+      return res.status(404).json({
+        message: `No historical data found for symbol ${symbol}`
+      });
     }
+
+    // Format the response with metadata
+    const response = {
+      symbol,
+      totalRecords: historicalData.length,
+      firstDate: historicalData[historicalData.length - 1]?.date,
+      lastDate: historicalData[0]?.date,
+      data: historicalData.map(item => ({
+        ...item,
+        open: Number(item.open).toFixed(2),
+        high: Number(item.high).toFixed(2),
+        low: Number(item.low).toFixed(2),
+        close: Number(item.close).toFixed(2),
+        volume: Number(item.volume),
+        value: Number(item.value),
+        pChange: Number(item.pChange).toFixed(2)
+      }))
+    };
+
+    console.log(`Successfully retrieved ${historicalData.length} records for ${symbol}`);
+    console.log(`Date range: ${response.firstDate} to ${response.lastDate}`);
     
-    res.status(200).json(data);
+    res.status(200).json(response);
+
   } catch (error) {
     console.error('Error fetching historical data:', error);
-    res.status(500).json({ message: 'Error fetching historical data' });
+    console.error('Error details:', {
+      message: error.message,
+      stack: error.stack
+    });
+    res.status(500).json({ 
+      message: 'Internal server error',
+      error: error.message 
+    });
   }
 };

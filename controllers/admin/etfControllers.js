@@ -26,11 +26,14 @@ export const getETFBySymbol = async (req, res) => {
   }
 };
 
+// controllers/etfController.js
+
 export const getETFHistoricalData = async (req, res) => {
   try {
     const { symbol } = req.params;
+    const { timeRange } = req.query;
     
-    const historicalData = await NiftyETFData.find()
+    const historicalData = await NiftyETFData.find({ 'stocks.symbol': symbol })
       .sort({ fetchTime: -1 })
       .limit(30);
 
@@ -38,24 +41,22 @@ export const getETFHistoricalData = async (req, res) => {
       return res.status(404).json({ message: 'No historical data available' });
     }
 
-    const symbolData = historicalData
-      .map(record => {
-        const stockData = record.stocks.find(stock => stock.symbol === symbol);
-        if (stockData) {
-          return {
-            ...stockData.toObject(),
-            fetchTime: record.fetchTime
-          };
-        }
-        return null;
-      })
-      .filter(Boolean);
+    // Format the data to match what the frontend expects
+    const formattedData = historicalData.map(doc => {
+      const stockData = doc.stocks.find(stock => stock.symbol === symbol);
+      return {
+        fetchTime: doc.fetchTime,
+        open: stockData.open,
+        dayHigh: stockData.dayHigh,
+        dayLow: stockData.dayLow,
+        lastPrice: stockData.lastPrice,
+        totalTradedVolume: stockData.totalTradedVolume,
+        totalTradedValue: stockData.totalTradedValue,
+        pChange: stockData.pChange || 0
+      };
+    });
 
-    if (symbolData.length === 0) {
-      return res.status(404).json({ message: `No historical data found for symbol ${symbol}` });
-    }
-
-    res.status(200).json(symbolData);
+    res.status(200).json(formattedData);
   } catch (error) {
     console.error('Error fetching historical ETF data:', error);
     res.status(500).json({ message: 'Internal server error' });

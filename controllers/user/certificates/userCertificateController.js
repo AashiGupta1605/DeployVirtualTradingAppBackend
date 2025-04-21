@@ -11,7 +11,7 @@ export const getUserCertificates = async (req, res) => {
       // Find all completed registrations with certificate IDs
       const registrations = await EventRegistration.find({
         userId,
-        status: 'Registered', // Only completed events have certificates
+        status: 'Completed', // Only completed events have certificates
         certificateId: { $exists: true }
       })
       .populate('eventId', 'title description startDate endDate entryFee participants icon')
