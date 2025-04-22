@@ -1,6 +1,6 @@
 import express from 'express';
 import { getAllUsersFeedbacks, getAllCompleteFeedbacks, getAllOrganizationsFeedbacks} from '../../controllers/user/feedbackController.js';
-import { searchOrganizations } from '../../controllers/organization/organizationController.js';
+import { searchOrganizations, allOrganizations } from '../../controllers/organization/organizationController.js';
 import { getApprovedUsers } from '../../controllers/user/userController.js';
 
 const router = express.Router();
@@ -12,7 +12,8 @@ router.get('/organizationFeedbacks/:category/:recommend/:search/:sortBy/:order',
 router.get('/organizationFeedbacks/:sortBy/:order',getAllOrganizationsFeedbacks)
 
 router.get('/getAllOrganizations/:search',searchOrganizations);
-router.get('/getAllOrganizations',searchOrganizations);
+// router.get('/getAllOrganizations',searchOrganizations);
+router.get('/getAllOrganizations',allOrganizations);
 
 router.get('/getAllUsers',getApprovedUsers)
 
