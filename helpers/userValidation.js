@@ -6,7 +6,7 @@ export const registerUserSchema = Joi.object({
   password: Joi.string()
   .min(8)
   .max(15) // Optional max length
-  .pattern(new RegExp("^(?=.*[A-Za-z])(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"))
+  .pattern(new RegExp("^(?=.*[A-Za-z])(?=.*[@$!%*?&#^])[A-Za-z\\d@$!%*?&#^]{8,}$"))
   .required()
   .messages({
     "string.min": "Password must be at least 8 characters long.",
@@ -51,7 +51,7 @@ export const loginUserSchema = Joi.object({
   password: Joi.string()
   .min(8)
   .max(15) // Optional max length
-  .pattern(new RegExp("^(?=.*[A-Za-z])(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"))
+  .pattern(new RegExp("^(?=.*[A-Za-z])(?=.*[@$!%*?&#^])[A-Za-z\\d@$!%*?&#^]{8,}$"))
   .required()
   .messages({
     "string.min": "Password must be at least 8 characters long.",
@@ -83,7 +83,7 @@ export const changePasswordSchema = Joi.object({
   oldPassword: Joi.string()
     .min(8)
     .max(15)
-    .pattern(/^(?=.*[A-Za-z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
+    .pattern(/^(?=.*[A-Za-z])(?=.*[@$!%*?&#^])[A-Za-z\d@$!%*?&#^]{8,}$/)
     .required()
     .messages({
       "string.min": "Password must be at least 8 characters",
@@ -95,7 +95,7 @@ export const changePasswordSchema = Joi.object({
   newPassword: Joi.string()
     .min(8)
     .max(15)
-    .pattern(/^(?=.*[A-Za-z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
+    .pattern(/^(?=.*[A-Za-z])(?=.*[@$!%*?&#^])[A-Za-z\d@$!%*?&#^]{8,}$/)
     .required()
     .messages({
       "string.min": "Password must be at least 8 characters",
@@ -109,7 +109,7 @@ export const passwordValidationSchema = Joi.object({
   newPassword: Joi.string()
     .min(8)
     .max(15)
-    .pattern(/^(?=.*[A-Za-z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, "password")
+    .pattern(/^(?=.*[A-Za-z])(?=.*[@$!%*?&#^])[A-Za-z\d@$!%*?&#^]{8,}$/, "password")
     .required()
     .messages({
       "string.min": "Password must be at least 8 characters",
@@ -126,3 +126,12 @@ export const passwordValidationSchema = Joi.object({
       "any.required": "Confirm password is required",
     }),
   });
+
+
+  export const contactSchema = Joi.object({
+  name: Joi.string().min(2).max(100).required(),
+  email: Joi.string().email().required(),
+  mobile: Joi.string().pattern(/^[0-9]{10}$/).required(),
+  type: Joi.string().required(),
+  desc: Joi.string().min(5).required(),
+});
