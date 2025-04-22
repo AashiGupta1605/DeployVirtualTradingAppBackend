@@ -20,9 +20,17 @@ export const addGalleryItem = async (req, res) => {
             });
         }
 
-        const result = await cloudinary.uploader.upload(file.data.toString('base64'), {
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+        if (!allowedTypes.includes(file.mimetype)) {
+            return res.status(409).json({
+                success: false,
+                message: "Invalid image type. Only JPG, PNG, and WEBP are allowed.",
+            });
+        }
+
+        const result = await cloudinary.uploader.upload(`data:${file.mimetype};base64,${file.data.toString('base64')}`, {
             folder: "gallery",
-        })
+        });
         const photo = result.url
 
         if (!categoryName || !photo) {
