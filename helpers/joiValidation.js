@@ -160,7 +160,7 @@ export const organizationUserRegistrationValidationSchema = Joi.object({
   }).label('Date of Birth'),
   // password: Joi.string().min(8).required().label('Password'),
   addedby: Joi.string().required(),
-  status: Joi.boolean().default(true).required(),
+  // status: Joi.boolean().default(true),
 });
 
 export default {
