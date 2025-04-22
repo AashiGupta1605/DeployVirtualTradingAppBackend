@@ -194,13 +194,70 @@ import OrgRegister from "../../models/OrgRegisterModal.js";
 import ContactUs from "../../models/ContactUsModal.js";
 import moment from "moment";
 
+// export const getOrgUserStats = async (req, res) => {
+//   try {
+//     const orgName = req.params.orgName;
+//     console.log(orgName);
+    
+//     // First get the organization ID from the name
+//     const org = await OrgRegister.findOne({ name:orgName, isDeleted: false });
+//     if (!org) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Organization not found",
+//       });
+//     }
+
+//     const [
+//       totalCount,
+//       maleCount,
+//       femaleCount,
+//       activeCount,
+//       deactiveCount,
+//       usersForAge,
+//     ] = await Promise.all([
+//     User.countDocuments({ addedby: orgName, isDeleted: false }),
+//     User.countDocuments({ addedby: orgName, gender: "Male", isDeleted: false }),
+//     User.countDocuments({ addedby: orgName, gender: "Female", isDeleted: false }),
+//     User.countDocuments({ addedby: orgName, status: "approved", isDeleted: false }),
+//     User.countDocuments({ addedby: orgName, status: "not approved", isDeleted: false }),
+//     User.find({ addedby: orgName, isDeleted: false }, "dob"),
+//     ]);
+
+//     const totalAge = usersForAge.reduce((sum, user) => {
+//       return sum + moment().diff(user.dob, "years");
+//     }, 0);
+//     const averageAge = (totalAge / (usersForAge.length || 1)).toFixed(2);
+
+//     res.status(200).json({
+//       success: true,
+//       stats: {
+//         total: totalCount,
+//         male: maleCount,
+//         female: femaleCount,
+//         active: activeCount,
+//         deactive: deactiveCount,
+//         averageAge: isNaN(averageAge) ? 0 : averageAge,
+//       },
+//       message: "Organization user stats fetched successfully",
+//     });
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(500).json({
+//       success: false,
+//       message: SERVER_ERROR,
+//       error: error.message,
+//     });
+//   }
+// };
+
 export const getOrgUserStats = async (req, res) => {
   try {
     const orgName = req.params.orgName;
     console.log(orgName);
     
     // First get the organization ID from the name
-    const org = await OrgRegister.findOne({ name:orgName, isDeleted: false });
+    const org = await OrgRegister.findOne({ name: orgName, isDeleted: false });
     if (!org) {
       return res.status(404).json({
         success: false,
@@ -216,13 +273,16 @@ export const getOrgUserStats = async (req, res) => {
       deactiveCount,
       usersForAge,
     ] = await Promise.all([
-    User.countDocuments({ addedby: orgName, isDeleted: false }),
-    User.countDocuments({ addedby: orgName, gender: "Male", isDeleted: false }),
-    User.countDocuments({ addedby: orgName, gender: "Female", isDeleted: false }),
-    User.countDocuments({ addedby: orgName, status: true, isDeleted: false }),
-    User.countDocuments({ addedby: orgName, status: false, isDeleted: false }),
-    User.find({ addedby: orgName, isDeleted: false }, "dob"),
+      User.countDocuments({ addedby: orgName, isDeleted: false }),
+      User.countDocuments({ addedby: orgName, gender: "Male", isDeleted: false }),
+      User.countDocuments({ addedby: orgName, gender: "Female", isDeleted: false }),
+      User.countDocuments({ addedby: orgName, isDeleted: false }), // Changed to lowercase
+      User.countDocuments({ addedby: orgName, status: "not approved", isDeleted: false }), // Changed to lowercase
+      User.find({ addedby: orgName, isDeleted: false }, "dob"),
+  
     ]);
+
+    console.log(`DB Query Results - Total: ${totalCount}, Male: ${maleCount}, Female: ${femaleCount}, Active: ${activeCount}, Deactive: ${deactiveCount}, Users for Age Calc: ${usersForAge.length}`);
 
     const totalAge = usersForAge.reduce((sum, user) => {
       return sum + moment().diff(user.dob, "years");

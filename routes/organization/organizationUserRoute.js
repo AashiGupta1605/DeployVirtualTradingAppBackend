@@ -5,14 +5,14 @@ import {
   organizationgetUserDisplayById,
   organizationUpdateUser,
   organizationUserDelete,
-  organizationTotalUsers,
-  organizationNewUsersLastWeek,
-  organizationMaleUsers,
-  organizationFemaleUsers,
-  organizationActiveUsers,
-  organizationDeactiveUsers,
-  organizationAverageUserAge,
-  organizationDashboardStats,
+  // organizationTotalUsers,
+  // organizationNewUsersLastWeek,
+  // organizationMaleUsers,
+  // organizationFemaleUsers,
+  // organizationActiveUsers,
+  // organizationDeactiveUsers,
+  // organizationAverageUserAge,
+  // organizationDashboardStats,
 } from '../../controllers/organization/organizationUsersController.js';
 import authMiddleware from '../../middlewares/organizationMiddleware.js';
 
@@ -27,18 +27,18 @@ router.put('/user/:id', authMiddleware, organizationUpdateUser);
 router.delete('/user/:id', authMiddleware, organizationUserDelete);
 
 // orgainzation user statistics
-router.get('/:orgName/users/count/total', organizationTotalUsers);
-router.get('/:orgName/users/count/new-week', organizationNewUsersLastWeek);
-router.get('/:orgName/users/count/male', organizationMaleUsers);
-router.get('/:orgName/users/count/female', organizationFemaleUsers);
-router.get('/:orgName/users/count/active', organizationActiveUsers);
-router.get('/:orgName/users/count/deactive', organizationDeactiveUsers);
-router.get('/:orgName/users/count/average-age', organizationAverageUserAge);
+// router.get('/:orgName/users/count/total', organizationTotalUsers);
+// router.get('/:orgName/users/count/new-week', organizationNewUsersLastWeek);
+// router.get('/:orgName/users/count/male', organizationMaleUsers);
+// router.get('/:orgName/users/count/female', organizationFemaleUsers);
+// router.get('/:orgName/users/count/active', organizationActiveUsers);
+// router.get('/:orgName/users/count/deactive', organizationDeactiveUsers);
+// router.get('/:orgName/users/count/average-age', organizationAverageUserAge);
 
 
 
 // one route for organization user detail
 
-router.get('/:orgName/dashboard', organizationDashboardStats);
+// router.get('/:orgName/dashboard', organizationDashboardStats);
 
 export default router;
