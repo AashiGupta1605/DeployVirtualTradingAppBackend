@@ -1,7 +1,7 @@
 import Joi from 'joi'; 
 
 export const registerUserSchema = Joi.object({
-  name: Joi.string().min(3).required(),
+  name: Joi.string().min(2).max(50).required(),
   email: Joi.string().email().required(),
   password: Joi.string()
   .min(8)
@@ -63,7 +63,7 @@ export const loginUserSchema = Joi.object({
 
 // Validation schema for updating profile (excluding email)
 export const updateProfileSchema = Joi.object({
-  name: Joi.string().min(3),
+  name: Joi.string().min(2).max(50),
   email: Joi.string().email().required(),
   mobile: Joi.string().pattern(/^[0-9]{10}$/),
   gender: Joi.string().valid('male', 'female', 'other'),
@@ -129,9 +129,20 @@ export const passwordValidationSchema = Joi.object({
 
 
   export const contactSchema = Joi.object({
-  name: Joi.string().min(2).max(100).required(),
+  name: Joi.string().min(2).max(50).required(),
   email: Joi.string().email().required(),
   mobile: Joi.string().pattern(/^[0-9]{10}$/).required(),
   type: Joi.string().required(),
-  desc: Joi.string().min(5).required(),
+  desc: Joi.string().min(5).max(500).required(),
 });
+
+
+// export const feedbackSchema = Joi.object({
+//   userId: Joi.string().required(),
+//   feedbackCategory: Joi.string().required(),
+//   feedbackMessage: Joi.string().min(5).max(500).required(),
+//   rating: Joi.number().min(1).max(5).required(),
+//   recommend: Joi.boolean().required(),
+//   suggestions: Joi.string().allow(""), // Optional, allow empty string
+// });
+
