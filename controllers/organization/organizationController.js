@@ -91,52 +91,145 @@ export const organizationRegister = async (req, res) => {
 
 // ORGANIZATION LOGIN CONTROLLER ----------------------------------------------------------
 // login
+// export const organizationLogin = async (req, res) => {
+//   const { email, mobile, password } = req.body;
+
+//   // Validate the request body using Joi
+//   const { error } = organizationLoginValidationSchema.validate(req.body);
+//   if (error) {
+//     return res.status(400).json({ success: false, message: error.details[0].message });
+//   }
+
+//   try {
+//     console.log("Login request received for:", { email, mobile });
+
+//     // Check if the organization exists by email or mobile
+//     const existingOrg = await OrgRegistration.findOne({
+//       $or: [
+//         { email: email?.trim().toLowerCase() }, // Case-insensitive email match
+//         { mobile: mobile?.trim() } // Optional: Trim mobile if provided
+//       ]
+//     });
+
+//     if (!existingOrg) {
+//       console.log("Organization not found for:", { email, mobile });
+//       return res.status(400).json({ success: false, message: ORG_NOT_FOUND });
+//     }
+
+//     console.log("Organization found:", existingOrg);
+
+//     // Compare the password
+//     const isPasswordValid = await comparePassword(password, existingOrg.password);
+//     if (!isPasswordValid) {
+//       console.log("Password comparison failed for:", { email, mobile });
+//       return res.status(400).json({ success: false, message: ORG_LOGIN_INVALID_CREDENTIALS });
+//     }
+
+//     console.log("Password comparison successful for:", { email, mobile });
+
+//     // Check approval status
+//     if (existingOrg.approvalStatus === "pending") {
+//       console.log("Organization approval status is pending for:", { email, mobile });
+//       return res.status(400).json({ success: false, message:  ORG_LOGIN_PENDING_APPROVAL });
+//     } else if (existingOrg.approvalStatus === "rejected") {
+//       console.log("Organization approval status is rejected for:", { email, mobile });
+//       return res.status(400).json({ success: false, message: ORG_LOGIN_REJECTED });
+//     }
+
+//     console.log("Organization approval status is approved for:", { email, mobile });
+
+//     // Generate JWT token
+//     const token = jwt.sign(
+//       { orgId: existingOrg._id, orgName: existingOrg.name },
+//       process.env.JWT_SECRET,
+//       { expiresIn: '1h' }
+//     );
+
+//     console.log("Login successful for:", { email, mobile });
+
+//     // Login successful
+//     res.status(200).json({
+//       success: true,
+//       message: 'Login successful',
+//       token,
+//       orgName: existingOrg.name,
+//       orgId: existingOrg._id,
+//       org: existingOrg
+//     });
+//   } catch (error) {
+//     console.error("Error during login:", error);
+//     res.status(500).json({ success: false, message: SERVER_ERROR, error:error.message  });
+//   }
+// };
+
+
 export const organizationLogin = async (req, res) => {
   const { email, mobile, password } = req.body;
 
   // Validate the request body using Joi
   const { error } = organizationLoginValidationSchema.validate(req.body);
   if (error) {
-    return res.status(400).json({ success: false, message: error.details[0].message });
+    return res.status(400).json({ 
+      success: false, 
+      message: error.details[0].message,
+      errorType: 'VALIDATION_ERROR'
+    });
   }
 
   try {
     console.log("Login request received for:", { email, mobile });
 
+    // Check if either email or mobile is provided
+    if (!email && !mobile) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Either email or mobile is required',
+        errorType: 'CREDENTIALS_REQUIRED'
+      });
+    }
+
     // Check if the organization exists by email or mobile
     const existingOrg = await OrgRegistration.findOne({
       $or: [
-        { email: email?.trim().toLowerCase() }, // Case-insensitive email match
-        { mobile: mobile?.trim() } // Optional: Trim mobile if provided
+        { email: email?.trim().toLowerCase() },
+        { mobile: mobile?.trim() }
       ]
     });
 
     if (!existingOrg) {
       console.log("Organization not found for:", { email, mobile });
-      return res.status(400).json({ success: false, message: ORG_NOT_FOUND });
+      return res.status(404).json({ 
+        success: false, 
+        message: ORG_NOT_FOUND,
+        errorType: 'ORG_NOT_FOUND'
+      });
     }
-
-    console.log("Organization found:", existingOrg);
 
     // Compare the password
     const isPasswordValid = await comparePassword(password, existingOrg.password);
     if (!isPasswordValid) {
       console.log("Password comparison failed for:", { email, mobile });
-      return res.status(400).json({ success: false, message: ORG_LOGIN_INVALID_CREDENTIALS });
+      return res.status(401).json({ 
+        success: false, 
+        message: ORG_LOGIN_INVALID_CREDENTIALS,
+        errorType: 'INVALID_CREDENTIALS'
+      });
     }
-
-    console.log("Password comparison successful for:", { email, mobile });
 
     // Check approval status
     if (existingOrg.approvalStatus === "pending") {
-      console.log("Organization approval status is pending for:", { email, mobile });
-      return res.status(400).json({ success: false, message:  ORG_LOGIN_PENDING_APPROVAL });
+      return res.status(403).json({ 
+        success: false, 
+        message: ORG_LOGIN_PENDING_APPROVAL,
+        errorType: 'PENDING_APPROVAL'
+      });
     } else if (existingOrg.approvalStatus === "rejected") {
-      console.log("Organization approval status is rejected for:", { email, mobile });
-      return res.status(400).json({ success: false, message: ORG_LOGIN_REJECTED });
+      return res.status(403).json({ 
+        success: false, 
+        message: ORG_LOGIN_REJECTED,
+        errorType: 'REJECTED'
+      });
     }
-
-    console.log("Organization approval status is approved for:", { email, mobile });
 
     // Generate JWT token
     const token = jwt.sign(
@@ -144,8 +237,6 @@ export const organizationLogin = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: '1h' }
     );
-
-    console.log("Login successful for:", { email, mobile });
 
     // Login successful
     res.status(200).json({
@@ -158,7 +249,12 @@ export const organizationLogin = async (req, res) => {
     });
   } catch (error) {
     console.error("Error during login:", error);
-    res.status(500).json({ success: false, message: SERVER_ERROR, error:error.message  });
+    res.status(500).json({ 
+      success: false, 
+      message: SERVER_ERROR,
+      error: error.message,
+      errorType: 'SERVER_ERROR'
+    });
   }
 };
 
