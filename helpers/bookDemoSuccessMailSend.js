@@ -20,7 +20,7 @@ export const sendDemoBookedEmail = async (email, name, preferredTimeSlot, prefer
 // html: `
 //       <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
 //         <h2 style="color: #4CAF50;">Dear ${name},</h2>
-//         <p>Your product demo has been successfully booked.</p>
+//         <p>Your product demo has been successfuly booked.</p>
 //         <p style="font-weight: bold;">Here are your booking details:</p>
 //         <ul style="list-style-type: none; padding: 0;">
 //           <li><strong>Preferred Date:</strong> ${preferredDate}</li>
