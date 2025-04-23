@@ -163,4 +163,4 @@ export const startAutoFetch = (interval) => { // 5 minutes = 300000 ms
 };
 
 
-startAutoFetch(60000);
+// startAutoFetch(60000);

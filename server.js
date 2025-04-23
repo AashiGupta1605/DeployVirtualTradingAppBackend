@@ -69,20 +69,23 @@ const scrapeWithRetry = async (scraperFn, name, maxRetries = 3) => {
 
 const runAllScrapers = async () => {
   const scrapers = [
-    { 
-      fn: scrapeAndStoreETFData, 
+    {
+      fn: scrapeAndStoreETFData,
       name: 'ETF',
-      enabled: false // You can conditionally enable/disable scrapers
+      enabled: false,
+      interval: '0 */4 * * *' // 4 hours
     },
-    { 
-      fn: fetchNifty50Data, 
+    {
+      fn: fetchNifty50Data,
       name: 'Nifty 50',
-      enabled: false 
+      enabled: false,
+      interval: '0 */4 * * *' // 4 hours
     },
-    { 
-      fn: fetchNifty500Data, 
+    {
+      fn: fetchNifty500Data,
       name: 'Nifty 500',
-      enabled: false 
+      enabled: false,
+      interval: '0 */4 * * *' // 4 hours
     }
   ];
 
