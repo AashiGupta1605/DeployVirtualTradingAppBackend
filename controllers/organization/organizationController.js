@@ -631,6 +631,17 @@ export const searchOrganizations = async (req, res) => {
   }
 };
 
+export const allOrganizations = async (req, res) => {
+  try {
+    let query = { isDeleted: false };
+    const orgs = await OrgRegistration.find(query);
+    res.status(200).json({ success: true, data: orgs });
+  } 
+  catch (error) {
+    res.status(500).json({ success: false, message: "Internal Server Error", error: error.message });
+  }
+};
+
 
 
 
