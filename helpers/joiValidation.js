@@ -52,7 +52,7 @@ import Joi from "joi";
 
 // add confirm password and remove accrediation
 export const organizationRegistrationValidationSchema = Joi.object({
-  name: Joi.string().required().label('Name'),
+  name: Joi.string().min(2).max(50).required().label('Name'),
   address: Joi.string().required().label('Address'),
   website: Joi.string().uri().label('Website'),
   contactPerson: Joi.string().required().label('Contact Person'),
@@ -62,7 +62,7 @@ export const organizationRegistrationValidationSchema = Joi.object({
   password: Joi.string()
     .min(8)
     .max(15) // Optional max length
-    .pattern(new RegExp("^(?=.*[A-Za-z])(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"))
+    .pattern(new RegExp("^(?=.*[A-Za-z])(?=.*[@$!%*?&#^])[A-Za-z\\d@$!%*?&#^]{8,}$"))
     .required()
     .messages({
       "string.min": "Password must be at least 8 characters long.",
@@ -83,7 +83,7 @@ export const organizationLoginValidationSchema = Joi.object({
   password: Joi.string()
     .min(8)
     .max(15) // Optional max length
-    .pattern(new RegExp("^(?=.*[A-Za-z])(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"))
+    .pattern(new RegExp("^(?=.*[A-Za-z])(?=.*[@$!%*?&#^])[A-Za-z\\d@$!%*?&#^]{8,}$"))
     .required()
     .messages({
       "string.min": "Password must be at least 8 characters long.",
@@ -98,7 +98,7 @@ export const changePasswordSchema = Joi.object({
   oldPassword: Joi.string()
     .min(8)
     .max(15)
-    .pattern(/^(?=.*[A-Za-z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
+    .pattern(/^(?=.*[A-Za-z])(?=.*[@$!%*?&#^])[A-Za-z\d@$!%*?&#^]{8,}$/)
     .required()
     .messages({
       "string.min": "Password must be at least 8 characters",
@@ -110,7 +110,7 @@ export const changePasswordSchema = Joi.object({
   newPassword: Joi.string()
     .min(8)
     .max(15)
-    .pattern(/^(?=.*[A-Za-z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
+    .pattern(/^(?=.*[A-Za-z])(?=.*[@$!%*?&#^])[A-Za-z\d@$!%*?&#^]{8,}$/)
     .required()
     .messages({
       "string.min": "Password must be at least 8 characters",
@@ -126,7 +126,7 @@ export const passwordValidationSchema = Joi.object({
   newPassword: Joi.string()
     .min(8)
     .max(15)
-    .pattern(/^(?=.*[A-Za-z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, "password")
+    .pattern(/^(?=.*[A-Za-z])(?=.*[@$!%*?&#^])[A-Za-z\d@$!%*?&#^]{8,}$/, "password")
     .required()
     .messages({
       "string.min": "Password must be at least 8 characters",
@@ -146,7 +146,7 @@ export const passwordValidationSchema = Joi.object({
 
 
 export const organizationUserRegistrationValidationSchema = Joi.object({
-  name: Joi.string().required().label('Name'),
+  name: Joi.string().min(2).max(50).required().label('Name'),
   email: Joi.string().email().required().label('Email'),
   mobile: Joi.string().pattern(/^[9876]\d{9}$/).required().messages({
     "string.pattern.base": "Mobile number must start with 9, 8, 7, or 6 and contain 10 digits"
@@ -190,7 +190,7 @@ export const getCompanyBySymbolValidation = Joi.object({
 });
 
 export const updateOrgValidation = Joi.object({
-  name: Joi.string().optional(),
+  name: Joi.string().min(2).max(50).optional(),
   address: Joi.string().optional(),
   website: Joi.string().uri().optional(),
   contactPerson: Joi.string().optional(),
@@ -228,7 +228,7 @@ export const getUserByOrgNameValidation = Joi.object({
 
 export const updateUserValidation = Joi.object({
   name: Joi.string()
-    .min(2)
+    .min(2).max(50)
     .optional(),
   email: Joi.string()
     .email()
@@ -274,7 +274,7 @@ export const organizationFeedbackValidationSchema = Joi.object({
       "Other"
     )
     .required(),
-  feedbackMessage: Joi.string().required(),
+  feedbackMessage: Joi.string().min(5).max(200).required(),
   rating: Joi.number().min(1).max(5).required(),
   recommend: Joi.boolean().required(),
   suggestions: Joi.string().allow("").optional(),

@@ -572,6 +572,7 @@ try {
 // user code ---------------------------------------
 
 import User from "../../models/UserModal.js";
+import { feedbackSchema } from "../../helpers/userValidation.js";
 
 
 // // Create Feedback
@@ -639,7 +640,13 @@ import User from "../../models/UserModal.js";
 
 export const createFeedback = async (req, res) => {
   try {
-    const { userId, organizationId, feedbackCategory, feedbackMessage, rating, recommend, suggestions } = req.body;
+    // Validate request body
+    const { error } = feedbackSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ success: false, message: error.details[0].message });
+    }
+
+    const { userId, feedbackCategory, feedbackMessage, rating, recommend, suggestions } = req.body;
 
     // Fetch the user to get the addedby field
     const user = await User.findById(userId);
@@ -649,14 +656,13 @@ export const createFeedback = async (req, res) => {
 
     const feedback = new Feedback({
       userId,
-      organizationId,
       feedbackCategory,
       feedbackMessage,
       rating,
       recommend,
       suggestions,
       feedbackType: "user",
-      addedby: user.addedby, // Include the addedby field from the user
+      addedby: user.addedby,
     });
 
     await feedback.save();

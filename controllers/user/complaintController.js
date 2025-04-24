@@ -1,14 +1,20 @@
 import Complaint from "../../models/ComplaintModel.js";
 import User from "../../models/UserModal.js";
+import { complaintSchema } from "../../helpers/userValidation.js";
 import { ORG_COMPLAINT_NOT_FOUND ,ORG_COMPLAINT_DELETE_SUCCESS,ORG_COMPLAINT_UPDATE_SUCCESS,ORG_COMPLAINT_FETCHED_SUCCESS, COMPLAINT_SUBMITTED_SUCCESS, ORG_ID_REQUIRED, SERVER_ERROR } from "../../helpers/messages.js";
 import { buildDateQuery, buildSearchQuery } from "../../helpers/dataHandler.js";
 
 // Create Complaint
 export const createComplaint = async (req, res) => {
   try {
+ 
+    const { error } = complaintSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ success: false, message: error.details[0].message });
+    }
+
     const { userId, category, complaintMessage } = req.body;
 
-    // Check if user exists
     const user = await User.findById(userId);
     if (!user) {
       return res.status(400).json({ message: "User not found", success: false });

@@ -133,16 +133,36 @@ export const passwordValidationSchema = Joi.object({
   email: Joi.string().email().required(),
   mobile: Joi.string().pattern(/^[0-9]{10}$/).required(),
   type: Joi.string().required(),
-  desc: Joi.string().min(5).max(500).required(),
+  desc: Joi.string().min(5).max(200).required(),
 });
 
 
-// export const feedbackSchema = Joi.object({
-//   userId: Joi.string().required(),
-//   feedbackCategory: Joi.string().required(),
-//   feedbackMessage: Joi.string().min(5).max(500).required(),
-//   rating: Joi.number().min(1).max(5).required(),
-//   recommend: Joi.boolean().required(),
-//   suggestions: Joi.string().allow(""), // Optional, allow empty string
-// });
+export const feedbackSchema = Joi.object({
+  userId: Joi.string().required(),
+  feedbackCategory: Joi.string()
+    .valid(
+      "Website UI/UX",
+      "Trading Features",
+      "Data Accuracy",
+      "Performance & Speed",
+      "Customer Support",
+      "Other"
+    )
+    .required(),
+  feedbackMessage: Joi.string().min(5).max(200).required(),
+  rating: Joi.number().min(1).max(5).required(),
+  recommend: Joi.boolean().required(),
+  suggestions: Joi.string().allow("").optional(),
+}).unknown(); 
 
+export const complaintSchema = Joi.object({
+  userId: Joi.string().required(),
+  category: Joi.string()
+    .valid("Account Issues",
+      "Payment Problems",
+      "Technical Errors",
+      "Service Quality",
+      "Other")
+    .required(),
+  complaintMessage: Joi.string().min(10).max(200).required(),
+}).unknown();
