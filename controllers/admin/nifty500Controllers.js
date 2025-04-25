@@ -225,7 +225,7 @@ export const getLatestBySymbol = async (req, res) => {
   }
 };
 
-// In controllers/admin/niftyDataControllers.js
+// In controllers/admin/Nifty500DataControllers.js
 
 export const getHistoricalDataBySymbol = async (req, res) => {
   try {
@@ -234,7 +234,7 @@ export const getHistoricalDataBySymbol = async (req, res) => {
     console.log(`Fetching all historical data for symbol: ${symbol}`);
 
     // Modified aggregation pipeline without time range filtering
-    const historicalData = await NiftyData.aggregate([
+    const historicalData = await Nifty500Data.aggregate([
       // Unwind the stocks array
       { $unwind: '$stocks' },
       
