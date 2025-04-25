@@ -52,7 +52,7 @@ import Joi from "joi";
 
 // add confirm password and remove accrediation
 export const organizationRegistrationValidationSchema = Joi.object({
-  name: Joi.string().min(2).max(50).required().label('Name'),
+  name: Joi.string().min(3).max(50).required().label('Name'),
   address: Joi.string().required().label('Address'),
   website: Joi.string().uri().label('Website'),
   contactPerson: Joi.string().required().label('Contact Person'),
@@ -146,7 +146,7 @@ export const passwordValidationSchema = Joi.object({
 
 
 export const organizationUserRegistrationValidationSchema = Joi.object({
-  name: Joi.string().min(2).max(50).required().label('Name'),
+  name: Joi.string().min(3).max(50).required().label('Name'),
   email: Joi.string().email().required().label('Email'),
   mobile: Joi.string().pattern(/^[9876]\d{9}$/).required().messages({
     "string.pattern.base": "Mobile number must start with 9, 8, 7, or 6 and contain 10 digits"
@@ -190,7 +190,7 @@ export const getCompanyBySymbolValidation = Joi.object({
 });
 
 export const updateOrgValidation = Joi.object({
-  name: Joi.string().min(2).max(50).optional(),
+  name: Joi.string().min(3).max(50).optional(),
   address: Joi.string().optional(),
   website: Joi.string().uri().optional(),
   contactPerson: Joi.string().optional(),
@@ -228,7 +228,7 @@ export const getUserByOrgNameValidation = Joi.object({
 
 export const updateUserValidation = Joi.object({
   name: Joi.string()
-    .min(2).max(50)
+    .min(3).max(50)
     .optional(),
   email: Joi.string()
     .email()

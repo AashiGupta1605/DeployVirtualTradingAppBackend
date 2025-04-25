@@ -1,8 +1,9 @@
 import Complaint from "../../models/ComplaintModel.js";
 import User from "../../models/UserModal.js";
-import { complaintSchema } from "../../helpers/userValidation.js";
+import { complaintSchema, organizationComplaintSchema} from "../../helpers/userValidation.js";
 import { ORG_COMPLAINT_NOT_FOUND ,ORG_COMPLAINT_DELETE_SUCCESS,ORG_COMPLAINT_UPDATE_SUCCESS,ORG_COMPLAINT_FETCHED_SUCCESS, COMPLAINT_SUBMITTED_SUCCESS, ORG_ID_REQUIRED, SERVER_ERROR } from "../../helpers/messages.js";
 import { buildDateQuery, buildSearchQuery } from "../../helpers/dataHandler.js";
+
 
 // Create Complaint
 export const createComplaint = async (req, res) => {
@@ -295,17 +296,15 @@ export const getComplaintStats = async (req, res) => {
 //Organization controllers
 
 export const registerOrganizationComplaint = async (req, res) => {
-  const {
-    orgName,
-    category,
-    complaintMessage,
-    organizationId,
-  } = req.body;
+  const { orgName, category, complaintMessage, organizationId } = req.body;
 
   try {
-    // Validate that organizationId is provided
-    if (!organizationId) {
-      return res.status(400).json({ success: false, message: ORG_ID_REQUIRED });
+    const { error } = organizationComplaintSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        message: error.details[0].message,
+      });
     }
 
     const newComplaint = new Complaint({
@@ -313,7 +312,7 @@ export const registerOrganizationComplaint = async (req, res) => {
       complaintMessage,
       complaintType: "organization",
       organizationId,
-      addedby: orgName, // if you're using this like in Feedback
+      addedby: orgName,
     });
 
     await newComplaint.save();
