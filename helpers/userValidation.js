@@ -1,7 +1,7 @@
 import Joi from 'joi'; 
 
 export const registerUserSchema = Joi.object({
-  name: Joi.string().min(2).max(50).required(),
+  name: Joi.string().min(3).max(50).required(),
   email: Joi.string().email().required(),
   password: Joi.string()
   .min(8)
@@ -63,7 +63,7 @@ export const loginUserSchema = Joi.object({
 
 // Validation schema for updating profile (excluding email)
 export const updateProfileSchema = Joi.object({
-  name: Joi.string().min(2).max(50),
+  name: Joi.string().min(3).max(50),
   email: Joi.string().email().required(),
   mobile: Joi.string().pattern(/^[0-9]{10}$/),
   gender: Joi.string().valid('male', 'female', 'other'),
@@ -129,7 +129,7 @@ export const passwordValidationSchema = Joi.object({
 
 
   export const contactSchema = Joi.object({
-  name: Joi.string().min(2).max(50).required(),
+  name: Joi.string().min(3).max(50).required(),
   email: Joi.string().email().required(),
   mobile: Joi.string().pattern(/^[0-9]{10}$/).required(),
   type: Joi.string().required(),
@@ -164,5 +164,21 @@ export const complaintSchema = Joi.object({
       "Service Quality",
       "Other")
     .required(),
-  complaintMessage: Joi.string().min(10).max(200).required(),
+  complaintMessage: Joi.string().min(5).max(200).required(),
+}).unknown();
+
+
+export const organizationComplaintSchema = Joi.object({
+  orgName: Joi.string().required(),
+  category: Joi.string()
+    .valid(
+      "Account Issues",
+      "Payment Problems",
+      "Technical Errors",
+      "Service Quality",
+      "Other"
+    )
+    .required(),
+  complaintMessage: Joi.string().min(5).max(200).required(),
+  organizationId: Joi.string().required(),
 }).unknown();
