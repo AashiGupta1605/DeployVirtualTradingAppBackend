@@ -6,7 +6,9 @@ import {
   getFeedbackStats,
   getComplaintStats,
   getQueryStats,
-  getSubscriptionStats
+  getSubscriptionStats,
+  getCertificateStats,
+  getParticipationStats
 } from '../../../controllers/user/statsController.js';
 
 const router = express.Router();
@@ -18,6 +20,8 @@ router.get('/:userId/feedback', getFeedbackStats);
 router.get('/:userId/complaints', getComplaintStats);
 router.get('/:userId/queries', getQueryStats);
 router.get('/:userId/subscription', getSubscriptionStats);
+router.get('/:userId/certificates', getCertificateStats);
+router.get('/:userId/participation', getParticipationStats);
 
 // router.get('/users', getUserStats);
 // router.get('/events', getEventStats);

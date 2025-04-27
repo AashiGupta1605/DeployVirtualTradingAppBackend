@@ -15,6 +15,10 @@ import guestUserRoute from "./routes/guestUser/guestUserRoute.js";
 import { errorHandler } from './middlewares/errorHandler.js';
 import fileUpload from 'express-fileupload';
 
+// node cron udapte for event status udapte when end date is eual or passed -
+
+import scheduleEventStatusUpdate from './jobs/updateEventStatus.js';
+
 import './helpers/chronJobMailServiceSchedule.js'
 import './helpers/chronJobSchedulingAllWorks.js'
 
@@ -124,6 +128,8 @@ const runAllScrapers = async () => {
 const startServer = async () => {
   try {
     await connectDB();
+
+    scheduleEventStatusUpdate();
     
     // Setup cron jobs
     cron.schedule('*/1 * * * *', () => {
