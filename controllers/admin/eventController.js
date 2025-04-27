@@ -5,11 +5,93 @@ import Payment from '../../models/PaymentModal.js';
 import razorpay from '../../helpers/razorPay.js';
 import crypto from 'crypto';
 import sendEmail from '../../utils/emailController.js';
+import { eventSchema } from '../../helpers/adminValidations.js';
 
 // Event CRUD Operations
+// export const createEvent = async (req, res) => {
+//   try {
+//     console.log('Received event creation request:', req.body);
+
+//     const { 
+//       title, 
+//       type, 
+//       description, 
+//       startDate, 
+//       endDate, 
+//       prize, 
+//       difficulty,
+//       rewardTiers
+//     } = req.body;
+
+//     // Validation
+//     if (!title) return res.status(400).json({ success: false, message: 'Event title is required' });
+//     if (!['ongoing', 'upcoming', 'completed'].includes(type)) {
+//       return res.status(400).json({ success: false, message: 'Invalid event type' });
+//     }
+//     if (!description) return res.status(400).json({ success: false, message: 'Event description is required' });
+
+//     // Date validation
+//     const start = new Date(startDate);
+//     const end = new Date(endDate);
+//     if (isNaN(start.getTime())) return res.status(400).json({ success: false, message: 'Invalid start date' });
+//     if (isNaN(end.getTime())) return res.status(400).json({ success: false, message: 'Invalid end date' });
+//     if (end < start) return res.status(400).json({ success: false, message: 'End date must be after start date' });
+
+//     // Validate reward tiers
+//     if (rewardTiers && !Array.isArray(rewardTiers)) {
+//       return res.status(400).json({ success: false, message: 'Reward tiers must be an array' });
+//     }
+
+//     // Create event
+//     const newEvent = new Event({
+//       title,
+//       type,
+//       description,
+//       startDate: start,
+//       endDate: end,
+//       prize: prize || 'TBD',
+//       difficulty: difficulty || 'Beginner',
+//       participants: req.body.participants || 0,
+//       entryFee: req.body.entryFee || 0,
+//       cashbackPercentage: req.body.cashbackPercentage || 0,
+//       rewards: req.body.rewards || [],
+//       prizeBreakdown: req.body.prizeBreakdown || [],
+//       rewardTiers: req.body.rewardTiers || [],
+//       requirements: req.body.requirements || '',
+//       progress: req.body.progress || 0,
+//       progressText: req.body.progressText || '',
+//       icon: req.body.icon || 'Trophy',
+//       backgroundColor: req.body.backgroundColor || 'bg-gradient-to-br from-blue-50 to-blue-100',
+//       highlight: req.body.highlight || '',
+//       isActive: true,
+//       isDeleted: false
+//     });
+
+//     await newEvent.save();
+
+//     res.status(201).json({
+//       success: true,
+//       message: 'Event created successfully',
+//       event: newEvent
+//     });
+//   } catch (error) {
+//     console.error('Event creation error:', error);
+//     res.status(500).json({ 
+//       success: false, 
+//       message: 'Internal server error',
+//       error: error.message 
+//     });
+//   }
+// };
+
 export const createEvent = async (req, res) => {
   try {
     console.log('Received event creation request:', req.body);
+
+    const { error } = eventSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ success: false, message: error.details[0].message });
+    }
 
     const { 
       title, 
@@ -22,26 +104,13 @@ export const createEvent = async (req, res) => {
       rewardTiers
     } = req.body;
 
-    // Validation
-    if (!title) return res.status(400).json({ success: false, message: 'Event title is required' });
-    if (!['ongoing', 'upcoming', 'completed'].includes(type)) {
-      return res.status(400).json({ success: false, message: 'Invalid event type' });
-    }
-    if (!description) return res.status(400).json({ success: false, message: 'Event description is required' });
-
-    // Date validation
+    // Manual Date Logic: (start must be before end)
     const start = new Date(startDate);
     const end = new Date(endDate);
-    if (isNaN(start.getTime())) return res.status(400).json({ success: false, message: 'Invalid start date' });
-    if (isNaN(end.getTime())) return res.status(400).json({ success: false, message: 'Invalid end date' });
-    if (end < start) return res.status(400).json({ success: false, message: 'End date must be after start date' });
-
-    // Validate reward tiers
-    if (rewardTiers && !Array.isArray(rewardTiers)) {
-      return res.status(400).json({ success: false, message: 'Reward tiers must be an array' });
+    if (end < start) {
+      return res.status(400).json({ success: false, message: 'End date must be after start date' });
     }
 
-    // Create event
     const newEvent = new Event({
       title,
       type,
@@ -55,7 +124,7 @@ export const createEvent = async (req, res) => {
       cashbackPercentage: req.body.cashbackPercentage || 0,
       rewards: req.body.rewards || [],
       prizeBreakdown: req.body.prizeBreakdown || [],
-      rewardTiers: req.body.rewardTiers || [],
+      rewardTiers: rewardTiers || [],
       requirements: req.body.requirements || '',
       progress: req.body.progress || 0,
       progressText: req.body.progressText || '',
@@ -82,7 +151,6 @@ export const createEvent = async (req, res) => {
     });
   }
 };
-
 
 export const getAllEvents = async (req, res) => {
   try {

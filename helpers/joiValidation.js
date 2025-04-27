@@ -55,7 +55,7 @@ export const organizationRegistrationValidationSchema = Joi.object({
   name: Joi.string().min(3).max(50).required().label('Name'),
   address: Joi.string().required().label('Address'),
   website: Joi.string().uri().label('Website'),
-  contactPerson: Joi.string().required().label('Contact Person'),
+  contactPerson: Joi.string().min(3).max(50).required().label('Contact Person'),
   email: Joi.string().email().required().label('Email'),
   mobile: Joi.string().pattern(/^[9876]\d{9}$/).required().label('Mobile'),
   approvalStatus: Joi.string().valid("approved", "rejected", "pending").default("pending").label('Approval Status'),
