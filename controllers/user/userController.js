@@ -119,6 +119,7 @@ import {
 //     res.status(500).json({ message: "Registration failed", error: error.message });
 //   }
 // };
+
 export const registerUser = async (req, res) => {
   const { name, email, password, confirmPassword, mobile, gender, dob, orgtype } = req.body;
 

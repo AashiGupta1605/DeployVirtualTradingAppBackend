@@ -8,6 +8,7 @@ import { sendOrganizationRegistrationEmail } from '../../helpers/emailService.js
 import sendEmail from "../../utils/emailController.js"; 
 import bcrypt from 'bcryptjs';
 import mongoose from 'mongoose';
+import sendOtp from '../../utils/sendOtp.js';
 // import cloudinary from '../../helpers/cloudinary.js';
 
 import {
@@ -30,42 +31,100 @@ import {
 
 // ORGANIZATION REGISTRATION CONTROLLER ----------------------------------------------------------
 // add confirm password and remove acrrediation
+// real working----
+// export const organizationRegister = async (req, res) => {
+//   const { name, address, website, contactPerson, email, mobile, approvalStatus, password } = req.body;
+
+//   // Validate the request body
+//   const { error } = organizationRegistrationValidationSchema.validate(req.body);
+//   if (error) {
+//     return res.status(400).json({ message: error.details[0].message });
+//   }
+
+//   try {
+//     // Check if the organization already exists
+//     const existingOrgByName = await OrgRegistration.findOne({ name });
+//     const existingOrgByEmail = await OrgRegistration.findOne({ email });
+//     const existingOrgByMobile = await OrgRegistration.findOne({ mobile });
+//     const existingOrgByWebsite = await OrgRegistration.findOne({ website });
+
+//     if (existingOrgByName) {
+//       return res.status(400).json({ message: ORG_ALREADY_EXISTS_NAME, success:false });
+//     }
+
+//     if (existingOrgByEmail) {
+//       return res.status(400).json({ message: ORG_ALREADY_EXISTS_EMAIL , success:false });
+//     }
+
+//     if (existingOrgByMobile) {
+//       return res.status(400).json({ message: ORG_ALREADY_EXISTS_PHONE, success:false });
+//     }
+
+//     if (existingOrgByWebsite) {
+//       return res.status(400).json({ message: ORG_ALREADY_EXISTS_WEBSITE, success:false });
+//     }
+
+//     // Hash the password
+//     const hashedPassword = await hashPassword(password);
+
+//     // Create a new organization
+//     const newOrg = new OrgRegistration({
+//       name,
+//       address,
+//       website,
+//       contactPerson,
+//       email,
+//       mobile,
+//       approvalStatus,
+//       password: hashedPassword
+//     });
+
+//     // Save the organization to the database
+//     await newOrg.save();
+//     await sendOrganizationRegistrationEmail(email, name, password);
+//     res.status(201).json({ message: ORG_REGISTRATION_SUCCESS, success:true });
+//   } catch (error) {
+//     console.error("Error registering organization:", error);
+//     res.status(500).json({ message: SERVER_ERROR, success:false });
+//   }
+// };
+
+
 export const organizationRegister = async (req, res) => {
   const { name, address, website, contactPerson, email, mobile, approvalStatus, password } = req.body;
 
   // Validate the request body
   const { error } = organizationRegistrationValidationSchema.validate(req.body);
   if (error) {
-    return res.status(400).json({ message: error.details[0].message });
+    return res.status(400).json({ message: error.details[0].message, success: false });
   }
 
   try {
     // Check if the organization already exists
-    const existingOrgByName = await OrgRegistration.findOne({ name });
-    const existingOrgByEmail = await OrgRegistration.findOne({ email });
-    const existingOrgByMobile = await OrgRegistration.findOne({ mobile });
-    const existingOrgByWebsite = await OrgRegistration.findOne({ website });
+    const [existingOrgByName, existingOrgByEmail, existingOrgByMobile, existingOrgByWebsite] = await Promise.all([
+      OrgRegistration.findOne({ name }),
+      OrgRegistration.findOne({ email }),
+      OrgRegistration.findOne({ mobile }),
+      OrgRegistration.findOne({ website })
+    ]);
 
     if (existingOrgByName) {
-      return res.status(400).json({ message: ORG_ALREADY_EXISTS_NAME, success:false });
+      return res.status(400).json({ message: ORG_ALREADY_EXISTS_NAME, success: false });
     }
-
     if (existingOrgByEmail) {
-      return res.status(400).json({ message: ORG_ALREADY_EXISTS_EMAIL , success:false });
+      return res.status(400).json({ message: ORG_ALREADY_EXISTS_EMAIL, success: false });
     }
-
     if (existingOrgByMobile) {
-      return res.status(400).json({ message: ORG_ALREADY_EXISTS_PHONE, success:false });
+      return res.status(400).json({ message: ORG_ALREADY_EXISTS_PHONE, success: false });
     }
-
     if (existingOrgByWebsite) {
-      return res.status(400).json({ message: ORG_ALREADY_EXISTS_WEBSITE, success:false });
+      return res.status(400).json({ message: ORG_ALREADY_EXISTS_WEBSITE, success: false });
     }
 
     // Hash the password
     const hashedPassword = await hashPassword(password);
 
-    // Create a new organization
+    // Create a new organization with 'not approved' status
     const newOrg = new OrgRegistration({
       name,
       address,
@@ -73,94 +132,86 @@ export const organizationRegister = async (req, res) => {
       contactPerson,
       email,
       mobile,
-      approvalStatus,
+      approvalStatus: 'pending',
+      status: 'not approved', // OTP verification status
       password: hashedPassword
     });
 
     // Save the organization to the database
     await newOrg.save();
-    await sendOrganizationRegistrationEmail(email, name, password);
-    res.status(201).json({ message: ORG_REGISTRATION_SUCCESS, success:true });
+    
+    // Generate and send OTP
+    await sendOtp(email);
+    
+    // Generate token for OTP verification
+    const token = jwt.sign({ id: newOrg._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    res.status(201).json({ 
+      message: ORG_REGISTRATION_SUCCESS, 
+      success: true,
+      token,
+      organization: {
+        _id: newOrg._id,
+        email: newOrg.email,
+        name: newOrg.name
+      }
+    });
   } catch (error) {
     console.error("Error registering organization:", error);
-    res.status(500).json({ message: SERVER_ERROR, success:false });
+    res.status(500).json({ message: SERVER_ERROR, success: false });
+  }
+};
+
+export const verifyOrganizationOtp = async (req, res) => {
+  const { email, otp } = req.body;
+
+  try {
+    // Find the OTP record
+    const otpRecord = await OtpVerification.findOne({ email, otp });
+
+    if (!otpRecord) {
+      return res.status(400).json({ message: "Invalid OTP", success: false });
+    }
+
+    // Find and update the organization
+    const organization = await OrgRegistration.findOneAndUpdate(
+      { email },
+      { status: 'approved' },
+      { new: true }
+    );
+
+    if (!organization) {
+      return res.status(404).json({ message: "Organization not found", success: false });
+    }
+
+    // Delete the used OTP
+    await OtpVerification.deleteOne({ email });
+
+    res.status(200).json({ 
+      message: "Organization verified successfully", 
+      success: true,
+      organization
+    });
+  } catch (error) {
+    console.error("Error verifying OTP:", error);
+    res.status(500).json({ message: SERVER_ERROR, success: false });
+  }
+};
+
+export const resendOrganizationOtp = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    await sendOtp(email);
+    res.status(200).json({ message: "OTP resent successfully", success: true });
+  } catch (error) {
+    console.error("Error resending OTP:", error);
+    res.status(500).json({ message: "Failed to resend OTP", success: false });
   }
 };
 
 
-
 // ORGANIZATION LOGIN CONTROLLER ----------------------------------------------------------
-// login
-// export const organizationLogin = async (req, res) => {
-//   const { email, mobile, password } = req.body;
-
-//   // Validate the request body using Joi
-//   const { error } = organizationLoginValidationSchema.validate(req.body);
-//   if (error) {
-//     return res.status(400).json({ success: false, message: error.details[0].message });
-//   }
-
-//   try {
-//     console.log("Login request received for:", { email, mobile });
-
-//     // Check if the organization exists by email or mobile
-//     const existingOrg = await OrgRegistration.findOne({
-//       $or: [
-//         { email: email?.trim().toLowerCase() }, // Case-insensitive email match
-//         { mobile: mobile?.trim() } // Optional: Trim mobile if provided
-//       ]
-//     });
-
-//     if (!existingOrg) {
-//       console.log("Organization not found for:", { email, mobile });
-//       return res.status(400).json({ success: false, message: ORG_NOT_FOUND });
-//     }
-
-//     console.log("Organization found:", existingOrg);
-
-//     // Compare the password
-//     const isPasswordValid = await comparePassword(password, existingOrg.password);
-//     if (!isPasswordValid) {
-//       console.log("Password comparison failed for:", { email, mobile });
-//       return res.status(400).json({ success: false, message: ORG_LOGIN_INVALID_CREDENTIALS });
-//     }
-
-//     console.log("Password comparison successful for:", { email, mobile });
-
-//     // Check approval status
-//     if (existingOrg.approvalStatus === "pending") {
-//       console.log("Organization approval status is pending for:", { email, mobile });
-//       return res.status(400).json({ success: false, message:  ORG_LOGIN_PENDING_APPROVAL });
-//     } else if (existingOrg.approvalStatus === "rejected") {
-//       console.log("Organization approval status is rejected for:", { email, mobile });
-//       return res.status(400).json({ success: false, message: ORG_LOGIN_REJECTED });
-//     }
-
-//     console.log("Organization approval status is approved for:", { email, mobile });
-
-//     // Generate JWT token
-//     const token = jwt.sign(
-//       { orgId: existingOrg._id, orgName: existingOrg.name },
-//       process.env.JWT_SECRET,
-//       { expiresIn: '1h' }
-//     );
-
-//     console.log("Login successful for:", { email, mobile });
-
-//     // Login successful
-//     res.status(200).json({
-//       success: true,
-//       message: 'Login successful',
-//       token,
-//       orgName: existingOrg.name,
-//       orgId: existingOrg._id,
-//       org: existingOrg
-//     });
-//   } catch (error) {
-//     console.error("Error during login:", error);
-//     res.status(500).json({ success: false, message: SERVER_ERROR, error:error.message  });
-//   }
-// };
 
 
 export const organizationLogin = async (req, res) => {
@@ -394,6 +445,7 @@ export const organizationResetPassword = async (req, res) => {
 // // Get Organization by Name
 
 import cloudinary from '../../helpers/cloudinary.js';
+import OtpVerification from '../../models/OtpVerification.js';
 
 // GET organization by ID
 // ORGANIZATION FETCHED ID CONTROLLER ----------------------------------------------------------

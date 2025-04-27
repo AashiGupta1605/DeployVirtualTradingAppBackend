@@ -15,7 +15,9 @@ import {
   getOrganizationById,
   updateOrganizationById,
   totalOrganizations,
-  changeOrganizationPassword
+  changeOrganizationPassword,
+  verifyOrganizationOtp,
+  resendOrganizationOtp
 } from '../../controllers/organization/organizationController.js';
 import authMiddleware from '../../middlewares/organizationMiddleware.js';
 
@@ -24,9 +26,10 @@ const router = express.Router();
 // organization routes
 router.post('/register', organizationRegister);
 router.post('/login', organizationLogin);
-// router.get('/by-name', getOrganizationByName);
-// router.put('/update-by-name', updateOrganizationByName);
 
+router.post('/verify-otp', verifyOrganizationOtp);
+
+router.post('/resend-otp', resendOrganizationOtp);
 // Forgot Password - Send Reset Link
 router.post("/forgot-password", organizationForgotPassword);
 

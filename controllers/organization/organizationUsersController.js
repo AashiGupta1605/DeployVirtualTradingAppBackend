@@ -24,7 +24,63 @@ import {
   USER_ALREADY_EXIST_EMAIL,
   USER_ALREADY_EXIST_PHONE,
 } from '../../helpers/messages.js';
+import sendEmail from '../../utils/emailController.js';
+import generateStrongPassword from '../../helpers/geneateStrongPassword.js';
 
+// working--
+
+// export const organizationUserRegistration = async (req, res) => {
+//   // Validate the request body
+//   const { error } = organizationUserRegistrationValidationSchema.validate(req.body);
+//   if (error) {
+//     return res.status(400).json({ success: false, msg: error.details[0].message });
+//   }
+
+//   const { name, email, mobile, gender, dob, addedby, status } = req.body;
+
+//   try {
+//     // Check if the user already exists by email or mobile
+//     const existingUserByEmail = await UserModal.findOne({ email });
+//     const existingUserByMobile = await UserModal.findOne({ mobile });
+
+//     if (existingUserByEmail) {
+//       return res.status(400).json({ success: false, msg: USER_ALREADY_EXIST_EMAIL });
+//     }
+
+//     if (existingUserByMobile) {
+//       return res.status(400).json({ success: false, msg: USER_ALREADY_EXIST_PHONE });
+//     }
+
+//     // Generate a unique password
+//     const password = `${name}${crypto.randomBytes(3).toString('hex')}`;
+
+//     // Create a new user
+//     const user = new UserModal({
+//       name,
+//       email,
+//       mobile,
+//       gender,
+//       dob,
+//       password,
+//       addedby,
+//       status,
+//     });
+
+//     // Hash the password
+//     user.password = await hashPassword(password);
+
+//     // Save the user to the database
+//     await user.save();
+
+//     // Send registration email
+//     await sendRegistrationEmail(email, name, password);
+
+//     res.status(201).json({ success: true, msg: USER_REGISTRATION_SUCCESS });
+//   } catch (error) {
+//     console.error("Error registering user:", error);
+//     res.status(500).json({ success: false, msg: SERVER_ERROR, error:error.msg });
+//   }
+// };
 
 export const organizationUserRegistration = async (req, res) => {
   // Validate the request body
@@ -33,7 +89,7 @@ export const organizationUserRegistration = async (req, res) => {
     return res.status(400).json({ success: false, msg: error.details[0].message });
   }
 
-  const { name, email, mobile, gender, dob, addedby, status } = req.body;
+  const { name, email, mobile, gender, dob, addedby } = req.body;
 
   try {
     // Check if the user already exists by email or mobile
@@ -48,8 +104,8 @@ export const organizationUserRegistration = async (req, res) => {
       return res.status(400).json({ success: false, msg: USER_ALREADY_EXIST_PHONE });
     }
 
-    // Generate a unique password
-    const password = `${name}${crypto.randomBytes(3).toString('hex')}`;
+    // Generate a strong password (at least 8 chars with special character)
+    const password = generateStrongPassword(name);
 
     // Create a new user
     const user = new UserModal({
@@ -60,7 +116,7 @@ export const organizationUserRegistration = async (req, res) => {
       dob,
       password,
       addedby,
-      status,
+      status:"approved",
     });
 
     // Hash the password
@@ -69,13 +125,30 @@ export const organizationUserRegistration = async (req, res) => {
     // Save the user to the database
     await user.save();
 
-    // Send registration email
-    await sendRegistrationEmail(email, name, password);
+    // Prepare email content using your existing template system
+    const emailSubject = "Welcome to PGR - Your Account Details";
+    const emailMessage = `
+      <p>Dear ${name},</p>
+      <p>Your account has been successfully created in our PGR Virtual Trading App.</p>
+      <p>Here are your login credentials:</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Password:</strong> ${password}</p>
+      <p>Please change your password after your first login for security reasons.</p>
+    `;
+    
+    await sendEmail(
+      email,
+      emailSubject,
+      emailMessage,
+      "Login Now",
+      `${process.env.FRONTEND_URL}/login`, // Using your FRONTEND_URL from env
+      true
+    );
 
     res.status(201).json({ success: true, msg: USER_REGISTRATION_SUCCESS });
   } catch (error) {
     console.error("Error registering user:", error);
-    res.status(500).json({ success: false, msg: SERVER_ERROR, error:error.msg });
+    res.status(500).json({ success: false, msg: SERVER_ERROR, error: error.message });
   }
 };
 
