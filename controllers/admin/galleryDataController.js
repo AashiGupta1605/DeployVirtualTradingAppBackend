@@ -1,5 +1,6 @@
 import galleryData from "../../models/EventsGalleryModal.js";
 import { v2 as cloudinary } from 'cloudinary';
+import { galleryItemSchema } from "../../helpers/adminValidations.js";
 
 // Configuration
 cloudinary.config({ 
@@ -75,114 +76,188 @@ cloudinary.config({
 // };
 
 
+// export const addGalleryItem = async (req, res) => {
+//     try {
+//         // Get data from the JSON body
+//         const { categoryName, title, desc, photo: base64Photo } = req.body; // Rename photo to base64Photo for clarity
+
+//         // --- Backend Validation ---
+
+//         // Check if base64 photo string exists
+//         if (!base64Photo) {
+//             return res.status(400).json({ // Use 400 for bad request/missing data
+//                 success: false,
+//                 message: "Image data (base64) is required.",
+//             });
+//         }
+
+//         // Check for required categoryName
+//         if (!categoryName) {
+//             return res.status(400).json({ // Use 400 for bad request/missing data
+//                 success: false,
+//                 message: "Category Name is a required field.",
+//             });
+//         }
+
+//         // Optional field validations (Length checks)
+//         if (title && (title.length < 8 || title.length > 80)) {
+//             return res.status(400).json({ // Use 400 for validation errors
+//                  success: false,
+//                  message:"Title must be between 8 to 80 characters."
+//             });
+//         }
+
+//         if (desc && (desc.length < 15 || desc.length > 600)) {
+//             return res.status(400).json({ // Use 400 for validation errors
+//                 success: false,
+//                 message:"Description must be between 15 to 600 characters."
+//             });
+//         }
+
+//         // --- Cloudinary Upload ---
+//         // Upload the base64 string directly. Cloudinary can handle data URIs.
+//         // We prepend the necessary prefix. Cloudinary often infers the type,
+//         // but you could pass the mimetype from the frontend if needed.
+//         const result = await cloudinary.uploader.upload(`data:image/jpeg;base64,${base64Photo}`, { // Assuming jpeg/png/webp works; adjust prefix if needed
+//             folder: "gallery",
+//             // You might want resource_type: "image" here explicitly
+//             resource_type: "image"
+//         });
+
+//         // Check if upload was successful and we got a URL
+//         if (!result || !result.url) {
+//              console.error("Cloudinary Upload Failed:", result);
+//              return res.status(500).json({
+//                 success: false,
+//                 message: "Failed to upload image to Cloudinary. Please try again.",
+//              });
+//         }
+
+//         const photoUrl = result.secure_url || result.url; // Use secure_url if available
+
+//         // --- Database Save ---
+//         const newGalleryItem = new galleryData({
+//             categoryName,
+//             title: title || null, // Ensure null if empty
+//             desc: desc || null,   // Ensure null if empty
+//             photo: photoUrl,      // Save the Cloudinary URL
+//             createdDate: new Date(),
+//             // No need to set defaults like isDeleted here, schema handles it
+//         });
+
+//         await newGalleryItem.save();
+
+//         // --- Success Response ---
+//         return res.status(201).json({
+//             success: true,
+//             message: "Image added to Gallery successfully.",
+//             galleryItem: newGalleryItem,
+//         });
+
+//     }
+//     catch (error) {
+//         console.error("Add Gallery Item Error:", error);
+
+//         // Handle potential Cloudinary errors more specifically if needed
+//         if (error.http_code) { // Cloudinary errors often have http_code
+//              return res.status(error.http_code || 500).json({
+//                  success: false,
+//                  message: `Cloudinary error: ${error.message}. Please try again.`,
+//                  error: error.message,
+//              });
+//         }
+
+//         // Handle Mongoose validation errors
+//         if (error.name === 'ValidationError') {
+//              return res.status(400).json({
+//                  success: false,
+//                  message: `Validation failed: ${error.message}`,
+//                  error: error.errors, // You might want to send specific field errors
+//              });
+//          }
+
+//         // Generic server error
+//         return res.status(500).json({
+//             success: false,
+//             message: `Failed to add Image in gallery: ${error.message}. Please try again.`,
+//             error: error.message, // Keep error message in dev, maybe remove in prod
+//         });
+//     }
+// };
+
 export const addGalleryItem = async (req, res) => {
     try {
-        // Get data from the JSON body
-        const { categoryName, title, desc, photo: base64Photo } = req.body; // Rename photo to base64Photo for clarity
-
-        // --- Backend Validation ---
-
-        // Check if base64 photo string exists
-        if (!base64Photo) {
-            return res.status(400).json({ // Use 400 for bad request/missing data
-                success: false,
-                message: "Image data (base64) is required.",
-            });
-        }
-
-        // Check for required categoryName
-        if (!categoryName) {
-            return res.status(400).json({ // Use 400 for bad request/missing data
-                success: false,
-                message: "Category Name is a required field.",
-            });
-        }
-
-        // Optional field validations (Length checks)
-        if (title && (title.length < 8 || title.length > 80)) {
-            return res.status(400).json({ // Use 400 for validation errors
-                 success: false,
-                 message:"Title must be between 8 to 80 characters."
-            });
-        }
-
-        if (desc && (desc.length < 15 || desc.length > 600)) {
-            return res.status(400).json({ // Use 400 for validation errors
-                success: false,
-                message:"Description must be between 15 to 600 characters."
-            });
-        }
-
-        // --- Cloudinary Upload ---
-        // Upload the base64 string directly. Cloudinary can handle data URIs.
-        // We prepend the necessary prefix. Cloudinary often infers the type,
-        // but you could pass the mimetype from the frontend if needed.
-        const result = await cloudinary.uploader.upload(`data:image/jpeg;base64,${base64Photo}`, { // Assuming jpeg/png/webp works; adjust prefix if needed
-            folder: "gallery",
-            // You might want resource_type: "image" here explicitly
-            resource_type: "image"
+      const { error } = galleryItemSchema.validate(req.body);
+      if (error) {
+        return res.status(400).json({
+          success: false,
+          message: error.details[0].message,
         });
-
-        // Check if upload was successful and we got a URL
-        if (!result || !result.url) {
-             console.error("Cloudinary Upload Failed:", result);
-             return res.status(500).json({
-                success: false,
-                message: "Failed to upload image to Cloudinary. Please try again.",
-             });
+      }
+  
+      const { categoryName, title, desc, photo: base64Photo } = req.body;
+  
+      // --- Cloudinary Upload ---
+      const result = await cloudinary.uploader.upload(
+        `data:image/jpeg;base64,${base64Photo}`,
+        {
+          folder: 'gallery',
+          resource_type: 'image',
         }
-
-        const photoUrl = result.secure_url || result.url; // Use secure_url if available
-
-        // --- Database Save ---
-        const newGalleryItem = new galleryData({
-            categoryName,
-            title: title || null, // Ensure null if empty
-            desc: desc || null,   // Ensure null if empty
-            photo: photoUrl,      // Save the Cloudinary URL
-            createdDate: new Date(),
-            // No need to set defaults like isDeleted here, schema handles it
-        });
-
-        await newGalleryItem.save();
-
-        // --- Success Response ---
-        return res.status(201).json({
-            success: true,
-            message: "Image added to Gallery successfully.",
-            galleryItem: newGalleryItem,
-        });
-
-    }
-    catch (error) {
-        console.error("Add Gallery Item Error:", error);
-
-        // Handle potential Cloudinary errors more specifically if needed
-        if (error.http_code) { // Cloudinary errors often have http_code
-             return res.status(error.http_code || 500).json({
-                 success: false,
-                 message: `Cloudinary error: ${error.message}. Please try again.`,
-                 error: error.message,
-             });
-        }
-
-        // Handle Mongoose validation errors
-        if (error.name === 'ValidationError') {
-             return res.status(400).json({
-                 success: false,
-                 message: `Validation failed: ${error.message}`,
-                 error: error.errors, // You might want to send specific field errors
-             });
-         }
-
-        // Generic server error
+      );
+  
+      if (!result || !result.url) {
+        console.error('Cloudinary Upload Failed:', result);
         return res.status(500).json({
-            success: false,
-            message: `Failed to add Image in gallery: ${error.message}. Please try again.`,
-            error: error.message, // Keep error message in dev, maybe remove in prod
+          success: false,
+          message: 'Failed to upload image to Cloudinary. Please try again.',
         });
+      }
+  
+      const photoUrl = result.secure_url || result.url;
+  
+      const newGalleryItem = new galleryData({
+        categoryName,
+        title: title || null,
+        desc: desc || null,
+        photo: photoUrl,
+        createdDate: new Date(),
+      });
+  
+      await newGalleryItem.save();
+  
+      return res.status(201).json({
+        success: true,
+        message: 'Image added to Gallery successfully.',
+        galleryItem: newGalleryItem,
+      });
+  
+    } catch (error) {
+      console.error('Add Gallery Item Error:', error);
+  
+      if (error.http_code) {
+        return res.status(error.http_code || 500).json({
+          success: false,
+          message: `Cloudinary error: ${error.message}. Please try again.`,
+          error: error.message,
+        });
+      }
+  
+      if (error.name === 'ValidationError') {
+        return res.status(400).json({
+          success: false,
+          message: `Validation failed: ${error.message}`,
+          error: error.errors,
+        });
+      }
+  
+      return res.status(500).json({
+        success: false,
+        message: `Failed to add Image in gallery: ${error.message}. Please try again.`,
+        error: error.message,
+      });
     }
-};
+  };
 
 // export const addGalleryItem = async (req, res) => {
 //     try {
