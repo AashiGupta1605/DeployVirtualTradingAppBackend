@@ -69,27 +69,26 @@ export const organizationRegistrationValidationSchema = Joi.object({
       "string.pattern.base": "Password must contain at least one letter and one special character.",
       "any.required": "Password is required.",
     }),
-  confirmPassword: Joi.string().valid(Joi.ref('password')).required().label('Confirm Password'),
+  confirmPassword: Joi.string().valid(Joi.ref('password')).label('Confirm Password'),
   photo: Joi.string().label("photo")
 });
 
 
 
-// add login with mobile 
-
 export const organizationLoginValidationSchema = Joi.object({
   email: Joi.string().email().label('Email'),
   mobile: Joi.string().label('Mobile'),
   password: Joi.string()
-    .min(8)
-    .max(15) // Optional max length
-    .pattern(new RegExp("^(?=.*[A-Za-z])(?=.*[@$!%*?&#^])[A-Za-z\\d@$!%*?&#^]{8,}$"))
+    // .min(8)
+    // .max(15) // Optional max length
+    // .pattern(new RegExp("^(?=.*[A-Za-z])(?=.*[@$!%*?&#^])[A-Za-z\\d@$!%*?&#^]{8,}$"))
     .required()
-    .messages({
-      "string.min": "Password must be at least 8 characters long.",
-      "string.pattern.base": "Password must contain at least one letter and one special character.",
-      "any.required": "Password is required.",
-    })
+    .label('password')
+    // .messages({
+    //   "string.min": "Password must be at least 8 characters long.",
+    //   "string.pattern.base": "Password must contain at least one letter and one special character.",
+    //   "any.required": "Password is required.",
+    // })
 }).or('email', 'mobile'); // Require either email or mobile, but not both
 
 
