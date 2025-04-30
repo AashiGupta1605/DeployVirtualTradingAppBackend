@@ -18,6 +18,7 @@ import fileUpload from 'express-fileupload';
 // node cron udapte for event status udapte when end date is eual or passed -
 
 import scheduleEventStatusUpdate from './jobs/updateEventStatus.js';
+import './jobs/dailyTransactionReport.js';
 
 import './helpers/chronJobMailServiceSchedule.js'
 import './helpers/chronJobSchedulingAllWorks.js'
