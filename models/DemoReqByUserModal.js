@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
 
 const userDemoSchema = new mongoose.Schema({
-    name: { type: String, required: true, trim:true, maxlength:25 },
+    name: { type: String, required: true, trim:true },
     // email: { type: String, required: true, unique: true, trim:true },
     // mobile: { type: String,  unique: true, required: true, trim:true, maxlength:10, maxlength:10 },
     email: { type: String, required: true, trim:true },
-    mobile: { type: String, required: true, trim:true, maxlength:10, maxlength:10 },
+    mobile: { type: String, required: true, trim:true},
     gender: { type: String, required: true, trim:true },
     dob: { type: Date, required: true },
-    aboutHelp: {type: String, required: true, trim:true, maxlength:160},
+    aboutHelp: {type: String, required: true, trim:true},
     // partOfOrganization: {type: Boolean, default: false},
     // organizationName: {type:String, trime:true},
     // preferredDate: {type: Date, default: null},

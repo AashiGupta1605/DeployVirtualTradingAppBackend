@@ -9,8 +9,8 @@ const galleryCategorySchema = new mongoose.Schema({
     //     required: true
     // },
 
-    // name: { type: String, required: true, unique:true, trim:true, maxlength:25 },
-    name: { type: String, required: true, trim:true, maxlength:25 },
+    // name: { type: String, required: true, unique:true, trim:true, maxlength:50 },
+    name: { type: String, required: true, trim:true, maxlength:50 },
     
     createdDate: { type: Date, default: null },
     isDeleted: { type: Boolean, default: false },
