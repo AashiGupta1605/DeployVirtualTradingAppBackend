@@ -83,7 +83,7 @@ const runAllScrapers = async () => {
     {
       fn: fetchNifty50Data,
       name: 'Nifty 50',
-      enabled: false,
+      enabled: true,
       interval: '0 */4 * * *' // 4 hours
     },
     {

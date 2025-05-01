@@ -20,8 +20,8 @@ export const galleryItemSchema = Joi.object({
 export const demoRequestSchema = Joi.object({
     name: Joi.string().min(3).max(50).required().messages({
         'string.empty': 'Name is required.',
-        'string.min': 'Name is too small.',
-        'string.max': 'Name is too large.'
+        'string.min': 'Name must be at least 3 characters',
+        'string.max': 'Name must be less than 50 characters'
     }),
     website: Joi.string().uri().required().messages({
         'string.empty': 'Website is required.',
@@ -52,8 +52,8 @@ export const demoRequestSchema = Joi.object({
 export const schema = Joi.object({
     name: Joi.string().min(3).max(50).required().messages({
         'string.empty': 'Name is required.',
-        'string.min': 'Name is too small.',
-        'string.max': 'Name is too large.',
+        'string.min': 'Name must be at least 3 characters',
+        'string.max': 'Name must be less than 50 characters',
     }),
     email: Joi.string().email().required().messages({
         'string.empty': 'Email is required.',
