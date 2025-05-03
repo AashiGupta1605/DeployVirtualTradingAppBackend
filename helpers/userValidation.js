@@ -182,3 +182,11 @@ export const organizationComplaintSchema = Joi.object({
   complaintMessage: Joi.string().min(5).max(200).required(),
   organizationId: Joi.string().required(),
 }).unknown();
+
+
+export const emailValidationSchema = Joi.object({
+  email: Joi.string().email().required().messages({
+    'string.email': 'Please provide a valid email address.',
+    'any.required': 'Email is required.',
+  }),
+});
