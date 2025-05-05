@@ -28,7 +28,10 @@ import {
   getOrgUserFeedbackStats,
   getOrgUserQueryStats,
   getStockStats,
-  getGalleryStats
+  getGalleryStats,
+  getOrgUserEventParticipationStats,
+  getOrgUserTradingStats,
+  getOrgUserComplaintStats
 } from '../../controllers/organization/organizationStatsController.js';
 
 const router = express.Router();
@@ -42,6 +45,10 @@ router.get('/:orgName/stats/user-feedbacks', getOrgUserFeedbackStats);
 router.get('/:orgName/stats/user-queries', getOrgUserQueryStats);
 router.get('/:orgName/stats/stocks', getStockStats);
 router.get('/:orgName/stats/gallery', getGalleryStats);
+router.get('/:orgName/stats/user-complaints', getOrgUserComplaintStats); 
+
+router.get('/:orgName/stats/event-participation', getOrgUserEventParticipationStats); // User participation in events
+router.get('/:orgName/stats/trading', getOrgUserTradingStats); // User trading activity
 
 
 export default router;
