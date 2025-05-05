@@ -722,7 +722,12 @@ export const deleteUser = async (req, res) => {
 // Get All Users (for admin)
 export const getUsers = async (req, res) => {
   try {
-    res.json(await User.find({addedby:"self", isDeleted: false, status: "approved" }));
+    //res.json(await User.find({addedby:"self", isDeleted: false, status: "approved"  }));
+    res.json(await User.find({
+      addedby: "self",
+      isDeleted: false,
+      status: { $in: ["approved", "not approved"] }
+    }));
   } catch (error) {
     res.status(500).json({ message: "Server Error" });
   }
