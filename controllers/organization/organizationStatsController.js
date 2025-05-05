@@ -462,6 +462,104 @@ export const getOrgComplaintStats = async (req, res) => {
   }
 };
 
+export const getOrgUserComplaintStats = async (req, res) => {
+  try {
+    const orgName = req.params.orgName;
+
+    // 1. Verify organization exists
+    const org = await OrgRegister.findOne({ name: orgName, isDeleted: false });
+    if (!org) {
+      return res.status(404).json({
+        success: false,
+        message: "Organization not found",
+      });
+    }
+
+    // 2. Get all user IDs for this organization
+    const orgUsers = await User.find({
+      addedby: orgName,
+      isDeleted: false
+    }).select('_id'); // Select only IDs for efficiency
+
+    const userIds = orgUsers.map(user => user._id);
+
+    // 3. Handle case where organization has no users
+    if (userIds.length === 0) {
+      return res.status(200).json({
+        success: true,
+        stats: {
+          total: 0,
+          pending: 0,
+          resolved: 0, // Use 'resolved' for consistency if frontend expects it
+          resolutionRate: 0,
+          recentUserComplaints: [],
+        },
+        message: "No users found for this organization.",
+      });
+    }
+
+    // 4. Query Complaint collection for complaints by these users
+    const [
+        totalUserComplaints,
+        pendingUserComplaints,
+        resolvedUserComplaints, // Mapped from 'solved' status
+        recentUserComplaintsData
+    ] = await Promise.all([
+      // Total complaints by org users
+      Complaint.countDocuments({
+        userId: { $in: userIds },
+        isDeleted: false
+      }),
+      // Pending complaints by org users
+      Complaint.countDocuments({
+        userId: { $in: userIds },
+        status: "pending",
+        isDeleted: false
+      }),
+      // Solved complaints by org users
+      Complaint.countDocuments({
+        userId: { $in: userIds },
+        status: "solved", // Use the enum value from your model
+        isDeleted: false
+      }),
+      // Recent complaints by org users
+      Complaint.find({
+        userId: { $in: userIds },
+        isDeleted: false
+      })
+        .sort({ createdDate: -1 })
+        .limit(5)
+        // Select relevant fields and populate user name/email for context
+        .select('category status createdDate userId complaintMessage')
+        .populate('userId', 'name email') // Populate user details
+    ]);
+
+    // 5. Calculate resolution rate
+    const resolutionRate = totalUserComplaints > 0
+      ? ((resolvedUserComplaints / totalUserComplaints) * 100).toFixed(2)
+      : 0;
+
+    // 6. Send the response
+    res.status(200).json({
+      success: true,
+      stats: {
+        total: totalUserComplaints,
+        pending: pendingUserComplaints,
+        resolved: resolvedUserComplaints, // Use 'resolved' key if preferred for frontend
+        resolutionRate: parseFloat(resolutionRate), // Ensure number format
+        recentUserComplaints: recentUserComplaintsData, // Renamed for clarity
+      },
+      message: "Organization user complaint stats fetched successfully",
+    });
+  } catch (error) {
+    console.error("Error fetching org user complaint stats:", error.message);
+    res.status(500).json({
+      success: false,
+      message: SERVER_ERROR,
+      error: error.message,
+    });
+  }
+};
 
 export const getOrgUserFeedbackStats = async (req, res) => {
   try {
@@ -838,5 +936,152 @@ export const getGalleryStats = async (req, res) => {
 
 
 
+// controllers/organization/organizationStatsController.js
 
+// Make sure these imports are present at the top
+// Import your Transaction model (adjust path if necessary)
+import Transaction from "../../models/TransactionModal.js";
+import EventRegistration from "../../models/EventRegistrationModal.js"; // Keep if needed for other stats
 
+// ... (keep existing controller functions like getOrgUserStats, getOrgEventStats, etc.)
+// ... (keep getOrgUserEventParticipationStats from the previous answer)
+
+/**
+ * @desc    Get total transaction count for users of a specific organization
+ * @route   GET /api/organization/:orgName/stats/trading  (Route path can remain the same)
+ * @access  Private/Admin
+ */
+export const getOrgUserTradingStats = async (req, res) => {
+  try {
+    const orgName = req.params.orgName;
+
+    // 1. Verify organization exists
+    const org = await OrgRegister.findOne({ name: orgName, isDeleted: false });
+    if (!org) {
+      return res.status(404).json({
+        success: false,
+        message: "Organization not found",
+      });
+    }
+
+    // 2. Get all user IDs for this organization
+    const orgUsers = await User.find({
+      addedby: orgName,
+      isDeleted: false
+    }).select('_id'); // Select only IDs for efficiency
+
+    const userIds = orgUsers.map(user => user._id);
+
+    // 3. Handle case where organization has no users
+    if (userIds.length === 0) {
+      return res.status(200).json({
+        success: true,
+        stats: {
+          totalTrades: 0, // Keep the key 'totalTrades' for consistency in frontend
+        },
+        message: "No users found for this organization.",
+      });
+    }
+
+    // 4. Count total transactions made by these users using the Transaction model
+    const totalTransactions = await Transaction.countDocuments({
+      userId: { $in: userIds },
+      // Add other filters if needed, e.g., status: 'completed'
+      // status: 'completed'
+      // No isDeleted field in the provided Transaction model, so omit it unless added later
+    });
+
+    // 5. Send the response
+    res.status(200).json({
+      success: true,
+      stats: {
+        totalTrades: totalTransactions, // Use the calculated count
+      },
+      message: "Organization user transaction stats fetched successfully",
+    });
+  } catch (error) {
+    console.error("Error fetching org user transaction stats:", error.message);
+    res.status(500).json({
+      success: false,
+      message: SERVER_ERROR,
+      error: error.message,
+    });
+  }
+};
+
+// ... (keep other existing controller functions like getStockStats, getGalleryStats, etc.)
+
+export const getOrgUserEventParticipationStats = async (req, res) => {
+  try {
+    const orgName = req.params.orgName;
+
+    // Verify organization exists
+    const org = await OrgRegister.findOne({ name: orgName, isDeleted: false });
+    if (!org) {
+      return res.status(404).json({
+        success: false,
+        message: "Organization not found",
+      });
+    }
+
+    // Get all user IDs for this organization
+    const orgUsers = await User.find({
+      addedby: orgName,
+      isDeleted: false
+    }).select('_id'); // Only select the _id for efficiency
+
+    const userIds = orgUsers.map(user => user._id);
+
+    if (userIds.length === 0) {
+      // No users in the organization, return zero stats
+      return res.status(200).json({
+        success: true,
+        stats: {
+          participatingUsers: 0,
+          participationRate: 0,
+          certificatesIssued: 0,
+        },
+        message: "No users found for this organization.",
+      });
+    }
+
+    // Perform calculations in parallel
+    const [participatingUserIds, certificatesCount] = await Promise.all([
+      // Find unique user IDs who have registered or completed an event
+      EventRegistration.distinct('userId', {
+        userId: { $in: userIds },
+        status: { $in: ['Registered', 'Completed'] } // Consider 'Registered' or 'Completed' as participation
+        // Add isDeleted: false if your EventRegistration model has it
+      }),
+      // Count registrations with a certificate ID for these users
+      EventRegistration.countDocuments({
+        userId: { $in: userIds },
+        certificateId: { $exists: true, $ne: null } // Check if certificateId exists and is not null
+        // Add isDeleted: false if your EventRegistration model has it
+      })
+    ]);
+
+    const participatingUsersCount = participatingUserIds.length;
+    const totalOrgUsers = orgUsers.length;
+    const participationRate = totalOrgUsers > 0
+      ? ((participatingUsersCount / totalOrgUsers) * 100).toFixed(2)
+      : 0;
+
+    res.status(200).json({
+      success: true,
+      stats: {
+        participatingUsers: participatingUsersCount,
+        participationRate: parseFloat(participationRate), // Ensure it's a number
+        certificatesIssued: certificatesCount,
+      },
+      message: "Organization event participation stats fetched successfully",
+    });
+  } catch (error) {
+    console.error("Error fetching org event participation stats:", error.message);
+    res.status(500).json({
+      success: false,
+      message: SERVER_ERROR,
+      error: error.message,
+    });
+  }
+};

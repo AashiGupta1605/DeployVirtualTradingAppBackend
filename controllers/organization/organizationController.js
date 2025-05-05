@@ -296,7 +296,8 @@ export const organizationLogin = async (req, res) => {
       token,
       orgName: existingOrg.name,
       orgId: existingOrg._id,
-      org: existingOrg
+      org: existingOrg,
+      role:"organization"
     });
   } catch (error) {
     console.error("Error during login:", error);
