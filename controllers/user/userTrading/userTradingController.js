@@ -48,7 +48,15 @@ export const tradeStock = async (req, res) => {
     if (!companySymbol) validationErrors.push('Company Symbol is required');
     if (numberOfShares <= 0) validationErrors.push('Number of shares must be positive');
     if (price <= 0) validationErrors.push('Price must be positive');
-    if (!['buy', 'sell'].includes(type)) validationErrors.push('Invalid trade type');
+    if (!['buy', 'sell'].includes(type)) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(400).json({
+        success: false,
+        message: 'Validation Error',
+        errors: [`Invalid trade type: ${type}. Must be either 'buy' or 'sell'`]
+      });
+    }
     if (!['market', 'limit', 'stop_loss', 'stop_buy'].includes(orderType)) validationErrors.push('Invalid order type');
 
     if (validationErrors.length > 0) {

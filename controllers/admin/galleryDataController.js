@@ -9,182 +9,6 @@ cloudinary.config({
     api_secret: '3PH6rCY3h78W7mYu8rQ_F5uG58U'
 });
  
-// export const addGalleryItem = async (req, res) => {
-//     try {
-//         const { categoryName, title, desc } = req.body;
-//         const file = req.files?.photo;
-        
-//         if (!file) {
-//             return res.status(409).json({
-//                 success: false,
-//                 message: "Image is required.",
-//             });
-//         }
-
-//         const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
-//         if (!allowedTypes.includes(file.mimetype)) {
-//             return res.status(409).json({
-//                 success: false,
-//                 message: "Invalid image type. Only JPG, PNG, and WEBP are allowed.",
-//             });
-//         }
-
-//         const result = await cloudinary.uploader.upload(`data:${file.mimetype};base64,${file.data.toString('base64')}`, {
-//             folder: "gallery",
-//         });
-//         const photo = result.url
-
-//         if (!categoryName || !photo) {
-//             return res.status(409).json({
-//                 success: false,
-//                 message: "Incomplete Data: Category Name and Photo are required fields.",
-//             });
-//         }
-
-//         if (title && (title.length < 8 || title.length > 80)) {
-//             return res.status(409).json({ success: false, message:"Title must be between 8 to 80 characters." });
-//         }
-
-//         if (desc && (desc.length < 15 || desc.length > 600)) {
-//             return res.status(409).json({ success: false, message:"Description must be between 15 to 600 characters." });
-//         }
-            
-//         const newGalleryItem = new galleryData({
-//             categoryName,
-//             title,
-//             desc,
-//             photo,
-//             createdDate: new Date(),
-//         });
-        
-//         await newGalleryItem.save();
-        
-//         return res.status(201).json({
-//             success: true,
-//             message: "Image in Gallery added successfully.",
-//             galleryItem: newGalleryItem,
-//         }); 
-//     } 
-//     catch (error) {
-//         console.error("Add Gallery Item Error:", error);
-//         return res.status(500).json({
-//             success: false,
-//             message: `Failed to add Image in gallery: ${error.message}. Please try again.`,
-//             error: error.message,
-//         });
-//     }
-// };
-
-
-// export const addGalleryItem = async (req, res) => {
-//     try {
-//         // Get data from the JSON body
-//         const { categoryName, title, desc, photo: base64Photo } = req.body; // Rename photo to base64Photo for clarity
-
-//         // --- Backend Validation ---
-
-//         // Check if base64 photo string exists
-//         if (!base64Photo) {
-//             return res.status(400).json({ // Use 400 for bad request/missing data
-//                 success: false,
-//                 message: "Image data (base64) is required.",
-//             });
-//         }
-
-//         // Check for required categoryName
-//         if (!categoryName) {
-//             return res.status(400).json({ // Use 400 for bad request/missing data
-//                 success: false,
-//                 message: "Category Name is a required field.",
-//             });
-//         }
-
-//         // Optional field validations (Length checks)
-//         if (title && (title.length < 8 || title.length > 80)) {
-//             return res.status(400).json({ // Use 400 for validation errors
-//                  success: false,
-//                  message:"Title must be between 8 to 80 characters."
-//             });
-//         }
-
-//         if (desc && (desc.length < 15 || desc.length > 600)) {
-//             return res.status(400).json({ // Use 400 for validation errors
-//                 success: false,
-//                 message:"Description must be between 15 to 600 characters."
-//             });
-//         }
-
-//         // --- Cloudinary Upload ---
-//         // Upload the base64 string directly. Cloudinary can handle data URIs.
-//         // We prepend the necessary prefix. Cloudinary often infers the type,
-//         // but you could pass the mimetype from the frontend if needed.
-//         const result = await cloudinary.uploader.upload(`data:image/jpeg;base64,${base64Photo}`, { // Assuming jpeg/png/webp works; adjust prefix if needed
-//             folder: "gallery",
-//             // You might want resource_type: "image" here explicitly
-//             resource_type: "image"
-//         });
-
-//         // Check if upload was successful and we got a URL
-//         if (!result || !result.url) {
-//              console.error("Cloudinary Upload Failed:", result);
-//              return res.status(500).json({
-//                 success: false,
-//                 message: "Failed to upload image to Cloudinary. Please try again.",
-//              });
-//         }
-
-//         const photoUrl = result.secure_url || result.url; // Use secure_url if available
-
-//         // --- Database Save ---
-//         const newGalleryItem = new galleryData({
-//             categoryName,
-//             title: title || null, // Ensure null if empty
-//             desc: desc || null,   // Ensure null if empty
-//             photo: photoUrl,      // Save the Cloudinary URL
-//             createdDate: new Date(),
-//             // No need to set defaults like isDeleted here, schema handles it
-//         });
-
-//         await newGalleryItem.save();
-
-//         // --- Success Response ---
-//         return res.status(201).json({
-//             success: true,
-//             message: "Image added to Gallery successfully.",
-//             galleryItem: newGalleryItem,
-//         });
-
-//     }
-//     catch (error) {
-//         console.error("Add Gallery Item Error:", error);
-
-//         // Handle potential Cloudinary errors more specifically if needed
-//         if (error.http_code) { // Cloudinary errors often have http_code
-//              return res.status(error.http_code || 500).json({
-//                  success: false,
-//                  message: `Cloudinary error: ${error.message}. Please try again.`,
-//                  error: error.message,
-//              });
-//         }
-
-//         // Handle Mongoose validation errors
-//         if (error.name === 'ValidationError') {
-//              return res.status(400).json({
-//                  success: false,
-//                  message: `Validation failed: ${error.message}`,
-//                  error: error.errors, // You might want to send specific field errors
-//              });
-//          }
-
-//         // Generic server error
-//         return res.status(500).json({
-//             success: false,
-//             message: `Failed to add Image in gallery: ${error.message}. Please try again.`,
-//             error: error.message, // Keep error message in dev, maybe remove in prod
-//         });
-//     }
-// };
-
 export const addGalleryItem = async (req, res) => {
     try {
       const { error } = galleryItemSchema.validate(req.body);
@@ -259,66 +83,7 @@ export const addGalleryItem = async (req, res) => {
     }
   };
 
-// export const addGalleryItem = async (req, res) => {
-//     try {
-//         const { categoryName, title, desc } = req.body;
-//         const photo = req.file; // Now available via multer
 
-//         if (!categoryName || !photo) {
-//             return res.status(409).json({
-//                 success: false,
-//                 message: "Incomplete Data: Category Name and Photo are required fields.",
-//             });
-//         }
-
-//         if (title && (title.length < 8 || title.length > 80)) {
-//             return res.status(409).json({ success: false, message:"Title must be between 8 to 80 characters." });
-//         }
-
-//         if (desc && (desc.length < 15 || desc.length > 600)) {
-//             return res.status(409).json({ success: false, message:"Description must be between 15 to 600 characters." });
-//         }
-
-//         if (!photo?.buffer) {
-//             return res.status(409).json({ success: false, message: "Invalid image buffer." });
-//         }
-
-//         // Convert the buffer to a base64 string for Cloudinary
-//         const photoBase64 = photo.buffer.toString('base64');
-//         const photoUri = `data:${photo.mimetype};base64,${photoBase64}`;
-
-//         const result = await cloudinary.uploader.upload(photoUri, {
-//             folder: 'gallery',
-//             resource_type: 'auto',
-//             // chunk_size: 20 * 1024 * 1024 // 20MB chunks for large files
-//         });
-
-            
-//         const newGalleryItem = new galleryData({
-//             categoryName,
-//             title,
-//             desc,
-//             photo: result.secure_url,
-//             createdDate: new Date(),
-//         });
-        
-//         await newGalleryItem.save();
-        
-//         return res.status(201).json({
-//             success: true,
-//             message: "Image in Gallery added successfully.",
-//             galleryItem: newGalleryItem,
-//         }); 
-//     } 
-//     catch (error) {
-//         console.error("Add Gallery Item Error:", error);
-//         return res.status(500).json({
-//             success: false,
-//             message: `Failed to add Image in gallery: ${error.message}. Please try again.`,
-//             error: error.message,
-//         });
-//     }
-// };
 
 export const updateGalleryItembyPatch = async (req, res) => {
     try {
@@ -388,54 +153,84 @@ export const updateGalleryItembyPatch = async (req, res) => {
 };
 
 export const updateGalleryItem = async(req, res) => {
-    try{
-        const {id} = req.params
-        const { categoryName, title, desc, photo } = req.body;
-
-        if(!id)
-        return res.status(500).json({ success: false, message: "Server Error: ID required." });
-
-        const existingGalleryItem = await galleryData.findOne({ _id: id, isDeleted: false });
-
-        if (!existingGalleryItem) {
-            return res.status(409).json({ success: false, message: "Image not found in Gallery." });
-        } 
-
-        if(!categoryName || categoryName.trim() === "")
-            return res.status(409).json({ success: false, message: "Category Name is required." });
-        
-        if(!photo || photo.trim()==="")
-            return res.status(409).json({ success: false, message: "Photo is required." });
-
-        if (title !== undefined){
-            if (title!== null && (title.length < 8 || title.length > 80)) {
-                return res.status(409).json({ success: false, message: "Title must be between 8 to 80 characters." });
-            }
+    try {
+      const {id} = req.params;
+      const { categoryName, title, desc, photo } = req.body;
+  
+      if(!id) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "ID is required." 
+        });
+      }
+  
+      // Validate inputs
+      if(!categoryName || categoryName.trim() === "") {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Category Name is required." 
+        });
+      }
+      
+      if(!photo || photo.trim() === "") {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Photo is required." 
+        });
+      }
+  
+      // Validate title length if provided
+      if (title !== undefined && title !== null) {
+        if (title.length < 8 || title.length > 80) {
+          return res.status(400).json({ 
+            success: false, 
+            message: "Title must be between 8 to 80 characters." 
+          });
         }
-
-        if (desc !== undefined) {
-            if (desc !== null && (desc.length < 15 || desc.length > 600)) {
-                return res.status(400).json({ success: false, message: "Description must be between 15 to 600 characters." });
-            }
+      }
+  
+      // Validate description length if provided
+      if (desc !== undefined && desc !== null) {
+        if (desc.length < 15 || desc.length > 600) {
+          return res.status(400).json({ 
+            success: false, 
+            message: "Description must be between 15 to 600 characters." 
+          });
         }
-
-        const updatedGalleryItem = await galleryData.findByIdAndUpdate(
-            id,
-            { categoryName, title, desc, photo, updatedDate: new Date() },
-            {new: true}
-        )
-        if(!updatedGalleryItem){
-            return res.status(500).json({success: false, message:"Gallery Image update unsuccessful. Please try again."})
-        }
-        else{
-            res.status(201).json({success: true, message: "Gallery Image updated successfuly.",updatedGalleryItem})
-        }
+      }
+  
+      const updatedGalleryItem = await galleryData.findByIdAndUpdate(
+        id,
+        { 
+          categoryName, 
+          title: title || null, 
+          desc: desc || null, 
+          photo, 
+          updatedDate: new Date() 
+        },
+        { new: true }
+      );
+  
+      if(!updatedGalleryItem) {
+        return res.status(404).json({
+          success: false, 
+          message: "Gallery item not found or update failed"
+        });
+      }
+  
+      res.status(200).json({
+        success: true, 
+        message: "Gallery Image updated successfully.",
+        updatedGalleryItem
+      });
+    } catch(error) {
+      console.error("Update Gallery Item Error:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: `Failed to update Gallery Image: ${error.message}`
+      });
     }
-    catch(error){
-        console.error("Update Gallery Item Error:", error);
-        res.status(500).json({ success: false, message: `Failed to update Gallery Image: ${error.message}.`, error:error.message});
-    }
-}
+  }
 
 export const deleteGalleryItem = async(req, res) => {
     try{
@@ -592,3 +387,42 @@ export const displayDeletedGalleryItems = async(req, res) => {
         
     }
 }
+
+
+export const uploadImage = async (req, res) => {
+    try {
+      const { image } = req.body;
+      
+      if (!image) {
+        return res.status(400).json({
+          success: false,
+          message: "No image provided",
+        });
+      }
+  
+      const result = await cloudinary.uploader.upload(
+        `data:image/jpeg;base64,${image}`,
+        {
+          folder: 'gallery',
+          resource_type: 'image',
+        }
+      );
+  
+      if (!result || !result.url) {
+        return res.status(500).json({
+          success: false,
+          message: 'Failed to upload image to Cloudinary',
+        });
+      }
+  
+      res.status(200).json({
+        success: true,
+        url: result.secure_url || result.url
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: `Image upload failed: ${error.message}`
+      });
+    }
+  };
