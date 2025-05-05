@@ -1,7 +1,7 @@
 import express from 'express'
 // import multer from 'multer';
 
-import { addGalleryItem, updateGalleryItem, updateGalleryItembyPatch, deleteGalleryItem, deleteAllGalleryItems, displayGalleryItems, permanentDeleteGalleryItem, displayDeletedGalleryItems } 
+import { addGalleryItem,uploadImage, updateGalleryItem, updateGalleryItembyPatch, deleteGalleryItem, deleteAllGalleryItems, displayGalleryItems, permanentDeleteGalleryItem, displayDeletedGalleryItems } 
 from "../../../controllers/admin/galleryDataController.js";
 
 // Configure multer for memory storage (file stays in memory)
@@ -21,13 +21,13 @@ from "../../../controllers/admin/galleryDataController.js";
 // });
 
 const router = express.Router();
-
+router.post('/uploadImage', uploadImage);
 router.get('/getGalleryItems/:search', displayGalleryItems)
 router.get('/getGalleryItems', displayGalleryItems)
 router.post('/addGalleryItem', addGalleryItem)
 // router.post('/addGalleryItem', upload.single('photo'), addGalleryItem)
+router.patch('/updateGalleryItembyPatch/:id', updateGalleryItembyPatch)
 router.put('/updateGalleryItem/:id', updateGalleryItem);
-router.patch('updateGalleryItembyPatch/:id',updateGalleryItembyPatch)
 router.patch('/deleteGalleryItem/:id', deleteGalleryItem);
 router.patch('/deleteAllGalleryItems', deleteAllGalleryItems);
 
