@@ -235,7 +235,8 @@ export const getStockStats = async (req, res) => {
   }
 };
 
-// Get focused certificate stats for user
+// // Get focused certificate stats for user
+
 export const getCertificateStats = async (req, res) => {
   try {
     const userId = req.params.userId;
@@ -342,15 +343,6 @@ export const getParticipationStats = async (req, res) => {
   }
 };
 
-// Update your existing exports
-// export default {
-//   getUserStats,
-//   getEventStats,
-//   getFeedbackStats,
-//   getComplaintStats,
-//   getQueryStats,
-//   getSubscriptionStats // Add this
-// };
 
 // Helper function to calculate age
 function calculateAge(dob) {
