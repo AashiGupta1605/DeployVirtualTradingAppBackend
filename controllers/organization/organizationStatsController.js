@@ -276,7 +276,7 @@ export const getOrgUserStats = async (req, res) => {
       User.countDocuments({ addedby: orgName, isDeleted: false }),
       User.countDocuments({ addedby: orgName, gender: "Male", isDeleted: false }),
       User.countDocuments({ addedby: orgName, gender: "Female", isDeleted: false }),
-      User.countDocuments({ addedby: orgName, isDeleted: false }), // Changed to lowercase
+      User.countDocuments({ addedby: orgName, status: "approved", isDeleted: false }), // Changed to lowercase
       User.countDocuments({ addedby: orgName, status: "not approved", isDeleted: false }), // Changed to lowercase
       User.find({ addedby: orgName, isDeleted: false }, "dob"),
   
