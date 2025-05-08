@@ -109,7 +109,8 @@ const transactionSchema = new mongoose.Schema({
     type: String,
     enum: ["pending", "completed", "failed"],
     default: "completed"
-  }
+  },
+  stockType: { type: String, enum: ['nifty50', 'nifty500', 'etf'], required: true }
 }, {
   timestamps: true
 });

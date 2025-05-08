@@ -30,6 +30,12 @@ const holdingSchema = new mongoose.Schema({
   lastUpdated: {
     type: Date,
     default: Date.now
+  },
+  stockType: {
+    type: String,
+    required: true,
+    enum: ['nifty50', 'nifty500', 'etf'],
+    default: 'nifty50'
   }
 });
 
