@@ -222,11 +222,11 @@ export const getUserStats = async (req, res) => {
       deactiveCount,
       usersForAge,
     ] = await Promise.all([
-      User.countDocuments({ isDeleted: false }),
+      User.countDocuments({ isDeleted: false, }),
       User.countDocuments({ gender: "Male", isDeleted: false }),
       User.countDocuments({ gender: "Female", isDeleted: false }),
-      User.countDocuments({ status: true, isDeleted: false }),
-      User.countDocuments({ status: false, isDeleted: false }),
+      User.countDocuments({ status: "approved", isDeleted: false }),
+      User.countDocuments({ status: "not approved", isDeleted: false }),
       User.find({ isDeleted: false }, "dob"),
     ]);
 
