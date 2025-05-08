@@ -6,6 +6,22 @@ import sendEmail from "../../../utils/emailController.js";
 import mongoose from 'mongoose';
 const PORTAL_FEE = 25;
 
+// Migration script to run once
+const fixStockTypes = async () => {
+  const holdings = await Holding.find({
+    $or: [
+      { stockType: { $exists: false } },
+      { stockType: { $nin: ['nifty50', 'nifty500', 'etf'] } }
+    ]
+  });
+  
+  for (const holding of holdings) {
+    holding.stockType = 'nifty50'; // or determine from other data
+    await holding.save();
+  }
+};
+
+
 export const tradeStock = async (req, res) => {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -20,97 +36,55 @@ export const tradeStock = async (req, res) => {
       type, // 'buy' or 'sell'
       total,
       currentMarketPrice,
-      eventId
+      eventId,
+      stockType
     } = req.body;
 
-    // Add validation for subscriptionPlanId
-    if (!mongoose.Types.ObjectId.isValid(subscriptionPlanId)) {
-      await session.abortTransaction();
-      session.endSession();
-      return res.status(400).json({
-        success: false,
-        message: 'Invalid subscription plan ID'
-      });
+    // Validate inputs
+    if (!userId || !subscriptionPlanId || !companySymbol || !numberOfShares || !price) {
+      throw new Error('Missing required fields');
     }
 
-    // Fetch user details for email notification
-    const user = await User.findById(userId);
-    if (!user) {
-      await session.abortTransaction();
-      session.endSession();
-      return res.status(404).json({ success: false, message: "User not found" });
-    }
-
-    // Comprehensive validation
-    const validationErrors = [];
-    if (!userId) validationErrors.push('User ID is required');
-    if (!subscriptionPlanId) validationErrors.push('Subscription Plan ID is required');
-    if (!companySymbol) validationErrors.push('Company Symbol is required');
-    if (numberOfShares <= 0) validationErrors.push('Number of shares must be positive');
-    if (price <= 0) validationErrors.push('Price must be positive');
     if (!['buy', 'sell'].includes(type)) {
-      await session.abortTransaction();
-      session.endSession();
-      return res.status(400).json({
-        success: false,
-        message: 'Validation Error',
-        errors: [`Invalid trade type: ${type}. Must be either 'buy' or 'sell'`]
-      });
-    }
-    if (!['market', 'limit', 'stop_loss', 'stop_buy'].includes(orderType)) validationErrors.push('Invalid order type');
-
-    if (validationErrors.length > 0) {
-      await session.abortTransaction();
-      session.endSession();
-      return res.status(400).json({
-        success: false,
-        message: 'Validation Error',
-        errors: validationErrors
-      });
+      throw new Error('Invalid trade type');
     }
 
-    // Find subscription
+    // For buy orders, stockType is required
+    if (type === 'buy' && !['nifty50', 'nifty500', 'etf'].includes(stockType)) {
+      throw new Error('Invalid stock type for purchase');
+    }
+
+    // Fetch user and subscription
+    const user = await User.findById(userId).session(session);
+    if (!user) throw new Error('User not found');
+
     const subscription = await SubscriptionPlan.findById(subscriptionPlanId).session(session);
     if (!subscription || subscription.status !== 'Active') {
-      await session.abortTransaction();
-      session.endSession();
-      return res.status(400).json({ success: false, message: 'Invalid or inactive subscription' });
+      throw new Error('Invalid or inactive subscription');
     }
 
-    let transaction;
-    let emailSubject = "";
-    let emailMessage = "";
-
-    // Normalize company symbol to uppercase for consistency
+    // Normalize symbol
     const normalizedSymbol = companySymbol.toUpperCase();
-    
-    const totalWithFee = type === 'buy' 
-      ? total + PORTAL_FEE  // Add fee for buying
-      : total - PORTAL_FEE; // Subtract fee for selling
+    const totalWithFee = type === 'buy' ? total + PORTAL_FEE : total - PORTAL_FEE;
 
-    // **BUY LOGIC**
+    let transaction;
+    let holding;
+
+    // Handle buy order
     if (type === 'buy') {
-      // Check if user has enough balance including fee
       if (totalWithFee > subscription.vertualAmount) {
-        await session.abortTransaction();
-        session.endSession();
-        return res.status(400).json({ 
-          success: false, 
-          message: 'Insufficient balance (including portal fee)' 
-        });
+        throw new Error('Insufficient balance');
       }
 
-      // Deduct balance including fee
+      // Update subscription balance
       subscription.vertualAmount -= totalWithFee;
       await subscription.save({ session });
 
-
-
-      // Find or create holding - case insensitive search
-      let holding = await Holding.findOne({ 
-        userId, 
-        subscriptionPlanId, 
-        companySymbol: { $regex: new RegExp(`^${normalizedSymbol}$`, 'i') },
+      // Find or create holding
+      holding = await Holding.findOne({
+        userId,
+        subscriptionPlanId,
+        companySymbol: normalizedSymbol,
         ...(eventId ? { eventId } : { $or: [{ eventId: null }, { eventId: { $exists: false } }] })
       }).session(session);
 
@@ -119,16 +93,17 @@ export const tradeStock = async (req, res) => {
         const totalValue = (holding.quantity * holding.averageBuyPrice) + total;
         holding.quantity = totalShares;
         holding.averageBuyPrice = totalValue / totalShares;
+        holding.stockType = stockType;
         await holding.save({ session });
       } else {
-        // Create new holding
         holding = await Holding.create([{
           userId,
           subscriptionPlanId,
           companySymbol: normalizedSymbol,
           quantity: numberOfShares,
           averageBuyPrice: price,
-          eventId // Include eventId in holding if provided
+          stockType,
+          eventId
         }], { session });
       }
 
@@ -138,6 +113,7 @@ export const tradeStock = async (req, res) => {
         subscriptionPlanId,
         companySymbol: normalizedSymbol,
         type: 'buy',
+        stockType,
         numberOfShares,
         price,
         total,
@@ -147,65 +123,40 @@ export const tradeStock = async (req, res) => {
         status: 'completed',
         eventId
       }], { session });
-
-      emailSubject = "Trade Confirmation: Stock Buy";
-      emailMessage = `
-        Dear ${user.name},<br><br>
-        You have successfully purchased <strong>${numberOfShares} shares</strong> of <strong>${normalizedSymbol}</strong> at <strong>₹${price.toFixed(2)} per share</strong>.
-        <br>
-        Stock Cost: <strong>₹${total.toFixed(2)}</strong>
-        <br>
-        Portal Fee: <strong>₹${PORTAL_FEE.toFixed(2)}</strong>
-        <br>
-        Total Cost (including fee): <strong>₹${totalWithFee.toFixed(2)}</strong>
-        <br><br>
-        Thank you for trading with us.
-      `;
     }
 
-    // **SELL LOGIC**
+    // Handle sell order
     if (type === 'sell') {
-      // Find holding with the same criteria used during buy - case insensitive
-      console.log('Sell Order - Looking for holdings with:', {
-        userId,
-        subscriptionPlanId,
-        companySymbol: normalizedSymbol,
-        eventId
-      });
-      
-      const holding = await Holding.findOne({
+      // Find holding (case-insensitive with more flexible matching)
+      holding = await Holding.findOne({
         userId,
         subscriptionPlanId,
         companySymbol: { $regex: new RegExp(`^${normalizedSymbol}$`, 'i') },
         ...(eventId ? { eventId } : { $or: [{ eventId: null }, { eventId: { $exists: false } }] })
       }).session(session);
-      
-      console.log('Found holding:', holding);
-    
+
       if (!holding) {
-        await session.abortTransaction();
-        session.endSession();
-        return res.status(400).json({ 
-          success: false, 
-          message: `No holdings found for ${normalizedSymbol}`,
-          availableHoldings: await Holding.find({ userId, subscriptionPlanId })
-        });
+        throw new Error(`You don't have any ${normalizedSymbol} shares to sell`);
       }
-    
+
       if (holding.quantity < numberOfShares) {
-        await session.abortTransaction();
-        session.endSession();
-        return res.status(400).json({ 
-          success: false, 
-          message: `Insufficient shares to sell. You only have ${holding.quantity} shares of ${normalizedSymbol}`,
-          availableShares: holding.quantity
-        });
+        throw new Error(`Insufficient shares. You only have ${holding.quantity} shares of ${normalizedSymbol}`);
       }
-    
-      // Add balance
+
+      // Ensure stockType exists and is valid
+      if (!holding.stockType) {
+        holding.stockType = 'nifty50'; // Default value
+      }
+      
+      const normalizedStockType = holding.stockType.toLowerCase();
+      if (!['nifty50', 'nifty500', 'etf'].includes(normalizedStockType)) {
+        throw new Error(`Invalid stock type in your holdings`);
+      }
+
+      // Update subscription balance
       subscription.vertualAmount += totalWithFee;
       await subscription.save({ session });
-    
+
       // Update or delete holding
       holding.quantity -= numberOfShares;
       if (holding.quantity === 0) {
@@ -220,6 +171,7 @@ export const tradeStock = async (req, res) => {
         subscriptionPlanId,
         companySymbol: normalizedSymbol,
         type: 'sell',
+        stockType: normalizedStockType,
         numberOfShares,
         price,
         total,
@@ -229,59 +181,39 @@ export const tradeStock = async (req, res) => {
         status: 'completed',
         eventId
       }], { session });
-
-      emailSubject = "Trade Confirmation: Stock Sell";
-      emailMessage = `
-        Dear ${user.name},<br><br>
-        You have successfully sold <strong>${numberOfShares} shares</strong> of <strong>${normalizedSymbol}</strong> at <strong>₹${price.toFixed(2)} per share</strong>.
-        <br>
-        Stock Proceeds: <strong>₹${total.toFixed(2)}</strong>
-        <br>
-        Portal Fee: <strong>₹${PORTAL_FEE.toFixed(2)}</strong>
-        <br>
-        Net Proceeds (after fee): <strong>₹${totalWithFee.toFixed(2)}</strong>
-        <br><br>
-        Thank you for trading with us.
-      `;
     }
 
     await session.commitTransaction();
     session.endSession();
 
-    // Send Email Notification
+    // Send email notification
     try {
-      await sendEmail(user.email, emailSubject, emailMessage);
+      const action = type === 'buy' ? 'purchased' : 'sold';
+      const emailMessage = `You have successfully ${action} ${numberOfShares} shares of ${normalizedSymbol}`;
+      await sendEmail(user.email, 'Trade Confirmation', emailMessage);
     } catch (emailError) {
-      console.error('Email sending failed:', emailError);
-      // Don't fail the request if email fails
+      console.error('Failed to send email:', emailError);
     }
-
-    // Get updated holdings
-    const updatedHoldings = await Holding.find({ 
-      userId, 
-      subscriptionPlanId,
-      ...(eventId ? { eventId } : { $or: [{ eventId: null }, { eventId: { $exists: false } }] })
-    });
 
     return res.status(200).json({
       success: true,
       transaction: transaction[0],
-      holdings: updatedHoldings,
-      balance: subscription.vertualAmount,
-      message: `Trade ${type} successful. Confirmation email sent.`,
+      holding: holding ? holding.toObject() : null,
+      balance: subscription.vertualAmount
     });
 
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
-    console.error('Trade Stock Error:', error);
-    return res.status(500).json({ 
-      success: false, 
-      message: 'Internal server error', 
-      error: error.message 
+    console.error('Trade error:', error);
+    return res.status(400).json({
+      success: false,
+      message: error.message
     });
   }
 };
+
+// ... rest of the controller methods remain the same ...
 
 export const getHoldings = async (req, res) => {
   try {
