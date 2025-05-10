@@ -77,7 +77,7 @@ const runAllScrapers = async () => {
     {
       fn: scrapeAndStoreETFData,
       name: 'ETF',
-      enabled: false,
+      enabled: true,
       interval: '0 */4 * * *' // 4 hours
     },
     {
@@ -89,7 +89,7 @@ const runAllScrapers = async () => {
     {
       fn: fetchNifty500Data,
       name: 'Nifty 500',
-      enabled: false,
+      enabled: true,
       interval: '0 */4 * * *' // 4 hours
     }
   ];

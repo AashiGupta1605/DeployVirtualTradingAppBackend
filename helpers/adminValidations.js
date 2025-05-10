@@ -89,45 +89,194 @@ export const schema = Joi.object({
 });
 
 export const eventSchema = Joi.object({
-    title: Joi.string().min(3).max(50).required().messages({
-      'string.empty': 'Event title is required.',
-      'string.min': 'Title must be at least 5 characters.',
-      'string.max': 'Title must not exceed 50 characters.',
+  // Required fields with clear validation messages
+  title: Joi.string()
+    .min(3)
+    .max(50)
+    .required()
+    .messages({
+      'string.empty': 'Title is required',
+      'string.min': 'Title must be at least 3 characters',
+      'string.max': 'Title must not exceed 50 characters',
+      'any.required': 'Title is required'
     }),
-    type: Joi.string().valid('ongoing', 'upcoming', 'completed').required().messages({
-      'any.only': 'Type must be one of ongoing, upcoming, or completed.',
-      'string.empty': 'Event type is required.',
-    }),
-    description: Joi.string().min(10).max(200).required().messages({
-      'string.empty': 'Event description is required.',
-      'string.min': 'Description must be at least 10 characters.',
-      'string.max': 'Description must not exceed 200 characters.',
-    }),
-    startDate: Joi.date().required().messages({
-      'date.base': 'Start date must be a valid date.',
-      'any.required': 'Start date is required.',
-    }),
-    endDate: Joi.date().required().messages({
-      'date.base': 'End date must be a valid date.',
-      'any.required': 'End date is required.',
-    }),
-    prize: Joi.string().optional().allow(''),
-    difficulty: Joi.string().optional().allow(''),
-    rewardTiers: Joi.array().items(Joi.any()).optional(),
-    participants: Joi.number().optional(),
-    entryFee: Joi.number().optional(),
-    cashbackPercentage: Joi.number().optional(),
-    rewards: Joi.array().optional(),
-    prizeBreakdown: Joi.array().optional(),
-    requirements: Joi.string().optional().allow(''),
-    progress: Joi.number().optional(),
-    progressText: Joi.string().optional().allow(''),
-    icon: Joi.string().optional().allow(''),
-    backgroundColor: Joi.string().optional().allow(''),
-    highlight: Joi.string().optional().allow(''),
-  });
 
+  type: Joi.string()
+    .valid('ongoing', 'upcoming', 'completed')
+    .required()
+    .messages({
+      'any.only': 'Event type must be one of: ongoing, upcoming, completed',
+      'string.empty': 'Event type is required',
+      'any.required': 'Event type is required'
+    }),
 
+  description: Joi.string()
+    .min(10)
+    .max(500)
+    .required()
+    .messages({
+      'string.empty': 'Description is required',
+      'string.min': 'Description must be at least 10 characters',
+      'string.max': 'Description must not exceed 500 characters',
+      'any.required': 'Description is required'
+    }),
+
+  startDate: Joi.date()
+    .iso()
+    .required()
+    .messages({
+      'date.base': 'Start date must be a valid date',
+      'date.format': 'Start date must be in ISO format (YYYY-MM-DD)',
+      'any.required': 'Start date is required'
+    }),
+
+  endDate: Joi.date()
+    .iso()
+    .min(Joi.ref('startDate'))
+    .required()
+    .messages({
+      'date.base': 'End date must be a valid date',
+      'date.format': 'End date must be in ISO format (YYYY-MM-DD)',
+      'date.min': 'End date must be after start date',
+      'any.required': 'End date is required'
+    }),
+
+  difficulty: Joi.string()
+    .valid('Beginner', 'Intermediate', 'Advanced', 'Expert')
+    .required()
+    .default('Beginner')
+    .messages({
+      'any.only': 'Difficulty must be one of: Beginner, Intermediate, Advanced, Expert',
+      'any.required': 'Difficulty level is required'
+    }),
+
+  prize: Joi.alternatives()
+    .try(
+      Joi.number().min(0).messages({
+        'number.base': 'Prize must be a number',
+        'number.min': 'Prize must be 0 or greater'
+      }),
+      Joi.string().pattern(/^\d+$/).messages({
+        'string.pattern.base': 'Prize must be a numeric string'
+      })
+    )
+    .required()
+    .messages({
+      'alternatives.types': 'Prize must be a number or numeric string',
+      'alternatives.match': 'Prize must be a number or numeric string',
+      'any.required': 'Prize information is required'
+    }),
+
+  entryFee: Joi.number()
+    .min(0)
+    .required()
+    .messages({
+      'number.base': 'Entry fee must be a number',
+      'number.min': 'Entry fee cannot be negative',
+      'any.required': 'Entry fee is required'
+    }),
+
+  participants: Joi.number()
+    .integer()
+    .min(0)
+    .required()
+    .messages({
+      'number.base': 'Participants must be a number',
+      'number.integer': 'Participants must be an integer',
+      'number.min': 'Participants cannot be negative',
+      'any.required': 'Participants count is required'
+    }),
+
+  // Optional fields with defaults
+  rewardTiers: Joi.array()
+    .items(
+      Joi.object({
+        tier: Joi.string().required().messages({
+          'string.empty': 'Tier name is required'
+        }),
+        description: Joi.string().required().messages({
+          'string.empty': 'Tier description is required'
+        }),
+        cashback: Joi.number()
+          .min(0)
+          .max(1)
+          .optional()
+          .messages({
+            'number.base': 'Cashback must be a number',
+            'number.min': 'Cashback cannot be negative',
+            'number.max': 'Cashback cannot exceed 1'
+          }),
+        bonus: Joi.number()
+          .min(0)
+          .optional()
+          .messages({
+            'number.base': 'Bonus must be a number',
+            'number.min': 'Bonus cannot be negative'
+          })
+      })
+    )
+    .default([]),
+
+  cashbackPercentage: Joi.number()
+    .min(0)
+    .max(100)
+    .default(0)
+    .messages({
+      'number.base': 'Cashback percentage must be a number',
+      'number.min': 'Cashback percentage cannot be negative',
+      'number.max': 'Cashback percentage cannot exceed 100'
+    }),
+
+  rewards: Joi.array()
+    .items(Joi.string())
+    .default([]),
+
+  prizeBreakdown: Joi.array()
+    .items(
+      Joi.object({
+        position: Joi.string().required().messages({
+          'string.empty': 'Position is required'
+        }),
+        reward: Joi.string().required().messages({
+          'string.empty': 'Reward description is required'
+        })
+      })
+    )
+    .default([]),
+
+  // Other optional fields
+  requirements: Joi.string()
+    .allow('')
+    .default(''),
+
+  progress: Joi.number()
+    .min(0)
+    .max(100)
+    .default(0)
+    .messages({
+      'number.base': 'Progress must be a number',
+      'number.min': 'Progress cannot be negative',
+      'number.max': 'Progress cannot exceed 100%'
+    }),
+
+  progressText: Joi.string()
+    .allow('')
+    .default(''),
+
+  icon: Joi.string()
+    .default('Trophy'),
+
+  backgroundColor: Joi.string()
+    .default('bg-gradient-to-br from-blue-50 to-blue-100'),
+
+  highlight: Joi.string()
+    .allow('')
+    .default('')
+
+}).options({ 
+  abortEarly: false,  // Show all validation errors at once
+  allowUnknown: true  // Allow other non-specified fields
+});
 
 export const userRegistrationSchema = Joi.object({
   name: Joi.string()
