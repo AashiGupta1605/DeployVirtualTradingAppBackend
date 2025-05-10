@@ -379,7 +379,7 @@ dotenv.config();
 
 // Cron schedule for 8:27 PM (20:27) Monday to Friday OR Every Day
 // Choose one:
-const CRON_SCHEDULE = '07 16 * * 1-5'; // 8:27 PM Mon-Fri
+const CRON_SCHEDULE = '00 16 * * 1-5'; // 8:27 PM Mon-Fri
 // const CRON_SCHEDULE = '27 20 1-5';   // 8:27 PM Every Day
 
 const TIMEZONE = 'Asia/Kolkata'; // Your specified timezone
