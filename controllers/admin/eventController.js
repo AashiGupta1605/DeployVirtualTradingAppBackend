@@ -10,55 +10,29 @@ import { eventSchema } from '../../helpers/adminValidations.js';
 
 export const createEvent = async (req, res) => {
   try {
-    console.log('Received event creation request:', req.body);
-
-    const { error } = eventSchema.validate(req.body);
-    if (error) {
-      return res.status(400).json({ success: false, message: error.details[0].message });
-    }
-
-    const { 
-      title, 
-      type, 
-      description, 
-      startDate, 
-      endDate, 
-      prize, 
-      difficulty,
-      rewardTiers
-    } = req.body;
-
-    // Manual Date Logic: (start must be before end)
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    if (end < start) {
-      return res.status(400).json({ success: false, message: 'End date must be after start date' });
-    }
-
-    const newEvent = new Event({
-      title,
-      type,
-      description,
-      startDate: start,
-      endDate: end,
-      prize: prize || 'TBD',
-      difficulty: difficulty || 'Beginner',
-      participants: req.body.participants || 0,
-      entryFee: req.body.entryFee || 0,
-      cashbackPercentage: req.body.cashbackPercentage || 0,
-      rewards: req.body.rewards || [],
-      prizeBreakdown: req.body.prizeBreakdown || [],
-      rewardTiers: rewardTiers || [],
-      requirements: req.body.requirements || '',
-      progress: req.body.progress || 0,
-      progressText: req.body.progressText || '',
-      icon: req.body.icon || 'Trophy',
-      backgroundColor: req.body.backgroundColor || 'bg-gradient-to-br from-blue-50 to-blue-100',
-      highlight: req.body.highlight || '',
-      isActive: true,
-      isDeleted: false
+    console.log('Received event data:', req.body); // Log incoming data
+    
+    // Validate request
+    const { error, value } = eventSchema.validate(req.body, { 
+      abortEarly: false,
+      convert: true // Ensure type conversion
     });
+    
+    if (error) {
+      console.log('Validation errors:', error.details); // Log validation errors
+      const errors = error.details.map(detail => ({
+        field: detail.path[0],
+        message: detail.message
+      }));
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Validation failed',
+        errors 
+      });
+    }
 
+    // Create event with validated data
+    const newEvent = new Event(value);
     await newEvent.save();
 
     res.status(201).json({
