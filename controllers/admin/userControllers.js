@@ -76,6 +76,7 @@ export const registerUser = async (req, res) => {
       email,
       emailSubject,
       emailMessage,
+      [],
       "Login Now",
       `${process.env.FRONTEND_URL}/login`, // Ensure env variable is set
       true
