@@ -432,10 +432,10 @@ export const getOrgComplaintStats = async (req, res) => {
     }
 
     const [total, pending, resolved, recent] = await Promise.all([
-      Complaint.countDocuments({   complaintType: "organization", isDeleted: false }),
-      Complaint.countDocuments({   complaintType: "organization", status: "pending", isDeleted: false }),
-      Complaint.countDocuments({   complaintType: "organization", status: "resolved", isDeleted: false }),
-      Complaint.find({   complaintType: "user", isDeleted: false })
+      Complaint.countDocuments({ organizationId: org._id,    complaintType: "organization", isDeleted: false }),
+      Complaint.countDocuments({ organizationId: org._id,    complaintType: "organization", status: "pending", isDeleted: false }),
+      Complaint.countDocuments({ organizationId: org._id,    complaintType: "organization", status: "resolved", isDeleted: false }),
+      Complaint.find({ organizationId: org._id,    complaintType: "organization", isDeleted: false })
         .sort({ createdDate: -1 })
         .limit(5)
         .select('title status createdDate')

@@ -8,7 +8,7 @@ const ComplaintSchema = new mongoose.Schema({
   },
   organizationId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "OrgRegister", // Reference to the Organization model (optional)
+      ref: "OrgRegister", // Reference to the Organization model 
     },
   category: {
     type: String,
