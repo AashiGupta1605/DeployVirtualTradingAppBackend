@@ -1,5 +1,5 @@
 {
-  "fetchTime": "2025-05-27T16:25:33.525Z",
+  "fetchTime": "2025-05-27T16:30:38.091Z",
   "stocks": [
     {
       "symbol": "LICNMID100",
@@ -18,8 +18,8 @@
       "perChange365d": 11.89790827096527,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 5.17,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 6.58,
+      "timestamp": "2025-05-27T16:30:38.091Z"
     },
     {
       "symbol": "MODEFENCE",
@@ -38,8 +38,8 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 28.59,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 30.15,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "AXISVALUE",
@@ -59,7 +59,7 @@
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
       "perChange30d": 3.94,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "GROWWDEFNC",
@@ -78,8 +78,8 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 28.9,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 30.29,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "MASPTOP50",
@@ -98,8 +98,8 @@
       "perChange365d": 26.916840398424824,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 7.03,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 7.94,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "EVIETF",
@@ -119,7 +119,7 @@
       "date365dAgo": "-",
       "date30dAgo": "-",
       "perChange30d": null,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "NIF100IETF",
@@ -138,8 +138,8 @@
       "perChange365d": 7.995452823039027,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.09,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 3.95,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "HDFCPVTBAN",
@@ -158,8 +158,8 @@
       "perChange365d": 14.001623376623375,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.6,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 1.46,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "MOSMALL250",
@@ -178,8 +178,8 @@
       "perChange365d": 4.440275171982484,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 6.69,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 6.95,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "ABSLNN50ET",
@@ -198,8 +198,8 @@
       "perChange365d": -1.3157894736842073,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.63,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 4.97,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "COMMOIETF",
@@ -218,8 +218,8 @@
       "perChange365d": -3.2644178454842216,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.25,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 2.82,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "MIDSELIETF",
@@ -238,8 +238,8 @@
       "perChange365d": 5.182926829268302,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 5.02,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 5.27,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "NV20",
@@ -258,8 +258,8 @@
       "perChange365d": 5.425271263563179,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.83,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 3.45,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "NIFTY100EW",
@@ -278,8 +278,8 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.61,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 2.87,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "NETF",
@@ -298,8 +298,8 @@
       "perChange365d": 11.066315616258024,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.47,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 4.16,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "MOGSEC",
@@ -318,8 +318,8 @@
       "perChange365d": 11.567567567567572,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 0.95,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 1.2,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "MAFANG",
@@ -338,8 +338,8 @@
       "perChange365d": 42.40016725904244,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 16.31,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 16.88,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "MOHEALTH",
@@ -358,8 +358,8 @@
       "perChange365d": 21.46860986547086,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.96,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 1.75,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "NIFMID150",
@@ -378,8 +378,8 @@
       "perChange365d": 7.768275300346157,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 6.12,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 6.47,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "EMULTIMQ",
@@ -398,28 +398,8 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 8.11,
-      "timestamp": "2025-05-27T16:25:33.525Z"
-    },
-    {
-      "symbol": "HDFCMID150",
-      "open": 20.8,
-      "dayHigh": 21.29,
-      "dayLow": 20.8,
-      "lastPrice": 21.27,
-      "previousClose": 21.18,
-      "change": 0.09,
-      "pChange": 0.42,
-      "totalTradedVolume": 306105,
-      "totalTradedValue": 6477181,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 23.65,
-      "yearLow": 17.51,
-      "perChange365d": 7.969543147208124,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 6.43,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 8.32,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "NIF10GETF",
@@ -438,8 +418,28 @@
       "perChange365d": 12.204555221314997,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.96,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 2.24,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "HDFCMID150",
+      "open": 20.8,
+      "dayHigh": 21.29,
+      "dayLow": 20.8,
+      "lastPrice": 21.27,
+      "previousClose": 21.18,
+      "change": 0.09,
+      "pChange": 0.42,
+      "totalTradedVolume": 306105,
+      "totalTradedValue": 6477181,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 23.65,
+      "yearLow": 17.51,
+      "perChange365d": 7.969543147208124,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 6.48,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "HDFCBSE500",
@@ -458,28 +458,8 @@
       "perChange365d": 6.2280701754385825,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.46,
-      "timestamp": "2025-05-27T16:25:33.525Z"
-    },
-    {
-      "symbol": "GROWWN200",
-      "open": 11.26,
-      "dayHigh": 11.26,
-      "dayLow": 11.09,
-      "lastPrice": 11.22,
-      "previousClose": 11.18,
-      "change": 0.04,
-      "pChange": 0.36,
-      "totalTradedVolume": 173878,
-      "totalTradedValue": 1935262,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 12.45,
-      "yearLow": 9,
-      "perChange365d": null,
-      "date365dAgo": "-",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.58,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 4.18,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "HDFCNIFIT",
@@ -498,8 +478,28 @@
       "perChange365d": 13.778162911611796,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 6.31,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 6.09,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "GROWWN200",
+      "open": 11.26,
+      "dayHigh": 11.26,
+      "dayLow": 11.09,
+      "lastPrice": 11.22,
+      "previousClose": 11.18,
+      "change": 0.04,
+      "pChange": 0.36,
+      "totalTradedVolume": 173878,
+      "totalTradedValue": 1935262,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 12.45,
+      "yearLow": 9,
+      "perChange365d": null,
+      "date365dAgo": "-",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 4.02,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "EBANKNIFTY",
@@ -518,48 +518,8 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.43,
-      "timestamp": "2025-05-27T16:25:33.525Z"
-    },
-    {
-      "symbol": "HDFCNEXT50",
-      "open": 68.63,
-      "dayHigh": 68.72,
-      "dayLow": 67.7,
-      "lastPrice": 68.5,
-      "previousClose": 68.28,
-      "change": 0.22,
-      "pChange": 0.32,
-      "totalTradedVolume": 55609,
-      "totalTradedValue": 3784192,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 88,
-      "yearLow": 57,
-      "perChange365d": -1.5945984772302821,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.69,
-      "timestamp": "2025-05-27T16:25:33.525Z"
-    },
-    {
-      "symbol": "MIDCAPIETF",
-      "open": 21.71,
-      "dayHigh": 21.71,
-      "dayLow": 21.43,
-      "lastPrice": 21.61,
-      "previousClose": 21.54,
-      "change": 0.07,
-      "pChange": 0.32,
-      "totalTradedVolume": 525547,
-      "totalTradedValue": 11341304,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 23.7,
-      "yearLow": 17.8,
-      "perChange365d": 7.6731439960139465,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 6.27,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 1.77,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "SELECTIPO",
@@ -578,8 +538,48 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 7.92,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 8.4,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "MIDCAPIETF",
+      "open": 21.71,
+      "dayHigh": 21.71,
+      "dayLow": 21.43,
+      "lastPrice": 21.61,
+      "previousClose": 21.54,
+      "change": 0.07,
+      "pChange": 0.32,
+      "totalTradedVolume": 525547,
+      "totalTradedValue": 11341304,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 23.7,
+      "yearLow": 17.8,
+      "perChange365d": 7.6731439960139465,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 6.61,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "HDFCNEXT50",
+      "open": 68.63,
+      "dayHigh": 68.72,
+      "dayLow": 67.7,
+      "lastPrice": 68.5,
+      "previousClose": 68.28,
+      "change": 0.22,
+      "pChange": 0.32,
+      "totalTradedVolume": 55609,
+      "totalTradedValue": 3784192,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 88,
+      "yearLow": 57,
+      "perChange365d": -1.5945984772302821,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 4.54,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "MIDQ50ADD",
@@ -598,8 +598,8 @@
       "perChange365d": 6.119210977701548,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 6.98,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 7.71,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "LICNETFGSC",
@@ -618,8 +618,8 @@
       "perChange365d": 11.852433281004707,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 0.92,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 1.14,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "HEALTHIETF",
@@ -638,28 +638,8 @@
       "perChange365d": 17.21264602565149,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.66,
-      "timestamp": "2025-05-27T16:25:33.525Z"
-    },
-    {
-      "symbol": "UTISXN50",
-      "open": 91.45,
-      "dayHigh": 91.45,
-      "dayLow": 87.95,
-      "lastPrice": 88.58,
-      "previousClose": 88.36,
-      "change": 0.22,
-      "pChange": 0.25,
-      "totalTradedVolume": 2965,
-      "totalTradedValue": 261868,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 96.27,
-      "yearLow": 66.72,
-      "perChange365d": 7.7746684511497754,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.26,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 1.62,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "PSUBANKADD",
@@ -678,28 +658,28 @@
       "perChange365d": -9.144463783639038,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.49,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 3.7,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
-      "symbol": "PSUBNKIETF",
-      "open": 68.23,
-      "dayHigh": 68.28,
-      "dayLow": 67.42,
-      "lastPrice": 68.06,
-      "previousClose": 67.9,
-      "change": 0.16,
-      "pChange": 0.24,
-      "totalTradedVolume": 135443,
-      "totalTradedValue": 9196579,
+      "symbol": "UTISXN50",
+      "open": 91.45,
+      "dayHigh": 91.45,
+      "dayLow": 87.95,
+      "lastPrice": 88.58,
+      "previousClose": 88.36,
+      "change": 0.22,
+      "pChange": 0.25,
+      "totalTradedVolume": 2965,
+      "totalTradedValue": 261868,
       "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 86.7,
-      "yearLow": 55.8,
-      "perChange365d": -9.63887413701539,
+      "yearHigh": 96.27,
+      "yearLow": 66.72,
+      "perChange365d": 7.7746684511497754,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.46,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 4.39,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "AXISBPSETF",
@@ -718,8 +698,28 @@
       "perChange365d": 7.914893617021274,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 0.8,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 0.88,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "PSUBNKIETF",
+      "open": 68.23,
+      "dayHigh": 68.28,
+      "dayLow": 67.42,
+      "lastPrice": 68.06,
+      "previousClose": 67.9,
+      "change": 0.16,
+      "pChange": 0.24,
+      "totalTradedVolume": 135443,
+      "totalTradedValue": 9196579,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 86.7,
+      "yearLow": 55.8,
+      "perChange365d": -9.63887413701539,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 3.72,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "GROWWRAIL",
@@ -738,8 +738,8 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 10.47,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 10.67,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "AXISTECETF",
@@ -758,28 +758,8 @@
       "perChange365d": 13.323124042879027,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 6.56,
-      "timestamp": "2025-05-27T16:25:33.525Z"
-    },
-    {
-      "symbol": "NV20IETF",
-      "open": 14.65,
-      "dayHigh": 14.82,
-      "dayLow": 14.21,
-      "lastPrice": 14.68,
-      "previousClose": 14.65,
-      "change": 0.03,
-      "pChange": 0.2,
-      "totalTradedVolume": 550750,
-      "totalTradedValue": 8018920,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 17.11,
-      "yearLow": 11.2,
-      "perChange365d": 5.082319255547596,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.46,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 5.98,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "GROWWEV",
@@ -798,8 +778,28 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 9.33,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 9,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "NV20IETF",
+      "open": 14.65,
+      "dayHigh": 14.82,
+      "dayLow": 14.21,
+      "lastPrice": 14.68,
+      "previousClose": 14.65,
+      "change": 0.03,
+      "pChange": 0.2,
+      "totalTradedVolume": 550750,
+      "totalTradedValue": 8018920,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 17.11,
+      "yearLow": 11.2,
+      "perChange365d": 5.082319255547596,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 2.97,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "PSUBNKBEES",
@@ -818,8 +818,8 @@
       "perChange365d": -9.61677512653652,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.1,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 3.36,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "NIF100BEES",
@@ -838,8 +838,8 @@
       "perChange365d": 7.1841255927003225,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.22,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 3.5,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "BANKPSU",
@@ -858,8 +858,8 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.03,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 3.24,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "MIDCAP",
@@ -878,8 +878,8 @@
       "perChange365d": 8.456053841540614,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 5.23,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 5.03,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "MONIFTY500",
@@ -898,8 +898,8 @@
       "perChange365d": 6.405529953917053,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.25,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 4.3,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "MID150BEES",
@@ -918,28 +918,8 @@
       "perChange365d": 7.490934379812222,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 6.81,
-      "timestamp": "2025-05-27T16:25:33.525Z"
-    },
-    {
-      "symbol": "HEALTHY",
-      "open": 14.49,
-      "dayHigh": 14.49,
-      "dayLow": 14.3,
-      "lastPrice": 14.38,
-      "previousClose": 14.36,
-      "change": 0.02,
-      "pChange": 0.14,
-      "totalTradedVolume": 103020,
-      "totalTradedValue": 1477306,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 15.75,
-      "yearLow": 11.7,
-      "perChange365d": 17.10097719869708,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.48,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 7.09,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "MOCAPITAL",
@@ -958,8 +938,28 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 10.45,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 9.57,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "HEALTHY",
+      "open": 14.49,
+      "dayHigh": 14.49,
+      "dayLow": 14.3,
+      "lastPrice": 14.38,
+      "previousClose": 14.36,
+      "change": 0.02,
+      "pChange": 0.14,
+      "totalTradedVolume": 103020,
+      "totalTradedValue": 1477306,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 15.75,
+      "yearLow": 11.7,
+      "perChange365d": 17.10097719869708,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 1.41,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "SBIBPB",
@@ -978,8 +978,8 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.66,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 3.84,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "HDFCPSUBK",
@@ -998,28 +998,8 @@
       "perChange365d": -9.642094017094017,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 2.91,
-      "timestamp": "2025-05-27T16:25:33.525Z"
-    },
-    {
-      "symbol": "SBIETFQLTY",
-      "open": 221.48,
-      "dayHigh": 223,
-      "dayLow": 221.08,
-      "lastPrice": 221.73,
-      "previousClose": 221.48,
-      "change": 0.25,
-      "pChange": 0.11,
-      "totalTradedVolume": 4947,
-      "totalTradedValue": 1100460,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 257.15,
-      "yearLow": 191.5,
-      "perChange365d": 5.090288639271995,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.79,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 3.26,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "HDFCSML250",
@@ -1038,8 +1018,28 @@
       "perChange365d": 4.890282131661449,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 7.27,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 7.48,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "SBIETFQLTY",
+      "open": 221.48,
+      "dayHigh": 223,
+      "dayLow": 221.08,
+      "lastPrice": 221.73,
+      "previousClose": 221.48,
+      "change": 0.25,
+      "pChange": 0.11,
+      "totalTradedVolume": 4947,
+      "totalTradedValue": 1100460,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 257.15,
+      "yearLow": 191.5,
+      "perChange365d": 5.090288639271995,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 5.12,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "MID150CASE",
@@ -1058,8 +1058,8 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 6.53,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 6.73,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "MSCIINDIA",
@@ -1078,28 +1078,8 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.64,
-      "timestamp": "2025-05-27T16:25:33.525Z"
-    },
-    {
-      "symbol": "MIDCAPETF",
-      "open": 21.39,
-      "dayHigh": 21.39,
-      "dayLow": 21.25,
-      "lastPrice": 21.37,
-      "previousClose": 21.35,
-      "change": 0.02,
-      "pChange": 0.09,
-      "totalTradedVolume": 1324850,
-      "totalTradedValue": 28219305,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 23.2,
-      "yearLow": 16,
-      "perChange365d": 7.440925087983914,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 6.75,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 3.86,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "PHARMABEES",
@@ -1119,27 +1099,27 @@
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
       "perChange30d": 0.41,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
-      "symbol": "MOM100",
-      "open": 61.93,
-      "dayHigh": 61.93,
-      "dayLow": 60.9,
-      "lastPrice": 61.25,
-      "previousClose": 61.2,
-      "change": 0.05,
-      "pChange": 0.08,
-      "totalTradedVolume": 382902,
-      "totalTradedValue": 23418286,
+      "symbol": "MIDCAPETF",
+      "open": 21.39,
+      "dayHigh": 21.39,
+      "dayLow": 21.25,
+      "lastPrice": 21.37,
+      "previousClose": 21.35,
+      "change": 0.02,
+      "pChange": 0.09,
+      "totalTradedVolume": 1324850,
+      "totalTradedValue": 28219305,
       "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 66.45,
-      "yearLow": 50.3,
-      "perChange365d": 8.985765124555154,
+      "yearHigh": 23.2,
+      "yearLow": 16,
+      "perChange365d": 7.440925087983914,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 6.77,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 6.75,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "GILT5YBEES",
@@ -1158,8 +1138,28 @@
       "perChange365d": 11.43825838686653,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.12,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 1.22,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "MOM100",
+      "open": 61.93,
+      "dayHigh": 61.93,
+      "dayLow": 60.9,
+      "lastPrice": 61.25,
+      "previousClose": 61.2,
+      "change": 0.05,
+      "pChange": 0.08,
+      "totalTradedVolume": 382902,
+      "totalTradedValue": 23418286,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 66.45,
+      "yearLow": 50.3,
+      "perChange365d": 8.985765124555154,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 6.86,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "BSLGOLDETF",
@@ -1178,8 +1178,8 @@
       "perChange365d": 30.313804297418457,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.79,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": -0.71,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "NV20BEES",
@@ -1198,8 +1198,8 @@
       "perChange365d": 5.127130483375247,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.61,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 3.2,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "ALPHA",
@@ -1218,48 +1218,8 @@
       "perChange365d": -6.54024767801858,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 7.07,
-      "timestamp": "2025-05-27T16:25:33.525Z"
-    },
-    {
-      "symbol": "LTGILTBEES",
-      "open": 28.92,
-      "dayHigh": 29,
-      "dayLow": 28.91,
-      "lastPrice": 28.95,
-      "previousClose": 28.94,
-      "change": 0.01,
-      "pChange": 0.03,
-      "totalTradedVolume": 2466628,
-      "totalTradedValue": 71359548,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 29.72,
-      "yearLow": 25.65,
-      "perChange365d": 12.078977932636475,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.15,
-      "timestamp": "2025-05-27T16:25:33.525Z"
-    },
-    {
-      "symbol": "GROWWLIQID",
-      "open": 104.18,
-      "dayHigh": 104.4,
-      "dayLow": 104.18,
-      "lastPrice": 104.19,
-      "previousClose": 104.16,
-      "change": 0.03,
-      "pChange": 0.03,
-      "totalTradedVolume": 121775,
-      "totalTradedValue": 12686519,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 105.3,
-      "yearLow": 98,
-      "perChange365d": null,
-      "date365dAgo": "-",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 0.41,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 7.21,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "LIQUIDCASE",
@@ -1278,8 +1238,48 @@
       "perChange365d": 6.211544096103135,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 0.42,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 0.44,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "LTGILTBEES",
+      "open": 28.92,
+      "dayHigh": 29,
+      "dayLow": 28.91,
+      "lastPrice": 28.95,
+      "previousClose": 28.94,
+      "change": 0.01,
+      "pChange": 0.03,
+      "totalTradedVolume": 2466628,
+      "totalTradedValue": 71359548,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 29.72,
+      "yearLow": 25.65,
+      "perChange365d": 12.078977932636475,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 1.12,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "GROWWLIQID",
+      "open": 104.18,
+      "dayHigh": 104.4,
+      "dayLow": 104.18,
+      "lastPrice": 104.19,
+      "previousClose": 104.16,
+      "change": 0.03,
+      "pChange": 0.03,
+      "totalTradedVolume": 121775,
+      "totalTradedValue": 12686519,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 105.3,
+      "yearLow": 98,
+      "perChange365d": null,
+      "date365dAgo": "-",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 0.43,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "GSEC10YEAR",
@@ -1298,28 +1298,8 @@
       "perChange365d": 13.040123456790118,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.31,
-      "timestamp": "2025-05-27T16:25:33.525Z"
-    },
-    {
-      "symbol": "LIQUIDPLUS",
-      "open": 1034.08,
-      "dayHigh": 1034.08,
-      "dayLow": 1034.06,
-      "lastPrice": 1034.08,
-      "previousClose": 1033.92,
-      "change": 0.16,
-      "pChange": 0.02,
-      "totalTradedVolume": 36894,
-      "totalTradedValue": 38150978,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 1038.75,
-      "yearLow": 994.83,
-      "perChange365d": null,
-      "date365dAgo": "-",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 0.44,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 1.35,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "AONELIQUID",
@@ -1338,8 +1318,8 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 0.43,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 0.44,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "LIQUID1",
@@ -1358,28 +1338,8 @@
       "perChange365d": 5.200052000520005,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 0.44,
-      "timestamp": "2025-05-27T16:25:33.525Z"
-    },
-    {
-      "symbol": "LIQUIDSHRI",
-      "open": 1054.57,
-      "dayHigh": 1054.59,
-      "dayLow": 1054.57,
-      "lastPrice": 1054.59,
-      "previousClose": 1054.42,
-      "change": 0.17,
-      "pChange": 0.02,
-      "totalTradedVolume": 16784,
-      "totalTradedValue": 17700070,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 1095.15,
-      "yearLow": 1000,
-      "perChange365d": null,
-      "date365dAgo": "-",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 0.42,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 0.46,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "CASHIETF",
@@ -1398,8 +1358,28 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
+      "perChange30d": 0.45,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "LIQUIDSHRI",
+      "open": 1054.57,
+      "dayHigh": 1054.59,
+      "dayLow": 1054.57,
+      "lastPrice": 1054.59,
+      "previousClose": 1054.42,
+      "change": 0.17,
+      "pChange": 0.02,
+      "totalTradedVolume": 16784,
+      "totalTradedValue": 17700070,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 1095.15,
+      "yearLow": 1000,
+      "perChange365d": null,
+      "date365dAgo": "-",
+      "date30dAgo": "25-Apr-2025",
       "perChange30d": 0.44,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "EBBETF0430",
@@ -1418,8 +1398,28 @@
       "perChange365d": 11.174705408768212,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.12,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 1.19,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "LIQUIDPLUS",
+      "open": 1034.08,
+      "dayHigh": 1034.08,
+      "dayLow": 1034.06,
+      "lastPrice": 1034.08,
+      "previousClose": 1033.92,
+      "change": 0.16,
+      "pChange": 0.02,
+      "totalTradedVolume": 36894,
+      "totalTradedValue": 38150978,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 1038.75,
+      "yearLow": 994.83,
+      "perChange365d": null,
+      "date365dAgo": "-",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 0.46,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "SENSEXIETF",
@@ -1438,48 +1438,8 @@
       "perChange365d": 9.875127119646194,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.88,
-      "timestamp": "2025-05-27T16:25:33.525Z"
-    },
-    {
-      "symbol": "LIQUIDADD",
-      "open": 1074.21,
-      "dayHigh": 1074.23,
-      "dayLow": 1074.21,
-      "lastPrice": 1074.21,
-      "previousClose": 1074.05,
-      "change": 0.16,
-      "pChange": 0.01,
-      "totalTradedVolume": 471271,
-      "totalTradedValue": 506248733,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 1219.7,
-      "yearLow": 949.27,
-      "perChange365d": 6.181857720402905,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 0.43,
-      "timestamp": "2025-05-27T16:25:33.525Z"
-    },
-    {
-      "symbol": "LIQUIDBETF",
-      "open": 1032.11,
-      "dayHigh": 1032.11,
-      "dayLow": 1032.09,
-      "lastPrice": 1032.09,
-      "previousClose": 1031.96,
-      "change": 0.13,
-      "pChange": 0.01,
-      "totalTradedVolume": 111710,
-      "totalTradedValue": 115295891,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 1200.19,
-      "yearLow": 810,
-      "perChange365d": null,
-      "date365dAgo": "-",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 0.43,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 3.23,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "HDFCGROWTH",
@@ -1498,8 +1458,8 @@
       "perChange365d": 6.833650966512389,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.19,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 2.9,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "HDFCLIQUID",
@@ -1518,48 +1478,48 @@
       "perChange365d": 1.284987150128501,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 0.41,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 0.42,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
-      "symbol": "LIQUIDSBI",
-      "open": 999.99,
-      "dayHigh": 1000.01,
-      "dayLow": 999.99,
-      "lastPrice": 999.99,
-      "previousClose": 1000,
-      "change": -0.01,
-      "pChange": 0,
-      "totalTradedVolume": 1539,
-      "totalTradedValue": 1539000,
+      "symbol": "LIQUIDADD",
+      "open": 1074.21,
+      "dayHigh": 1074.23,
+      "dayLow": 1074.21,
+      "lastPrice": 1074.21,
+      "previousClose": 1074.05,
+      "change": 0.16,
+      "pChange": 0.01,
+      "totalTradedVolume": 471271,
+      "totalTradedValue": 506248733,
       "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 1000.01,
-      "yearLow": 990.15,
-      "perChange365d": -0.0009999999999990906,
+      "yearHigh": 1219.7,
+      "yearLow": 949.27,
+      "perChange365d": 6.181857720402905,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 0,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 0.45,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
-      "symbol": "ABSLLIQUID",
-      "open": 1000,
-      "dayHigh": 1000.01,
-      "dayLow": 999.99,
-      "lastPrice": 999.99,
-      "previousClose": 1000,
-      "change": -0.01,
-      "pChange": 0,
-      "totalTradedVolume": 848,
-      "totalTradedValue": 847991,
+      "symbol": "LIQUIDBETF",
+      "open": 1032.11,
+      "dayHigh": 1032.11,
+      "dayLow": 1032.09,
+      "lastPrice": 1032.09,
+      "previousClose": 1031.96,
+      "change": 0.13,
+      "pChange": 0.01,
+      "totalTradedVolume": 111710,
+      "totalTradedValue": 115295891,
       "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 1030,
-      "yearLow": 990,
-      "perChange365d": 0,
-      "date365dAgo": "24-May-2024",
+      "yearHigh": 1200.19,
+      "yearLow": 810,
+      "perChange365d": null,
+      "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 0,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 0.44,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "LIQUIDETF",
@@ -1579,19 +1539,39 @@
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
       "perChange30d": 0,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
-      "symbol": "LIQUID",
+      "symbol": "LIQUIDSBI",
       "open": 999.99,
-      "dayHigh": 1000,
+      "dayHigh": 1000.01,
       "dayLow": 999.99,
       "lastPrice": 999.99,
-      "previousClose": 999.99,
-      "change": 0,
+      "previousClose": 1000,
+      "change": -0.01,
       "pChange": 0,
-      "totalTradedVolume": 66638,
-      "totalTradedValue": 66637333,
+      "totalTradedVolume": 1539,
+      "totalTradedValue": 1539000,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 1000.01,
+      "yearLow": 990.15,
+      "perChange365d": -0.0009999999999990906,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 0,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "ABSLLIQUID",
+      "open": 1000,
+      "dayHigh": 1000.01,
+      "dayLow": 999.99,
+      "lastPrice": 999.99,
+      "previousClose": 1000,
+      "change": -0.01,
+      "pChange": 0,
+      "totalTradedVolume": 848,
+      "totalTradedValue": 847991,
       "lastUpdateTime": "27-May-2025 16:00:00",
       "yearHigh": 1030,
       "yearLow": 990,
@@ -1599,7 +1579,7 @@
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
       "perChange30d": 0,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "FINIETF",
@@ -1618,28 +1598,8 @@
       "perChange365d": 24.567327986492188,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 5.92,
-      "timestamp": "2025-05-27T16:25:33.525Z"
-    },
-    {
-      "symbol": "EGOLD",
-      "open": 96.9,
-      "dayHigh": 97.15,
-      "dayLow": 95.95,
-      "lastPrice": 96.45,
-      "previousClose": 96.45,
-      "change": 0,
-      "pChange": 0,
-      "totalTradedVolume": 4776,
-      "totalTradedValue": 460788,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 101.45,
-      "yearLow": 69.7,
-      "perChange365d": 30.514208389715822,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.36,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 5.71,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "LIQUIDBEES",
@@ -1659,47 +1619,47 @@
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
       "perChange30d": 0,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
-      "symbol": "ABGSEC",
-      "open": 110.73,
-      "dayHigh": 111.1,
-      "dayLow": 110.51,
-      "lastPrice": 110.73,
-      "previousClose": 110.73,
+      "symbol": "LIQUID",
+      "open": 999.99,
+      "dayHigh": 1000,
+      "dayLow": 999.99,
+      "lastPrice": 999.99,
+      "previousClose": 999.99,
       "change": 0,
       "pChange": 0,
-      "totalTradedVolume": 1290,
-      "totalTradedValue": 142906,
+      "totalTradedVolume": 66638,
+      "totalTradedValue": 66637333,
       "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 120,
-      "yearLow": 99.66,
-      "perChange365d": null,
-      "date365dAgo": "-",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.06,
-      "timestamp": "2025-05-27T16:25:33.525Z"
-    },
-    {
-      "symbol": "LICNETFSEN",
-      "open": 912.99,
-      "dayHigh": 912.99,
-      "dayLow": 908,
-      "lastPrice": 912.99,
-      "previousClose": 912.99,
-      "change": 0,
-      "pChange": 0,
-      "totalTradedVolume": 22,
-      "totalTradedValue": 19995,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 989,
-      "yearLow": 780,
-      "perChange365d": 9.898165535172616,
+      "yearHigh": 1030,
+      "yearLow": 990,
+      "perChange365d": 0,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.98,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 0,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "EGOLD",
+      "open": 96.9,
+      "dayHigh": 97.15,
+      "dayLow": 95.95,
+      "lastPrice": 96.45,
+      "previousClose": 96.45,
+      "change": 0,
+      "pChange": 0,
+      "totalTradedVolume": 4776,
+      "totalTradedValue": 460788,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 101.45,
+      "yearLow": 69.7,
+      "perChange365d": 30.514208389715822,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": -0.57,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "LIQUIDIETF",
@@ -1719,7 +1679,47 @@
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
       "perChange30d": 0,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "LICNETFSEN",
+      "open": 912.99,
+      "dayHigh": 912.99,
+      "dayLow": 908,
+      "lastPrice": 912.99,
+      "previousClose": 912.99,
+      "change": 0,
+      "pChange": 0,
+      "totalTradedVolume": 22,
+      "totalTradedValue": 19995,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 989,
+      "yearLow": 780,
+      "perChange365d": 9.898165535172616,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 3.98,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "ABGSEC",
+      "open": 110.73,
+      "dayHigh": 111.1,
+      "dayLow": 110.51,
+      "lastPrice": 110.73,
+      "previousClose": 110.73,
+      "change": 0,
+      "pChange": 0,
+      "totalTradedVolume": 1290,
+      "totalTradedValue": 142906,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 120,
+      "yearLow": 99.66,
+      "perChange365d": null,
+      "date365dAgo": "-",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 1.07,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "UTINEXT50",
@@ -1738,28 +1738,8 @@
       "perChange365d": -2.1537622682660826,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.47,
-      "timestamp": "2025-05-27T16:25:33.525Z"
-    },
-    {
-      "symbol": "SETFNN50",
-      "open": 713.31,
-      "dayHigh": 713.98,
-      "dayLow": 708.52,
-      "lastPrice": 713.21,
-      "previousClose": 713.32,
-      "change": -0.11,
-      "pChange": -0.02,
-      "totalTradedVolume": 19476,
-      "totalTradedValue": 13866717,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 825.6,
-      "yearLow": 585.51,
-      "perChange365d": -1.9265146723137414,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.59,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 4.18,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "GSEC10ABSL",
@@ -1778,8 +1758,28 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "21-Apr-2025",
-      "perChange30d": 1.37,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 1.35,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "SETFNN50",
+      "open": 713.31,
+      "dayHigh": 713.98,
+      "dayLow": 708.52,
+      "lastPrice": 713.21,
+      "previousClose": 713.32,
+      "change": -0.11,
+      "pChange": -0.02,
+      "totalTradedVolume": 19476,
+      "totalTradedValue": 13866717,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 825.6,
+      "yearLow": 585.51,
+      "perChange365d": -1.9265146723137414,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 4.52,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "CONSUMIETF",
@@ -1798,8 +1798,8 @@
       "perChange365d": 8.94361039912121,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.23,
-      "timestamp": "2025-05-27T16:25:33.525Z"
+      "perChange30d": 2.62,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "MOREALTY",
@@ -1818,48 +1818,8 @@
       "perChange365d": -8.699021602247413,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 9.7,
-      "timestamp": "2025-05-27T16:25:33.525Z"
-    },
-    {
-      "symbol": "PSUBANK",
-      "open": 670.81,
-      "dayHigh": 674.75,
-      "dayLow": 667.11,
-      "lastPrice": 670.5,
-      "previousClose": 670.81,
-      "change": -0.31,
-      "pChange": -0.05,
-      "totalTradedVolume": 10183,
-      "totalTradedValue": 6843688,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 870,
-      "yearLow": 552,
-      "perChange365d": -9.911725583457613,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.36,
-      "timestamp": "2025-05-27T16:25:33.525Z"
-    },
-    {
-      "symbol": "SETF10GILT",
-      "open": 259.74,
-      "dayHigh": 259.74,
-      "dayLow": 258.21,
-      "lastPrice": 258.82,
-      "previousClose": 258.95,
-      "change": -0.13,
-      "pChange": -0.05,
-      "totalTradedVolume": 4533,
-      "totalTradedValue": 1172687,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 267,
-      "yearLow": 225.7,
-      "perChange365d": 11.975426148654499,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.23,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 9.82,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "NIF5GETF",
@@ -1878,8 +1838,28 @@
       "perChange365d": 12.269058295964133,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.71,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 1.66,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "SETF10GILT",
+      "open": 259.74,
+      "dayHigh": 259.74,
+      "dayLow": 258.21,
+      "lastPrice": 258.82,
+      "previousClose": 258.95,
+      "change": -0.13,
+      "pChange": -0.05,
+      "totalTradedVolume": 4533,
+      "totalTradedValue": 1172687,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 267,
+      "yearLow": 225.7,
+      "perChange365d": 11.975426148654499,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 1.17,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "EBBETF0431",
@@ -1898,8 +1878,28 @@
       "perChange365d": 11.429319971836051,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.43,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 1.38,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "PSUBANK",
+      "open": 670.81,
+      "dayHigh": 674.75,
+      "dayLow": 667.11,
+      "lastPrice": 670.5,
+      "previousClose": 670.81,
+      "change": -0.31,
+      "pChange": -0.05,
+      "totalTradedVolume": 10183,
+      "totalTradedValue": 6843688,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 870,
+      "yearLow": 552,
+      "perChange365d": -9.911725583457613,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 3.64,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "IVZINGOLD",
@@ -1918,8 +1918,8 @@
       "perChange365d": 30.90298747441157,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.65,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": -0.61,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "MNC",
@@ -1938,28 +1938,8 @@
       "perChange365d": -3.0446549391068967,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.98,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "AXISHCETF",
-      "open": 142.44,
-      "dayHigh": 142.69,
-      "dayLow": 141.42,
-      "lastPrice": 142.31,
-      "previousClose": 142.44,
-      "change": -0.13,
-      "pChange": -0.09,
-      "totalTradedVolume": 2818,
-      "totalTradedValue": 400578,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 159.99,
-      "yearLow": 116,
-      "perChange365d": 16.666666666666664,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.84,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 4.94,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "NIFTYQLITY",
@@ -1978,8 +1958,28 @@
       "perChange365d": 6.1599602583209245,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 5.53,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 5.28,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "AXISHCETF",
+      "open": 142.44,
+      "dayHigh": 142.69,
+      "dayLow": 141.42,
+      "lastPrice": 142.31,
+      "previousClose": 142.44,
+      "change": -0.13,
+      "pChange": -0.09,
+      "totalTradedVolume": 2818,
+      "totalTradedValue": 400578,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 159.99,
+      "yearLow": 116,
+      "perChange365d": 16.666666666666664,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 1.79,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "AONETOTAL",
@@ -1998,68 +1998,8 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.81,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "ABSLPSE",
-      "open": 10.2,
-      "dayHigh": 10.31,
-      "dayLow": 10.1,
-      "lastPrice": 10.16,
-      "previousClose": 10.17,
-      "change": -0.01,
-      "pChange": -0.1,
-      "totalTradedVolume": 112889,
-      "totalTradedValue": 1144694,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 11.82,
-      "yearLow": 8,
-      "perChange365d": -6.788990825688076,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 5.28,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "NEXT50IETF",
-      "open": 68.25,
-      "dayHigh": 70.6,
-      "dayLow": 68.25,
-      "lastPrice": 70.29,
-      "previousClose": 70.36,
-      "change": -0.07,
-      "pChange": -0.1,
-      "totalTradedVolume": 1563083,
-      "totalTradedValue": 109587749,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 81.64,
-      "yearLow": 58.7,
-      "perChange365d": -2.4562864279766803,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.75,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "MONQ50",
-      "open": 73.73,
-      "dayHigh": 73.97,
-      "dayLow": 73.2,
-      "lastPrice": 73.3,
-      "previousClose": 73.37,
-      "change": -0.07,
-      "pChange": -0.1,
-      "totalTradedVolume": 50150,
-      "totalTradedValue": 3680508,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 93.32,
-      "yearLow": 57.51,
-      "perChange365d": 16.164817749603795,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.7,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 4.54,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "BSE500IETF",
@@ -2078,28 +2018,68 @@
       "perChange365d": 6.248272048659104,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.59,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 4.79,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
-      "symbol": "MAHKTECH",
-      "open": 22.77,
-      "dayHigh": 22.87,
-      "dayLow": 22.35,
-      "lastPrice": 22.85,
-      "previousClose": 22.88,
-      "change": -0.03,
-      "pChange": -0.13,
-      "totalTradedVolume": 987390,
-      "totalTradedValue": 22403879,
+      "symbol": "MONQ50",
+      "open": 73.73,
+      "dayHigh": 73.97,
+      "dayLow": 73.2,
+      "lastPrice": 73.3,
+      "previousClose": 73.37,
+      "change": -0.07,
+      "pChange": -0.1,
+      "totalTradedVolume": 50150,
+      "totalTradedValue": 3680508,
       "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 26.74,
-      "yearLow": 12.9,
-      "perChange365d": 64.27030913012223,
+      "yearHigh": 93.32,
+      "yearLow": 57.51,
+      "perChange365d": 16.164817749603795,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.06,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 3.6,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "NEXT50IETF",
+      "open": 68.25,
+      "dayHigh": 70.6,
+      "dayLow": 68.25,
+      "lastPrice": 70.29,
+      "previousClose": 70.36,
+      "change": -0.07,
+      "pChange": -0.1,
+      "totalTradedVolume": 1563083,
+      "totalTradedValue": 109587749,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 81.64,
+      "yearLow": 58.7,
+      "perChange365d": -2.4562864279766803,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 4.6,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "ABSLPSE",
+      "open": 10.2,
+      "dayHigh": 10.31,
+      "dayLow": 10.1,
+      "lastPrice": 10.16,
+      "previousClose": 10.17,
+      "change": -0.01,
+      "pChange": -0.1,
+      "totalTradedVolume": 112889,
+      "totalTradedValue": 1144694,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 11.82,
+      "yearLow": 8,
+      "perChange365d": -6.788990825688076,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 5.07,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "LICMFGOLD",
@@ -2118,8 +2098,28 @@
       "perChange365d": 31.27214365745086,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.48,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": -0.74,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "MAHKTECH",
+      "open": 22.77,
+      "dayHigh": 22.87,
+      "dayLow": 22.35,
+      "lastPrice": 22.85,
+      "previousClose": 22.88,
+      "change": -0.03,
+      "pChange": -0.13,
+      "totalTradedVolume": 987390,
+      "totalTradedValue": 22403879,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 26.74,
+      "yearLow": 12.9,
+      "perChange365d": 64.27030913012223,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 2.61,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "SMALLCAP",
@@ -2138,8 +2138,8 @@
       "perChange365d": -4.6364594309799845,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 7.04,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 6.95,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "ECAPINSURE",
@@ -2158,48 +2158,8 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 7.84,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "EQUAL200",
-      "open": 12.94,
-      "dayHigh": 12.94,
-      "dayLow": 12.77,
-      "lastPrice": 12.86,
-      "previousClose": 12.88,
-      "change": -0.02,
-      "pChange": -0.16,
-      "totalTradedVolume": 10358,
-      "totalTradedValue": 133100,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 13.75,
-      "yearLow": 11.03,
-      "perChange365d": null,
-      "date365dAgo": "-",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 5.31,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "GOLD360",
-      "open": 94.8,
-      "dayHigh": 94.95,
-      "dayLow": 94,
-      "lastPrice": 94.45,
-      "previousClose": 94.6,
-      "change": -0.15,
-      "pChange": -0.16,
-      "totalTradedVolume": 173,
-      "totalTradedValue": 16343,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 105.25,
-      "yearLow": 86.3,
-      "perChange365d": null,
-      "date365dAgo": "-",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.42,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 7.06,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "EBBETF0433",
@@ -2219,7 +2179,47 @@
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
       "perChange30d": 1.63,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "EQUAL200",
+      "open": 12.94,
+      "dayHigh": 12.94,
+      "dayLow": 12.77,
+      "lastPrice": 12.86,
+      "previousClose": 12.88,
+      "change": -0.02,
+      "pChange": -0.16,
+      "totalTradedVolume": 10358,
+      "totalTradedValue": 133100,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 13.75,
+      "yearLow": 11.03,
+      "perChange365d": null,
+      "date365dAgo": "-",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 5.07,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "GOLD360",
+      "open": 94.8,
+      "dayHigh": 94.95,
+      "dayLow": 94,
+      "lastPrice": 94.45,
+      "previousClose": 94.6,
+      "change": -0.15,
+      "pChange": -0.16,
+      "totalTradedVolume": 173,
+      "totalTradedValue": 16343,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 105.25,
+      "yearLow": 86.3,
+      "perChange365d": null,
+      "date365dAgo": "-",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": -0.58,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "MIDSMALL",
@@ -2238,8 +2238,8 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 7.51,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 7.36,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "QGOLDHALF",
@@ -2258,8 +2258,8 @@
       "perChange365d": 30.492019088365957,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.5,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": -0.71,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "GROWWMOM50",
@@ -2279,27 +2279,7 @@
       "date365dAgo": "-",
       "date30dAgo": "-",
       "perChange30d": null,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "BANKBETF",
-      "open": 56.2,
-      "dayHigh": 56.2,
-      "dayLow": 55.5,
-      "lastPrice": 55.82,
-      "previousClose": 55.93,
-      "change": -0.11,
-      "pChange": -0.2,
-      "totalTradedVolume": 255180,
-      "totalTradedValue": 14233940,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 65,
-      "yearLow": 41.51,
-      "perChange365d": 12.995951417004054,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.52,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "EVINDIA",
@@ -2318,68 +2298,28 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 9.38,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 9.01,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
-      "symbol": "IVZINNIFTY",
-      "open": 2800.91,
-      "dayHigh": 2841.21,
-      "dayLow": 2800.91,
-      "lastPrice": 2808.71,
-      "previousClose": 2814.6,
-      "change": -5.89,
-      "pChange": -0.21,
-      "totalTradedVolume": 62,
-      "totalTradedValue": 174169,
+      "symbol": "BANKBETF",
+      "open": 56.2,
+      "dayHigh": 56.2,
+      "dayLow": 55.5,
+      "lastPrice": 55.82,
+      "previousClose": 55.93,
+      "change": -0.11,
+      "pChange": -0.2,
+      "totalTradedVolume": 255180,
+      "totalTradedValue": 14233940,
       "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 3100,
-      "yearLow": 2450,
-      "perChange365d": 10.051407032419352,
+      "yearHigh": 65,
+      "yearLow": 41.51,
+      "perChange365d": 12.995951417004054,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.39,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "ABSLBANETF",
-      "open": 56.85,
-      "dayHigh": 56.85,
-      "dayLow": 55.85,
-      "lastPrice": 56.25,
-      "previousClose": 56.37,
-      "change": -0.12,
-      "pChange": -0.21,
-      "totalTradedVolume": 39406,
-      "totalTradedValue": 2225650,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 57.52,
-      "yearLow": 46.33,
-      "perChange365d": 12.74804570054119,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.66,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "TATSILV",
-      "open": 9.67,
-      "dayHigh": 9.68,
-      "dayLow": 9.52,
-      "lastPrice": 9.55,
-      "previousClose": 9.57,
-      "change": -0.02,
-      "pChange": -0.21,
-      "totalTradedVolume": 3079727,
-      "totalTradedValue": 29534581,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 9.98,
-      "yearLow": 7,
-      "perChange365d": 6.229143492769749,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.1,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 1.38,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "TATAGOLD",
@@ -2398,8 +2338,68 @@
       "perChange365d": 30.586592178770942,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.32,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": -0.64,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "TATSILV",
+      "open": 9.67,
+      "dayHigh": 9.68,
+      "dayLow": 9.52,
+      "lastPrice": 9.55,
+      "previousClose": 9.57,
+      "change": -0.02,
+      "pChange": -0.21,
+      "totalTradedVolume": 3079727,
+      "totalTradedValue": 29534581,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 9.98,
+      "yearLow": 7,
+      "perChange365d": 6.229143492769749,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": -0.42,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "ABSLBANETF",
+      "open": 56.85,
+      "dayHigh": 56.85,
+      "dayLow": 55.85,
+      "lastPrice": 56.25,
+      "previousClose": 56.37,
+      "change": -0.12,
+      "pChange": -0.21,
+      "totalTradedVolume": 39406,
+      "totalTradedValue": 2225650,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 57.52,
+      "yearLow": 46.33,
+      "perChange365d": 12.74804570054119,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 1.33,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "IVZINNIFTY",
+      "open": 2800.91,
+      "dayHigh": 2841.21,
+      "dayLow": 2800.91,
+      "lastPrice": 2808.71,
+      "previousClose": 2814.6,
+      "change": -5.89,
+      "pChange": -0.21,
+      "totalTradedVolume": 62,
+      "totalTradedValue": 174169,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 3100,
+      "yearLow": 2450,
+      "perChange365d": 10.051407032419352,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 3.18,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "PVTBANKADD",
@@ -2418,8 +2418,8 @@
       "perChange365d": 12.829882257409663,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.87,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 1.54,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "UTISENSETF",
@@ -2438,128 +2438,8 @@
       "perChange365d": 9.766326405116217,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.82,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "MAKEINDIA",
-      "open": 148.82,
-      "dayHigh": 148.82,
-      "dayLow": 142.98,
-      "lastPrice": 144.15,
-      "previousClose": 144.49,
-      "change": -0.34,
-      "pChange": -0.24,
-      "totalTradedVolume": 781556,
-      "totalTradedValue": 112145470,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 161.1,
-      "yearLow": 119.5,
-      "perChange365d": 2.161587526576904,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 7.96,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "MOQUALITY",
-      "open": 194.3,
-      "dayHigh": 194.3,
-      "dayLow": 192,
-      "lastPrice": 192.87,
-      "previousClose": 193.33,
-      "change": -0.46,
-      "pChange": -0.24,
-      "totalTradedVolume": 3084,
-      "totalTradedValue": 595181,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 222.7,
-      "yearLow": 162.15,
-      "perChange365d": -0.995842102561469,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 7.13,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "NEXT30ADD",
-      "open": 38.08,
-      "dayHigh": 38.28,
-      "dayLow": 37.83,
-      "lastPrice": 38.14,
-      "previousClose": 38.23,
-      "change": -0.09,
-      "pChange": -0.24,
-      "totalTradedVolume": 5085,
-      "totalTradedValue": 193636,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 39.4,
-      "yearLow": 32.27,
-      "perChange365d": null,
-      "date365dAgo": "-",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.77,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "BBETF0432",
-      "open": 1283.07,
-      "dayHigh": 1287.15,
-      "dayLow": 1282.07,
-      "lastPrice": 1282.13,
-      "previousClose": 1285.27,
-      "change": -3.14,
-      "pChange": -0.24,
-      "totalTradedVolume": 6256,
-      "totalTradedValue": 8022944,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 1287.15,
-      "yearLow": 1135.66,
-      "perChange365d": 11.866018688979434,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.58,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "DIVOPPBEES",
-      "open": 79.53,
-      "dayHigh": 79.53,
-      "dayLow": 77.82,
-      "lastPrice": 78.34,
-      "previousClose": 78.53,
-      "change": -0.19,
-      "pChange": -0.24,
-      "totalTradedVolume": 117420,
-      "totalTradedValue": 9170502,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 99,
-      "yearLow": 68.3,
-      "perChange365d": 0.8886027044430105,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.49,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "EQUAL50ADD",
-      "open": 322.4,
-      "dayHigh": 322.66,
-      "dayLow": 320,
-      "lastPrice": 321.63,
-      "previousClose": 322.4,
-      "change": -0.77,
-      "pChange": -0.24,
-      "totalTradedVolume": 5600,
-      "totalTradedValue": 1798384,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 351.28,
-      "yearLow": 280.01,
-      "perChange365d": 8.031035872631993,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.08,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 3.43,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "EQUAL50",
@@ -2579,7 +2459,127 @@
       "date365dAgo": "-",
       "date30dAgo": "-",
       "perChange30d": null,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "MAKEINDIA",
+      "open": 148.82,
+      "dayHigh": 148.82,
+      "dayLow": 142.98,
+      "lastPrice": 144.15,
+      "previousClose": 144.49,
+      "change": -0.34,
+      "pChange": -0.24,
+      "totalTradedVolume": 781556,
+      "totalTradedValue": 112145470,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 161.1,
+      "yearLow": 119.5,
+      "perChange365d": 2.161587526576904,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 7.19,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "DIVOPPBEES",
+      "open": 79.53,
+      "dayHigh": 79.53,
+      "dayLow": 77.82,
+      "lastPrice": 78.34,
+      "previousClose": 78.53,
+      "change": -0.19,
+      "pChange": -0.24,
+      "totalTradedVolume": 117420,
+      "totalTradedValue": 9170502,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 99,
+      "yearLow": 68.3,
+      "perChange365d": 0.8886027044430105,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 2.91,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "MOQUALITY",
+      "open": 194.3,
+      "dayHigh": 194.3,
+      "dayLow": 192,
+      "lastPrice": 192.87,
+      "previousClose": 193.33,
+      "change": -0.46,
+      "pChange": -0.24,
+      "totalTradedVolume": 3084,
+      "totalTradedValue": 595181,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 222.7,
+      "yearLow": 162.15,
+      "perChange365d": -0.995842102561469,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 7.13,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "EQUAL50ADD",
+      "open": 322.4,
+      "dayHigh": 322.66,
+      "dayLow": 320,
+      "lastPrice": 321.63,
+      "previousClose": 322.4,
+      "change": -0.77,
+      "pChange": -0.24,
+      "totalTradedVolume": 5600,
+      "totalTradedValue": 1798384,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 351.28,
+      "yearLow": 280.01,
+      "perChange365d": 8.031035872631993,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 3.56,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "BBETF0432",
+      "open": 1283.07,
+      "dayHigh": 1287.15,
+      "dayLow": 1282.07,
+      "lastPrice": 1282.13,
+      "previousClose": 1285.27,
+      "change": -3.14,
+      "pChange": -0.24,
+      "totalTradedVolume": 6256,
+      "totalTradedValue": 8022944,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 1287.15,
+      "yearLow": 1135.66,
+      "perChange365d": 11.866018688979434,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 1.33,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "NEXT30ADD",
+      "open": 38.08,
+      "dayHigh": 38.28,
+      "dayLow": 37.83,
+      "lastPrice": 38.14,
+      "previousClose": 38.23,
+      "change": -0.09,
+      "pChange": -0.24,
+      "totalTradedVolume": 5085,
+      "totalTradedValue": 193636,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 39.4,
+      "yearLow": 32.27,
+      "perChange365d": null,
+      "date365dAgo": "-",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 4.14,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "INFRAIETF",
@@ -2598,8 +2598,8 @@
       "perChange365d": 2.0814880425155113,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 5.33,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 4.83,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "UNIONGOLD",
@@ -2618,8 +2618,8 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.47,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": -0.74,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "AXISILVER",
@@ -2638,48 +2638,8 @@
       "perChange365d": 6.314643440391956,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.38,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "CPSEETF",
-      "open": 93.39,
-      "dayHigh": 93.39,
-      "dayLow": 92.05,
-      "lastPrice": 92.51,
-      "previousClose": 92.76,
-      "change": -0.25,
-      "pChange": -0.27,
-      "totalTradedVolume": 793519,
-      "totalTradedValue": 73352896,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 106.6,
-      "yearLow": 74.9,
-      "perChange365d": -0.8998393144081299,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 5.15,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "MOLOWVOL",
-      "open": 37.46,
-      "dayHigh": 37.55,
-      "dayLow": 37.12,
-      "lastPrice": 37.36,
-      "previousClose": 37.46,
-      "change": -0.1,
-      "pChange": -0.27,
-      "totalTradedVolume": 45614,
-      "totalTradedValue": 1698665,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 41.85,
-      "yearLow": 33.05,
-      "perChange365d": 4.124860646599768,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.34,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": -0.93,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "IDFNIFTYET",
@@ -2698,8 +2658,48 @@
       "perChange365d": 10.04063388866315,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.06,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 3.77,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "CPSEETF",
+      "open": 93.39,
+      "dayHigh": 93.39,
+      "dayLow": 92.05,
+      "lastPrice": 92.51,
+      "previousClose": 92.76,
+      "change": -0.25,
+      "pChange": -0.27,
+      "totalTradedVolume": 793519,
+      "totalTradedValue": 73352896,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 106.6,
+      "yearLow": 74.9,
+      "perChange365d": -0.8998393144081299,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 4.79,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "MOLOWVOL",
+      "open": 37.46,
+      "dayHigh": 37.55,
+      "dayLow": 37.12,
+      "lastPrice": 37.36,
+      "previousClose": 37.46,
+      "change": -0.1,
+      "pChange": -0.27,
+      "totalTradedVolume": 45614,
+      "totalTradedValue": 1698665,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 41.85,
+      "yearLow": 33.05,
+      "perChange365d": 4.124860646599768,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 3.09,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "BANKETFADD",
@@ -2718,28 +2718,8 @@
       "perChange365d": 12.830793905372891,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.71,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "GOLDBEES",
-      "open": 80.52,
-      "dayHigh": 80.52,
-      "dayLow": 77.38,
-      "lastPrice": 79.54,
-      "previousClose": 79.77,
-      "change": -0.23,
-      "pChange": -0.29,
-      "totalTradedVolume": 10765565,
-      "totalTradedValue": 859307398,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 83.56,
-      "yearLow": 57.85,
-      "perChange365d": 30.393442622950833,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.32,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 1.39,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "GOLDETF",
@@ -2758,8 +2738,8 @@
       "perChange365d": 30.557496157607947,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.27,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": -0.56,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "SBIETFPB",
@@ -2778,8 +2758,28 @@
       "perChange365d": 12.72631749110896,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.73,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 1.63,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "GOLDBEES",
+      "open": 80.52,
+      "dayHigh": 80.52,
+      "dayLow": 77.38,
+      "lastPrice": 79.54,
+      "previousClose": 79.77,
+      "change": -0.23,
+      "pChange": -0.29,
+      "totalTradedVolume": 10765565,
+      "totalTradedValue": 859307398,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 83.56,
+      "yearLow": 57.85,
+      "perChange365d": 30.393442622950833,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": -0.59,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "ALPHAETF",
@@ -2798,28 +2798,8 @@
       "perChange365d": -8.465608465608472,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 5.24,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "SILVERCASE",
-      "open": 10.15,
-      "dayHigh": 10.18,
-      "dayLow": 9.99,
-      "lastPrice": 10,
-      "previousClose": 10.03,
-      "change": -0.03,
-      "pChange": -0.3,
-      "totalTradedVolume": 229540,
-      "totalTradedValue": 2299990,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 10.99,
-      "yearLow": 9,
-      "perChange365d": null,
-      "date365dAgo": "-",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.2,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 5.03,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "MOVALUE",
@@ -2838,8 +2818,28 @@
       "perChange365d": -1.6710132328793625,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.59,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 4.41,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "SILVERCASE",
+      "open": 10.15,
+      "dayHigh": 10.18,
+      "dayLow": 9.99,
+      "lastPrice": 10,
+      "previousClose": 10.03,
+      "change": -0.03,
+      "pChange": -0.3,
+      "totalTradedVolume": 229540,
+      "totalTradedValue": 2299990,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 10.99,
+      "yearLow": 9,
+      "perChange365d": null,
+      "date365dAgo": "-",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": -0.6,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "HDFCNIFBAN",
@@ -2858,8 +2858,48 @@
       "perChange365d": 12.867132867132877,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.8,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 1.37,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "BSLNIFTY",
+      "open": 28.83,
+      "dayHigh": 28.89,
+      "dayLow": 28.45,
+      "lastPrice": 28.66,
+      "previousClose": 28.75,
+      "change": -0.09,
+      "pChange": -0.31,
+      "totalTradedVolume": 318161,
+      "totalTradedValue": 9099404,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 30.45,
+      "yearLow": 20.37,
+      "perChange365d": 9.598470363288726,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 3.36,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "MOMENTUM50",
+      "open": 52.49,
+      "dayHigh": 52.5,
+      "dayLow": 51.76,
+      "lastPrice": 52,
+      "previousClose": 52.16,
+      "change": -0.16,
+      "pChange": -0.31,
+      "totalTradedVolume": 592198,
+      "totalTradedValue": 30806139,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 66,
+      "yearLow": 42.4,
+      "perChange365d": null,
+      "date365dAgo": "-",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 5.75,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "MONEXT50",
@@ -2879,87 +2919,7 @@
       "date365dAgo": "-",
       "date30dAgo": "-",
       "perChange30d": null,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "MOMENTUM50",
-      "open": 52.49,
-      "dayHigh": 52.5,
-      "dayLow": 51.76,
-      "lastPrice": 52,
-      "previousClose": 52.16,
-      "change": -0.16,
-      "pChange": -0.31,
-      "totalTradedVolume": 592198,
-      "totalTradedValue": 30806139,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 66,
-      "yearLow": 42.4,
-      "perChange365d": null,
-      "date365dAgo": "-",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 6.34,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "BSLNIFTY",
-      "open": 28.83,
-      "dayHigh": 28.89,
-      "dayLow": 28.45,
-      "lastPrice": 28.66,
-      "previousClose": 28.75,
-      "change": -0.09,
-      "pChange": -0.31,
-      "totalTradedVolume": 318161,
-      "totalTradedValue": 9099404,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 30.45,
-      "yearLow": 20.37,
-      "perChange365d": 9.598470363288726,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.98,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "GSEC10IETF",
-      "open": 257.88,
-      "dayHigh": 259.11,
-      "dayLow": 256.58,
-      "lastPrice": 257.06,
-      "previousClose": 257.89,
-      "change": -0.83,
-      "pChange": -0.32,
-      "totalTradedVolume": 1713,
-      "totalTradedValue": 440720,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 260,
-      "yearLow": 228.8,
-      "perChange365d": 11.281385281385282,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.49,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "BBNPPGOLD",
-      "open": 93.75,
-      "dayHigh": 93.85,
-      "dayLow": 93,
-      "lastPrice": 93,
-      "previousClose": 93.3,
-      "change": -0.3,
-      "pChange": -0.32,
-      "totalTradedVolume": 1249,
-      "totalTradedValue": 116706,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 98.2,
-      "yearLow": 67.1,
-      "perChange365d": 30.16095171448565,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.59,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "BANKBEES",
@@ -2978,8 +2938,8 @@
       "perChange365d": 12.753369994639787,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.83,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 1.55,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "BANKIETF",
@@ -2998,8 +2958,48 @@
       "perChange365d": 12.757861005407566,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.8,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 1.51,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "BBNPPGOLD",
+      "open": 93.75,
+      "dayHigh": 93.85,
+      "dayLow": 93,
+      "lastPrice": 93,
+      "previousClose": 93.3,
+      "change": -0.3,
+      "pChange": -0.32,
+      "totalTradedVolume": 1249,
+      "totalTradedValue": 116706,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 98.2,
+      "yearLow": 67.1,
+      "perChange365d": 30.16095171448565,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": -0.43,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "GSEC10IETF",
+      "open": 257.88,
+      "dayHigh": 259.11,
+      "dayLow": 256.58,
+      "lastPrice": 257.06,
+      "previousClose": 257.89,
+      "change": -0.83,
+      "pChange": -0.32,
+      "totalTradedVolume": 1713,
+      "totalTradedValue": 440720,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 260,
+      "yearLow": 228.8,
+      "perChange365d": 11.281385281385282,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 1.16,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "SILVER360",
@@ -3018,48 +3018,8 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": -1.88,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "MID150",
-      "open": 21.35,
-      "dayHigh": 21.35,
-      "dayLow": 20.83,
-      "lastPrice": 21.17,
-      "previousClose": 21.24,
-      "change": -0.07,
-      "pChange": -0.33,
-      "totalTradedVolume": 20420,
-      "totalTradedValue": 433516,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 22.95,
-      "yearLow": 17.98,
-      "perChange365d": null,
-      "date365dAgo": "-",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 6.41,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "HEALTHADD",
-      "open": 141.49,
-      "dayHigh": 141.49,
-      "dayLow": 140.33,
-      "lastPrice": 140.33,
-      "previousClose": 140.79,
-      "change": -0.46,
-      "pChange": -0.33,
-      "totalTradedVolume": 211,
-      "totalTradedValue": 29683,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 151.58,
-      "yearLow": 115,
-      "perChange365d": 16.1768358307807,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.45,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": -2.48,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "HDFCNIFTY",
@@ -3078,8 +3038,48 @@
       "perChange365d": 9.54556288233891,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.2,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 3.65,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "HEALTHADD",
+      "open": 141.49,
+      "dayHigh": 141.49,
+      "dayLow": 140.33,
+      "lastPrice": 140.33,
+      "previousClose": 140.79,
+      "change": -0.46,
+      "pChange": -0.33,
+      "totalTradedVolume": 211,
+      "totalTradedValue": 29683,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 151.58,
+      "yearLow": 115,
+      "perChange365d": 16.1768358307807,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 1.29,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "MID150",
+      "open": 21.35,
+      "dayHigh": 21.35,
+      "dayLow": 20.83,
+      "lastPrice": 21.17,
+      "previousClose": 21.24,
+      "change": -0.07,
+      "pChange": -0.33,
+      "totalTradedVolume": 20420,
+      "totalTradedValue": 433516,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 22.95,
+      "yearLow": 17.98,
+      "perChange365d": null,
+      "date365dAgo": "-",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 6.56,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "OILIETF",
@@ -3098,8 +3098,8 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 6.81,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 6.26,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "MOMOMENTUM",
@@ -3118,48 +3118,8 @@
       "perChange365d": -12.528312570781429,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 5.96,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "GOLDETFADD",
-      "open": 93.52,
-      "dayHigh": 94.15,
-      "dayLow": 91.25,
-      "lastPrice": 93.19,
-      "previousClose": 93.52,
-      "change": -0.33,
-      "pChange": -0.35,
-      "totalTradedVolume": 276050,
-      "totalTradedValue": 25498738,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 97.5,
-      "yearLow": 66.9,
-      "perChange365d": 30.35389564974123,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.23,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "HDFCLOWVOL",
-      "open": 20.27,
-      "dayHigh": 20.35,
-      "dayLow": 19.96,
-      "lastPrice": 20.1,
-      "previousClose": 20.17,
-      "change": -0.07,
-      "pChange": -0.35,
-      "totalTradedVolume": 47181,
-      "totalTradedValue": 951168,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 22.25,
-      "yearLow": 17.22,
-      "perChange365d": 10.016420361247958,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.01,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 5.45,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "SETFNIFBK",
@@ -3178,8 +3138,48 @@
       "perChange365d": 12.590179659865305,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.86,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 1.53,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "HDFCLOWVOL",
+      "open": 20.27,
+      "dayHigh": 20.35,
+      "dayLow": 19.96,
+      "lastPrice": 20.1,
+      "previousClose": 20.17,
+      "change": -0.07,
+      "pChange": -0.35,
+      "totalTradedVolume": 47181,
+      "totalTradedValue": 951168,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 22.25,
+      "yearLow": 17.22,
+      "perChange365d": 10.016420361247958,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 2.71,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "GOLDETFADD",
+      "open": 93.52,
+      "dayHigh": 94.15,
+      "dayLow": 91.25,
+      "lastPrice": 93.19,
+      "previousClose": 93.52,
+      "change": -0.33,
+      "pChange": -0.35,
+      "totalTradedVolume": 276050,
+      "totalTradedValue": 25498738,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 97.5,
+      "yearLow": 66.9,
+      "perChange365d": 30.35389564974123,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": -0.55,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "SETFGOLD",
@@ -3198,8 +3198,8 @@
       "perChange365d": 30.319910870603213,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.42,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": -0.7,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "ITETFADD",
@@ -3218,28 +3218,8 @@
       "perChange365d": 12.398609501738106,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 6.8,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "LOWVOLIETF",
-      "open": 22,
-      "dayHigh": 22,
-      "dayLow": 21.54,
-      "lastPrice": 21.63,
-      "previousClose": 21.71,
-      "change": -0.08,
-      "pChange": -0.37,
-      "totalTradedVolume": 687317,
-      "totalTradedValue": 14859793,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 24.4,
-      "yearLow": 19.03,
-      "perChange365d": 9.463562753036424,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.14,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 5.9,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "BANKETF",
@@ -3258,68 +3238,28 @@
       "perChange365d": 12.973660822493327,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 2.07,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 1.7,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
-      "symbol": "MULTICAP",
-      "open": 15.95,
-      "dayHigh": 15.95,
-      "dayLow": 15.8,
-      "lastPrice": 15.84,
-      "previousClose": 15.9,
-      "change": -0.06,
-      "pChange": -0.38,
-      "totalTradedVolume": 114490,
-      "totalTradedValue": 1814666,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 17.55,
-      "yearLow": 13.43,
-      "perChange365d": null,
-      "date365dAgo": "-",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 5.44,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "AXSENSEX",
-      "open": 83.6,
-      "dayHigh": 83.93,
-      "dayLow": 82.67,
-      "lastPrice": 83.34,
-      "previousClose": 83.66,
-      "change": -0.32,
-      "pChange": -0.38,
-      "totalTradedVolume": 4818,
-      "totalTradedValue": 399942,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 98,
-      "yearLow": 66.4,
-      "perChange365d": 9.012426422498365,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.35,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "QUAL30IETF",
-      "open": 21.27,
-      "dayHigh": 21.27,
-      "dayLow": 20.99,
-      "lastPrice": 21.14,
-      "previousClose": 21.22,
+      "symbol": "LOWVOLIETF",
+      "open": 22,
+      "dayHigh": 22,
+      "dayLow": 21.54,
+      "lastPrice": 21.63,
+      "previousClose": 21.71,
       "change": -0.08,
-      "pChange": -0.38,
-      "totalTradedVolume": 228671,
-      "totalTradedValue": 4824958,
+      "pChange": -0.37,
+      "totalTradedVolume": 687317,
+      "totalTradedValue": 14859793,
       "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 26.5,
-      "yearLow": 18.01,
-      "perChange365d": 5.5944055944055995,
+      "yearHigh": 24.4,
+      "yearLow": 19.03,
+      "perChange365d": 9.463562753036424,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 6.1,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 2.85,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "HDFCQUAL",
@@ -3338,8 +3278,48 @@
       "perChange365d": 3.918382087396162,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 5.19,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 4.77,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "MULTICAP",
+      "open": 15.95,
+      "dayHigh": 15.95,
+      "dayLow": 15.8,
+      "lastPrice": 15.84,
+      "previousClose": 15.9,
+      "change": -0.06,
+      "pChange": -0.38,
+      "totalTradedVolume": 114490,
+      "totalTradedValue": 1814666,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 17.55,
+      "yearLow": 13.43,
+      "perChange365d": null,
+      "date365dAgo": "-",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 5.04,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "QUAL30IETF",
+      "open": 21.27,
+      "dayHigh": 21.27,
+      "dayLow": 20.99,
+      "lastPrice": 21.14,
+      "previousClose": 21.22,
+      "change": -0.08,
+      "pChange": -0.38,
+      "totalTradedVolume": 228671,
+      "totalTradedValue": 4824958,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 26.5,
+      "yearLow": 18.01,
+      "perChange365d": 5.5944055944055995,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 5.4,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "NEXT50",
@@ -3358,8 +3338,28 @@
       "perChange365d": -2.3237270759767696,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 5.11,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 4.78,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "AXSENSEX",
+      "open": 83.6,
+      "dayHigh": 83.93,
+      "dayLow": 82.67,
+      "lastPrice": 83.34,
+      "previousClose": 83.66,
+      "change": -0.32,
+      "pChange": -0.38,
+      "totalTradedVolume": 4818,
+      "totalTradedValue": 399942,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 98,
+      "yearLow": 66.4,
+      "perChange365d": 9.012426422498365,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 3,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "MOM30IETF",
@@ -3378,8 +3378,8 @@
       "perChange365d": -12.605752961082917,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 6.36,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 5.95,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "GOLDCASE",
@@ -3398,8 +3398,8 @@
       "perChange365d": 30.509939498703538,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.26,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": -0.66,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "TNIDETF",
@@ -3418,8 +3418,8 @@
       "perChange365d": 12.490613266583216,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.65,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 3.88,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "AXISGOLD",
@@ -3438,8 +3438,8 @@
       "perChange365d": 30.24580823701775,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.33,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": -0.71,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "NIFTY50ADD",
@@ -3458,48 +3458,8 @@
       "perChange365d": 9.310417992785897,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.98,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "MON100",
-      "open": 179.4,
-      "dayHigh": 179.4,
-      "dayLow": 176.11,
-      "lastPrice": 176.98,
-      "previousClose": 177.73,
-      "change": -0.75,
-      "pChange": -0.42,
-      "totalTradedVolume": 844041,
-      "totalTradedValue": 149302412,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 221.7,
-      "yearLow": 142.11,
-      "perChange365d": 16.911084687541283,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.07,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "ITBEES",
-      "open": 40.8,
-      "dayHigh": 40.82,
-      "dayLow": 40.43,
-      "lastPrice": 40.63,
-      "previousClose": 40.8,
-      "change": -0.17,
-      "pChange": -0.42,
-      "totalTradedVolume": 4714449,
-      "totalTradedValue": 191265195,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 49.76,
-      "yearLow": 33.63,
-      "perChange365d": 12.36172566371683,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 6.42,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 3.26,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "GSEC5IETF",
@@ -3518,8 +3478,8 @@
       "perChange365d": 10.143388210302701,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.2,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 0.97,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "MON50EQUAL",
@@ -3539,7 +3499,47 @@
       "date365dAgo": "-",
       "date30dAgo": "-",
       "perChange30d": null,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "MON100",
+      "open": 179.4,
+      "dayHigh": 179.4,
+      "dayLow": 176.11,
+      "lastPrice": 176.98,
+      "previousClose": 177.73,
+      "change": -0.75,
+      "pChange": -0.42,
+      "totalTradedVolume": 844041,
+      "totalTradedValue": 149302412,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 221.7,
+      "yearLow": 142.11,
+      "perChange365d": 16.911084687541283,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 3.56,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "ITBEES",
+      "open": 40.8,
+      "dayHigh": 40.82,
+      "dayLow": 40.43,
+      "lastPrice": 40.63,
+      "previousClose": 40.8,
+      "change": -0.17,
+      "pChange": -0.42,
+      "totalTradedVolume": 4714449,
+      "totalTradedValue": 191265195,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 49.76,
+      "yearLow": 33.63,
+      "perChange365d": 12.36172566371683,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 5.97,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "PVTBANIETF",
@@ -3558,8 +3558,28 @@
       "perChange365d": 12.909836065573781,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.77,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 1.4,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "METAL",
+      "open": 9.39,
+      "dayHigh": 9.44,
+      "dayLow": 9.27,
+      "lastPrice": 9.3,
+      "previousClose": 9.34,
+      "change": -0.04,
+      "pChange": -0.43,
+      "totalTradedVolume": 332176,
+      "totalTradedValue": 3092558,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 10.84,
+      "yearLow": 7.73,
+      "perChange365d": null,
+      "date365dAgo": "-",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 8.65,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "GROWWSLVR",
@@ -3579,27 +3599,7 @@
       "date365dAgo": "-",
       "date30dAgo": "-",
       "perChange30d": null,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "METAL",
-      "open": 9.39,
-      "dayHigh": 9.44,
-      "dayLow": 9.27,
-      "lastPrice": 9.3,
-      "previousClose": 9.34,
-      "change": -0.04,
-      "pChange": -0.43,
-      "totalTradedVolume": 332176,
-      "totalTradedValue": 3092558,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 10.84,
-      "yearLow": 7.73,
-      "perChange365d": null,
-      "date365dAgo": "-",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 9.24,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "CONSUMBEES",
@@ -3618,8 +3618,8 @@
       "perChange365d": 8.094105656531342,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 2.95,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 2.46,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "HDFCSENSEX",
@@ -3638,8 +3638,8 @@
       "perChange365d": 9.561561561561554,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.6,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 3.04,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "GROWWGOLD",
@@ -3658,28 +3658,8 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.07,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "JUNIORBEES",
-      "open": 742.47,
-      "dayHigh": 742.47,
-      "dayLow": 713.2,
-      "lastPrice": 717.45,
-      "previousClose": 720.84,
-      "change": -3.39,
-      "pChange": -0.47,
-      "totalTradedVolume": 450453,
-      "totalTradedValue": 323443272,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 830,
-      "yearLow": 595,
-      "perChange365d": -2.5455385158722623,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.83,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": -0.47,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "NIFTYIETF",
@@ -3698,8 +3678,28 @@
       "perChange365d": 9.44723220988581,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.13,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 3.62,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "JUNIORBEES",
+      "open": 742.47,
+      "dayHigh": 742.47,
+      "dayLow": 713.2,
+      "lastPrice": 717.45,
+      "previousClose": 720.84,
+      "change": -3.39,
+      "pChange": -0.47,
+      "totalTradedVolume": 450453,
+      "totalTradedValue": 323443272,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 830,
+      "yearLow": 595,
+      "perChange365d": -2.5455385158722623,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 4.36,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "CONS",
@@ -3718,28 +3718,8 @@
       "perChange365d": 8.251618871415358,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 2.66,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "UTINIFTETF",
-      "open": 272.02,
-      "dayHigh": 272.95,
-      "dayLow": 269.3,
-      "lastPrice": 270.7,
-      "previousClose": 272.01,
-      "change": -1.31,
-      "pChange": -0.48,
-      "totalTradedVolume": 32876,
-      "totalTradedValue": 8893615,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 285.31,
-      "yearLow": 235,
-      "perChange365d": 9.426792788422667,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.98,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 2.24,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "LICNETFN50",
@@ -3758,8 +3738,28 @@
       "perChange365d": 9.808170800224737,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.93,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 3.43,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "UTINIFTETF",
+      "open": 272.02,
+      "dayHigh": 272.95,
+      "dayLow": 269.3,
+      "lastPrice": 270.7,
+      "previousClose": 272.01,
+      "change": -1.31,
+      "pChange": -0.48,
+      "totalTradedVolume": 32876,
+      "totalTradedValue": 8893615,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 285.31,
+      "yearLow": 235,
+      "perChange365d": 9.426792788422667,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 3.38,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "NIFTYETF",
@@ -3778,48 +3778,8 @@
       "perChange365d": 9.407507914970589,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.23,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "AXISNIFTY",
-      "open": 280.31,
-      "dayHigh": 280.31,
-      "dayLow": 269.16,
-      "lastPrice": 270.82,
-      "previousClose": 272.15,
-      "change": -1.33,
-      "pChange": -0.49,
-      "totalTradedVolume": 7347,
-      "totalTradedValue": 1989494,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 288.5,
-      "yearLow": 236,
-      "perChange365d": 9.484152652005166,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.07,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "HNGSNGBEES",
-      "open": 395.05,
-      "dayHigh": 396.95,
-      "dayLow": 386.07,
-      "lastPrice": 387,
-      "previousClose": 388.9,
-      "change": -1.9,
-      "pChange": -0.49,
-      "totalTradedVolume": 77458,
-      "totalTradedValue": 30022720,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 448.9,
-      "yearLow": 269.02,
-      "perChange365d": 21.13434330787529,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.82,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 3.63,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "HDFCGOLD",
@@ -3838,8 +3798,48 @@
       "perChange365d": 30.5940436375219,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.16,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": -0.64,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "HNGSNGBEES",
+      "open": 395.05,
+      "dayHigh": 396.95,
+      "dayLow": 386.07,
+      "lastPrice": 387,
+      "previousClose": 388.9,
+      "change": -1.9,
+      "pChange": -0.49,
+      "totalTradedVolume": 77458,
+      "totalTradedValue": 30022720,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 448.9,
+      "yearLow": 269.02,
+      "perChange365d": 21.13434330787529,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 3.26,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "AXISNIFTY",
+      "open": 280.31,
+      "dayHigh": 280.31,
+      "dayLow": 269.16,
+      "lastPrice": 270.82,
+      "previousClose": 272.15,
+      "change": -1.33,
+      "pChange": -0.49,
+      "totalTradedVolume": 7347,
+      "totalTradedValue": 1989494,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 288.5,
+      "yearLow": 236,
+      "perChange365d": 9.484152652005166,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 3.54,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "FMCGIETF",
@@ -3858,8 +3858,8 @@
       "perChange365d": 4.033379694019472,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 0.59,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 0.03,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "SBIETFCON",
@@ -3878,28 +3878,8 @@
       "perChange365d": 8.262945280940139,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.35,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "SILVERETF",
-      "open": 96,
-      "dayHigh": 96.8,
-      "dayLow": 95.04,
-      "lastPrice": 95.1,
-      "previousClose": 95.59,
-      "change": -0.49,
-      "pChange": -0.51,
-      "totalTradedVolume": 131302,
-      "totalTradedValue": 12545906,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 100,
-      "yearLow": 79.5,
-      "perChange365d": 3.673825357026044,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.23,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 2.8,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "ICICIB22",
@@ -3918,28 +3898,28 @@
       "perChange365d": -1.0810810810810836,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.81,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 4.13,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
-      "symbol": "MOMENTUM",
-      "open": 31.43,
-      "dayHigh": 31.43,
-      "dayLow": 30.71,
-      "lastPrice": 30.84,
-      "previousClose": 31,
-      "change": -0.16,
-      "pChange": -0.52,
-      "totalTradedVolume": 68902,
-      "totalTradedValue": 2128382,
+      "symbol": "SILVERETF",
+      "open": 96,
+      "dayHigh": 96.8,
+      "dayLow": 95.04,
+      "lastPrice": 95.1,
+      "previousClose": 95.59,
+      "change": -0.49,
+      "pChange": -0.51,
+      "totalTradedVolume": 131302,
+      "totalTradedValue": 12545906,
       "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 39.57,
-      "yearLow": 25.75,
-      "perChange365d": -12.460970763553782,
+      "yearHigh": 100,
+      "yearLow": 79.5,
+      "perChange365d": 3.673825357026044,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 6.13,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": -0.67,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "LOWVOL",
@@ -3958,8 +3938,8 @@
       "perChange365d": 9.186991869918693,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.4,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 2.86,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "GOLDIETF",
@@ -3978,8 +3958,28 @@
       "perChange365d": 30.33047346679378,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.21,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": -0.7,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "MOMENTUM",
+      "open": 31.43,
+      "dayHigh": 31.43,
+      "dayLow": 30.71,
+      "lastPrice": 30.84,
+      "previousClose": 31,
+      "change": -0.16,
+      "pChange": -0.52,
+      "totalTradedVolume": 68902,
+      "totalTradedValue": 2128382,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 39.57,
+      "yearLow": 25.75,
+      "perChange365d": -12.460970763553782,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 5.65,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "NIFTYBETF",
@@ -3998,8 +3998,8 @@
       "perChange365d": 9.442340342170562,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.95,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 3.34,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "BSLSENETFG",
@@ -4018,8 +4018,8 @@
       "perChange365d": 8.844911147011299,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.86,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 3.31,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "CONSUMER",
@@ -4038,28 +4038,8 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.7,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "VAL30IETF",
-      "open": 12.98,
-      "dayHigh": 13.06,
-      "dayLow": 12.88,
-      "lastPrice": 12.91,
-      "previousClose": 12.98,
-      "change": -0.07,
-      "pChange": -0.54,
-      "totalTradedVolume": 45971,
-      "totalTradedValue": 594864,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 14.14,
-      "yearLow": 10.93,
-      "perChange365d": null,
-      "date365dAgo": "-",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.1,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 4.33,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "METALIETF",
@@ -4078,8 +4058,28 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 8.86,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 8.16,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "VAL30IETF",
+      "open": 12.98,
+      "dayHigh": 13.06,
+      "dayLow": 12.88,
+      "lastPrice": 12.91,
+      "previousClose": 12.98,
+      "change": -0.07,
+      "pChange": -0.54,
+      "totalTradedVolume": 45971,
+      "totalTradedValue": 594864,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 14.14,
+      "yearLow": 10.93,
+      "perChange365d": null,
+      "date365dAgo": "-",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 2.86,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "HDFCMOMENT",
@@ -4098,8 +4098,8 @@
       "perChange365d": -12.471461187214606,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 6.13,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 5.61,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "GOLD1",
@@ -4118,28 +4118,8 @@
       "perChange365d": 30.438324914453318,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.22,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "NIFTYBEES",
-      "open": 279.89,
-      "dayHigh": 280.89,
-      "dayLow": 276.9,
-      "lastPrice": 278.3,
-      "previousClose": 279.89,
-      "change": -1.59,
-      "pChange": -0.57,
-      "totalTradedVolume": 10251014,
-      "totalTradedValue": 2853267236,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 293.99,
-      "yearLow": 231.3,
-      "perChange365d": 9.257223618090457,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.19,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": -0.69,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "SETFNIF50",
@@ -4158,8 +4138,28 @@
       "perChange365d": 9.192061778626583,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.17,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 3.68,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "NIFTYBEES",
+      "open": 279.89,
+      "dayHigh": 280.89,
+      "dayLow": 276.9,
+      "lastPrice": 278.3,
+      "previousClose": 279.89,
+      "change": -1.59,
+      "pChange": -0.57,
+      "totalTradedVolume": 10251014,
+      "totalTradedValue": 2853267236,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 293.99,
+      "yearLow": 231.3,
+      "perChange365d": 9.257223618090457,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 3.58,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "TOP100CASE",
@@ -4178,8 +4178,8 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.24,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 3.85,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "AUTOBEES",
@@ -4198,8 +4198,8 @@
       "perChange365d": -0.5193520464943816,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 8.31,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 7.62,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "UTIBANKETF",
@@ -4218,28 +4218,8 @@
       "perChange365d": 12.46768741300458,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.79,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "TOP10ADD",
-      "open": 98.94,
-      "dayHigh": 98.94,
-      "dayLow": 97.34,
-      "lastPrice": 97.85,
-      "previousClose": 98.45,
-      "change": -0.6,
-      "pChange": -0.61,
-      "totalTradedVolume": 122091,
-      "totalTradedValue": 11939278,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 119.7,
-      "yearLow": 86.5,
-      "perChange365d": null,
-      "date365dAgo": "-",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.63,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 1.5,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "HDFCNIF100",
@@ -4258,8 +4238,28 @@
       "perChange365d": 7.084019769357491,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.14,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 3.58,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "TOP10ADD",
+      "open": 98.94,
+      "dayHigh": 98.94,
+      "dayLow": 97.34,
+      "lastPrice": 97.85,
+      "previousClose": 98.45,
+      "change": -0.6,
+      "pChange": -0.61,
+      "totalTradedVolume": 122091,
+      "totalTradedValue": 11939278,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 119.7,
+      "yearLow": 86.5,
+      "perChange365d": null,
+      "date365dAgo": "-",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 2.97,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "NIFITETF",
@@ -4278,8 +4278,8 @@
       "perChange365d": 12.134772308502223,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 6.4,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 5.81,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "GOLDSHARE",
@@ -4298,8 +4298,8 @@
       "perChange365d": 30.625507717303023,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.12,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": -0.49,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "ALPL30IETF",
@@ -4318,8 +4318,8 @@
       "perChange365d": -2.1466905187835343,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.07,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 2.25,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "SILVER1",
@@ -4338,8 +4338,8 @@
       "perChange365d": 6.066688970670232,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.22,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": -0.72,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "SILVER",
@@ -4358,8 +4358,8 @@
       "perChange365d": 5.691408785977066,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.31,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": -0.86,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "BBNPNBETF",
@@ -4378,8 +4378,8 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.7,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 1.23,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "BANKNIFTY1",
@@ -4398,8 +4398,8 @@
       "perChange365d": 12.45742574257425,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.92,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 1.46,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "LICNFNHGP",
@@ -4418,28 +4418,8 @@
       "perChange365d": 11.36561436822533,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 6.86,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "AUTOIETF",
-      "open": 24.37,
-      "dayHigh": 24.38,
-      "dayLow": 23.97,
-      "lastPrice": 24.09,
-      "previousClose": 24.25,
-      "change": -0.16,
-      "pChange": -0.66,
-      "totalTradedVolume": 326529,
-      "totalTradedValue": 7862818,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 28.36,
-      "yearLow": 19.72,
-      "perChange365d": -0.618811881188113,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 8.16,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 6.57,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "SENSEXETF",
@@ -4458,8 +4438,28 @@
       "perChange365d": 9.19994727823908,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.51,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 2.83,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "AUTOIETF",
+      "open": 24.37,
+      "dayHigh": 24.38,
+      "dayLow": 23.97,
+      "lastPrice": 24.09,
+      "previousClose": 24.25,
+      "change": -0.16,
+      "pChange": -0.66,
+      "totalTradedVolume": 326529,
+      "totalTradedValue": 7862818,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 28.36,
+      "yearLow": 19.72,
+      "perChange365d": -0.618811881188113,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 7.54,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "SHARIABEES",
@@ -4478,28 +4478,8 @@
       "perChange365d": 2.433958459366818,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.64,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "SILVERBEES",
-      "open": 94.53,
-      "dayHigh": 94.79,
-      "dayLow": 93.9,
-      "lastPrice": 93.91,
-      "previousClose": 94.55,
-      "change": -0.64,
-      "pChange": -0.68,
-      "totalTradedVolume": 4643649,
-      "totalTradedValue": 437617481,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 100,
-      "yearLow": 76.7,
-      "perChange365d": 5.552433404518374,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.11,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 1.07,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "AXISBNKETF",
@@ -4518,8 +4498,28 @@
       "perChange365d": 12.148678195189822,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 1.84,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 1.15,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "SILVERBEES",
+      "open": 94.53,
+      "dayHigh": 94.79,
+      "dayLow": 93.9,
+      "lastPrice": 93.91,
+      "previousClose": 94.55,
+      "change": -0.64,
+      "pChange": -0.68,
+      "totalTradedVolume": 4643649,
+      "totalTradedValue": 437617481,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 100,
+      "yearLow": 76.7,
+      "perChange365d": 5.552433404518374,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": -0.63,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "BFSI",
@@ -4538,8 +4538,8 @@
       "perChange365d": 21.097234611953596,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 2.4,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 1.54,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "IT",
@@ -4558,8 +4558,8 @@
       "perChange365d": 12.855549358616843,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 6.65,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 5.76,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "TECH",
@@ -4578,8 +4578,8 @@
       "perChange365d": 12.210288298473714,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 6.76,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 5.98,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "ESILVER",
@@ -4598,8 +4598,8 @@
       "perChange365d": 5.859501456782123,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.15,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": -0.86,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "SILVERADD",
@@ -4618,8 +4618,8 @@
       "perChange365d": 5.745062836624764,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.2,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": -0.53,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "SILVRETF",
@@ -4638,8 +4638,8 @@
       "perChange365d": 5.83342575135855,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.37,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": -0.91,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "SBISILVER",
@@ -4658,48 +4658,8 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.27,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "ITIETF",
-      "open": 40.93,
-      "dayHigh": 40.98,
-      "dayLow": 40.4,
-      "lastPrice": 40.6,
-      "previousClose": 40.9,
-      "change": -0.3,
-      "pChange": -0.73,
-      "totalTradedVolume": 632818,
-      "totalTradedValue": 25673426,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 49.53,
-      "yearLow": 33.43,
-      "perChange365d": 12.966054535336683,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 6.82,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "INFRABEES",
-      "open": 930,
-      "dayHigh": 935.14,
-      "dayLow": 920,
-      "lastPrice": 923.99,
-      "previousClose": 930.74,
-      "change": -6.75,
-      "pChange": -0.73,
-      "totalTradedVolume": 74899,
-      "totalTradedValue": 69020177,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 1020,
-      "yearLow": 783.98,
-      "perChange365d": 0.9736853608427644,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.84,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": -0.78,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "ESG",
@@ -4718,8 +4678,48 @@
       "perChange365d": 9.187645990137552,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.26,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 3.49,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "INFRABEES",
+      "open": 930,
+      "dayHigh": 935.14,
+      "dayLow": 920,
+      "lastPrice": 923.99,
+      "previousClose": 930.74,
+      "change": -6.75,
+      "pChange": -0.73,
+      "totalTradedVolume": 74899,
+      "totalTradedValue": 69020177,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 1020,
+      "yearLow": 783.98,
+      "perChange365d": 0.9736853608427644,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 4.3,
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "ITIETF",
+      "open": 40.93,
+      "dayHigh": 40.98,
+      "dayLow": 40.4,
+      "lastPrice": 40.6,
+      "previousClose": 40.9,
+      "change": -0.3,
+      "pChange": -0.73,
+      "totalTradedVolume": 632818,
+      "totalTradedValue": 25673426,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 49.53,
+      "yearLow": 33.43,
+      "perChange365d": 12.966054535336683,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 6.01,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "NIFTY1",
@@ -4738,8 +4738,8 @@
       "perChange365d": 8.921303944876502,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.69,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 3.19,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "SBIETFIT",
@@ -4758,8 +4758,8 @@
       "perChange365d": 12.330473290893996,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 6.73,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 5.91,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "MOM50",
@@ -4778,8 +4778,8 @@
       "perChange365d": 9.38341238302782,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.62,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 3.66,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "HDFCSILVER",
@@ -4798,8 +4798,8 @@
       "perChange365d": 5.546822366943631,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": -0.13,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": -0.81,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "LOWVOL1",
@@ -4818,8 +4818,8 @@
       "perChange365d": 9.149277688603515,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.37,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 2.82,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "SILVERIETF",
@@ -4838,8 +4838,8 @@
       "perChange365d": 5.658948279593166,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 0.04,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": -0.67,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "QNIFTY",
@@ -4858,8 +4858,8 @@
       "perChange365d": 9.179528838342812,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.85,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 3.04,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "SBINEQWETF",
@@ -4878,28 +4878,8 @@
       "perChange365d": null,
       "date365dAgo": "-",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 4.08,
-      "timestamp": "2025-05-27T16:25:33.526Z"
-    },
-    {
-      "symbol": "HDFCVALUE",
-      "open": 135.39,
-      "dayHigh": 135.45,
-      "dayLow": 133.7,
-      "lastPrice": 134.24,
-      "previousClose": 135.39,
-      "change": -1.15,
-      "pChange": -0.85,
-      "totalTradedVolume": 11463,
-      "totalTradedValue": 1543149,
-      "lastUpdateTime": "27-May-2025 16:00:00",
-      "yearHigh": 155.7,
-      "yearLow": 117.5,
-      "perChange365d": 4.450669156551508,
-      "date365dAgo": "24-May-2024",
-      "date30dAgo": "25-Apr-2025",
-      "perChange30d": 3.87,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 3.55,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "MOINFRA",
@@ -4919,7 +4899,27 @@
       "date365dAgo": "-",
       "date30dAgo": "-",
       "perChange30d": null,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "timestamp": "2025-05-27T16:30:38.092Z"
+    },
+    {
+      "symbol": "HDFCVALUE",
+      "open": 135.39,
+      "dayHigh": 135.45,
+      "dayLow": 133.7,
+      "lastPrice": 134.24,
+      "previousClose": 135.39,
+      "change": -1.15,
+      "pChange": -0.85,
+      "totalTradedVolume": 11463,
+      "totalTradedValue": 1543149,
+      "lastUpdateTime": "27-May-2025 16:00:00",
+      "yearHigh": 155.7,
+      "yearLow": 117.5,
+      "perChange365d": 4.450669156551508,
+      "date365dAgo": "24-May-2024",
+      "date30dAgo": "25-Apr-2025",
+      "perChange30d": 2.94,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "ITETF",
@@ -4938,8 +4938,8 @@
       "perChange365d": 11.832946635730876,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 6.42,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 5.52,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "SENSEXADD",
@@ -4958,8 +4958,8 @@
       "perChange365d": 10.262845066701903,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 5.69,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 4.1,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "NPBET",
@@ -4978,8 +4978,8 @@
       "perChange365d": 12.42858855019776,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 2.49,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 1.53,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "AXISCETF",
@@ -4998,8 +4998,8 @@
       "perChange365d": 6.751324684816372,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 2.92,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 1.42,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     },
     {
       "symbol": "SDL26BEES",
@@ -5018,8 +5018,8 @@
       "perChange365d": 7.704363606368051,
       "date365dAgo": "24-May-2024",
       "date30dAgo": "25-Apr-2025",
-      "perChange30d": 2.43,
-      "timestamp": "2025-05-27T16:25:33.526Z"
+      "perChange30d": 0.76,
+      "timestamp": "2025-05-27T16:30:38.092Z"
     }
   ]
 }
