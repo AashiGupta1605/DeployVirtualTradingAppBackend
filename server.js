@@ -27,6 +27,12 @@ dotenv.config();
 
 const app = express();
 
+
+app.get("/", (req, res) => {
+  res.send("Backend is working!");
+});
+
+
 // Get the absolute path of the current directory
 const __dirname = path.resolve(); // Ensure correct path handling
 app.use("/img", express.static(path.join(__dirname, "utils/img")));
